@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -38,8 +36,16 @@ public class GameManager : MonoBehaviour
             case GameState.PLAYER_SPAWN:
                 UnitManager.instance.SpawnAllies();
                 break;
+            case GameState.ENEMIES_SPAWN:
+                UnitManager.instance.SpawnEnemies();
+                break;
             default:
                 break;
         }
+    }
+
+    public GameState GetState()
+    {
+        return gameState;
     }
 }

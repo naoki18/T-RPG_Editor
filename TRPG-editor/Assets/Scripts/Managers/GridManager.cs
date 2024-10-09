@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class GridManager : MonoBehaviour
 {
     public static GridManager instance { get; private set; }
-
     [SerializeField] int width;
     [SerializeField] int height;
     [SerializeField] Tile tilePf;
