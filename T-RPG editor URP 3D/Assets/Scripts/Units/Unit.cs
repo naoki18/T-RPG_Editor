@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
     Faction faction;
     int movementPoint;
-    Vector2 position;
+    Vector3 positionOnGrid;
     public static Unit InstantiateUnit(ScriptableUnit unitData)
     {
         Unit unit = Instantiate(UnitManager.instance.unitPf, Vector3.zero, Quaternion.identity);
@@ -16,18 +18,48 @@ public class Unit : MonoBehaviour
     }
 
     public Faction GetFaction() { return faction; }
-    public void SetPosition(Vector2 position)
+    public void SetPosition(Vector3 position)
     {
-        this.position = position;
+        this.positionOnGrid = position;
     }
 
-    public List<Vector2> GetReachablePos()
+    public List<Vector3> GetReachablePos()
     {
-        List<Vector2> reachablePos = new List<Vector2>();
-        List<Vector2> direction = new List<Vector2> { new Vector2(1, 0), new Vector2(-1, 0), new Vector2(0, 1), new Vector2(0,-1) };
-        int movementPointAvailable = movementPoint;
+        List<Vector3> reachablePos = new List<Vector3>();
+        List<Vector3> direction = new List<Vector3>() { new Vector3(1, 0, 0), new Vector3(-1, 0, 0), new Vector3(0, 0, 1), new Vector3(0, 0, -1) };
+        // Let's try every direction from the current position
         for (int i = 0; i < 4; i++)
         {
+            // for each direction we have max movement point available
+            int movementPointAvailable = movementPoint;
+            // List with next position to try & movement point available when position has been saved
+            List<Tuple<Vector3, int>> tileToTry = new() { };
+            tileToTry.Add(new Tuple<Vector3, int>(positionOnGrid + direction[i], movementPointAvailable));
+            do
+            {
+                // Get last position to try
+                Tuple<Vector3, int> tuple = tileToTry[^1];
+                Vector3 PositionToTry = tuple.Item1;
+                movementPointAvailable = tuple.Item2;
+                Tile tile = GridManager.instance.GetTileAtPos(PositionToTry);
+                if (tile != null && tile.GetWalkableValue() > -1)
+                {
+                    movementPointAvailable -= tile.GetWalkableValue();
+                    if (movementPointAvailable >= 0 && !reachablePos.Contains(PositionToTry))
+                    {
+                        reachablePos.Add(PositionToTry);
+                    }
+                    if (movementPointAvailable > 0)
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            tileToTry.Add(new Tuple<Vector3, int>(PositionToTry + direction[j], movementPointAvailable));
+                        }
+
+                    }
+                }
+                tileToTry.Remove(tuple);
+            } while (tileToTry.Count > 0);
 
         }
         return reachablePos;

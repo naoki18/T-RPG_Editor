@@ -16,7 +16,7 @@ public class Tile : MonoBehaviour
     }
     public void OnMouseEnter()
     {
-        Highlight(0.5f);
+       Highlight(0.5f);
     }
 
     public void OnMouseExit()
@@ -27,12 +27,16 @@ public class Tile : MonoBehaviour
 
     public void OnMouseDown()
     {
-        // TODO : NE PAS UTILISER CETTE FONCTION
-        if(GameManager.instance.GetState() != GameManager.GameState.PLAYER_TURN || unitOnTile == null) return;
-        if(unitOnTile.GetFaction() == Faction.ALLY)
+        // TODO : NE PAS UTILISER CETTE FONCTION, ET TRANSFERER DANS LE GRID MANAGER
+        if(GameManager.instance.GetState() != GameManager.GameState.PLAYER_TURN) return;
+        if(UnitManager.instance.GetSelectedUnit() == null && unitOnTile != null)
         {
-            UnitManager.instance.SelectUnit(unitOnTile);
+            if (unitOnTile.GetFaction() == Faction.ALLY)
+            {
+                UnitManager.instance.SelectUnit(unitOnTile);
+            }
         }
+        
     }
 
     public void SetCharacter(Unit character)
@@ -51,7 +55,7 @@ public class Tile : MonoBehaviour
     /// Value under 0 will be clamped to 0.
     /// </summary>
     /// <param name="highlightPercent"></param>
-    private void Highlight(float highlightPercent)
+    public void Highlight(float highlightPercent)
     {
         highlightPercent = Mathf.Clamp01(highlightPercent);
         Color color = mRenderer.material.color;
@@ -62,6 +66,10 @@ public class Tile : MonoBehaviour
         mRenderer.material.color = color;
     }
 
+    public void RemoveHighlight()
+    {
+        mRenderer.material.color = baseColor;
+    }
     public bool IsValid()
     {
         if (walkableValue == -1 || unitOnTile != null) return false;

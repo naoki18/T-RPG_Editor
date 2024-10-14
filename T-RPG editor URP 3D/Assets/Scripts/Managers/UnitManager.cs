@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UnitManager : MonoBehaviour
@@ -12,6 +11,8 @@ public class UnitManager : MonoBehaviour
     List<ScriptableUnit> units = new List<ScriptableUnit>();
     Unit selectedUnit;
 
+    public delegate void OnSelectUnitDelegate(Unit unit);
+    public event OnSelectUnitDelegate OnSelectUnit;
     private void Awake()
     {
         if (instance == null)
@@ -30,8 +31,9 @@ public class UnitManager : MonoBehaviour
             GameManager.instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
             return;
         }
-        Vector3 pos = GridManager.instance.GetRandomPos();
+        Vector3 pos = GridManager.instance.GetRandomValidPos();
         unit.transform.position = new Vector3(pos.x, pos.y + 1, pos.z);
+        unit.SetPosition(pos);
         GridManager.instance.GetTileAtPos(pos).SetCharacter(unit);
         GameManager.instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
     }
@@ -44,8 +46,9 @@ public class UnitManager : MonoBehaviour
             return;
         }
         
-        Vector3 pos = GridManager.instance.GetRandomPos();
+        Vector3 pos = GridManager.instance.GetRandomValidPos();
         unit.transform.position = new Vector3(pos.x, pos.y + 1, pos.z);
+        unit.SetPosition(pos);
         GridManager.instance.GetTileAtPos(pos).SetCharacter(unit);
         GameManager.instance.ChangeState(GameManager.GameState.PLAYER_TURN);
     }
@@ -61,6 +64,7 @@ public class UnitManager : MonoBehaviour
     {
         if (unit == null) return;
         selectedUnit = unit;
+        OnSelectUnit.Invoke(unit);
     }
 
     public Unit GetSelectedUnit()

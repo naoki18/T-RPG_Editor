@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faction: 0
   sprite: {fileID: 1488531949, guid: a1f868d870f5b9f4f8438cabbe8bcf22, type: 3}
-  movementPoint: 0
+  movementPoint: 3
