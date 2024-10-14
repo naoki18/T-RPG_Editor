@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
@@ -20,7 +19,17 @@ public class Unit : MonoBehaviour
     public Faction GetFaction() { return faction; }
     public void SetPosition(Vector3 position)
     {
-        this.positionOnGrid = position;
+        Tile tile = GridManager.instance.GetTileAtPos(position);
+        if (tile != null)
+        {
+            GridManager.instance.GetTileAtPos(this.positionOnGrid).SetCharacter(null);
+            this.positionOnGrid = position;
+            Vector3 wPos = this.positionOnGrid;
+            wPos.y += 1;
+            this.transform.position = wPos;
+            tile.SetCharacter(this);
+        }
+        
     }
 
     public List<Vector3> GetReachablePos()

@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
         PLAYER_SPAWN,
         ENEMIES_SPAWN,
         PLAYER_TURN,
+        PLAYER_MOVE_CHARACTER,
         ENEMIES_TURN
     }
     public static GameManager instance { get; private set; }
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
 
     public void ChangeState(GameState newState)
     {
+        // TODO : Ajouter des delegates pour laisser chaque manager faire ce qu'il doit faire lors d'un nouveau state
         gameState = newState;
         switch(gameState)
         {
@@ -38,6 +40,9 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.ENEMIES_SPAWN:
                 UnitManager.instance.SpawnEnemies();
+                break;
+            case GameState.PLAYER_TURN:
+                GridManager.instance.ClearReachablePos();
                 break;
             default:
                 break;

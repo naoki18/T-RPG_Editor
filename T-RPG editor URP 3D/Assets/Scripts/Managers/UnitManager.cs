@@ -6,7 +6,7 @@ public class UnitManager : MonoBehaviour
 {
     public static UnitManager instance { get; private set; }
 
-    [SerializeField] public Unit unitPf;
+    public Unit unitPf;
 
     List<ScriptableUnit> units = new List<ScriptableUnit>();
     Unit selectedUnit;
@@ -23,6 +23,7 @@ public class UnitManager : MonoBehaviour
         else Destroy(this);
     }
 
+    #region SPAWN
     public void SpawnAllies()
     {
         Unit unit = InstantiateRandomUnit(Faction.ALLY);
@@ -34,7 +35,6 @@ public class UnitManager : MonoBehaviour
         Vector3 pos = GridManager.instance.GetRandomValidPos();
         unit.transform.position = new Vector3(pos.x, pos.y + 1, pos.z);
         unit.SetPosition(pos);
-        GridManager.instance.GetTileAtPos(pos).SetCharacter(unit);
         GameManager.instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
     }
     public void SpawnEnemies()
@@ -49,7 +49,6 @@ public class UnitManager : MonoBehaviour
         Vector3 pos = GridManager.instance.GetRandomValidPos();
         unit.transform.position = new Vector3(pos.x, pos.y + 1, pos.z);
         unit.SetPosition(pos);
-        GridManager.instance.GetTileAtPos(pos).SetCharacter(unit);
         GameManager.instance.ChangeState(GameManager.GameState.PLAYER_TURN);
     }
     private Unit InstantiateRandomUnit(Faction faction)
@@ -59,7 +58,9 @@ public class UnitManager : MonoBehaviour
         if (unit == null) return null;
         return Unit.InstantiateUnit(unit);
     }
+    #endregion
 
+    #region MANAGE_UNIT
     public void SelectUnit(Unit unit)
     {
         if (unit == null) return;
@@ -67,8 +68,22 @@ public class UnitManager : MonoBehaviour
         OnSelectUnit.Invoke(unit);
     }
 
+    public void MoveUnit(Unit unit, Vector3 position)
+    {
+        unit.SetPosition(position);
+    }
+
+    public void MoveUnit(Unit unit, Tile tile)
+    {
+        Vector3 pos = new(tile.transform.position.x, tile.transform.position.y, tile.transform.position.z);
+        unit.SetPosition(pos);
+    }
+    #endregion
+
+    #region GETTERS
     public Unit GetSelectedUnit()
     {
         return selectedUnit;
     }
+    #endregion
 }

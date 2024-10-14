@@ -9,34 +9,10 @@ public class Tile : MonoBehaviour
 
     Color baseColor;
 
-    private void Start()
+    private void Awake()
     {
         mRenderer = GetComponent<MeshRenderer>();
         baseColor = mRenderer.material.color;
-    }
-    public void OnMouseEnter()
-    {
-       Highlight(0.5f);
-    }
-
-    public void OnMouseExit()
-    {
-        if (unitOnTile != null && unitOnTile == UnitManager.instance.GetSelectedUnit()) return;
-        mRenderer.material.color = baseColor;
-    }
-
-    public void OnMouseDown()
-    {
-        // TODO : NE PAS UTILISER CETTE FONCTION, ET TRANSFERER DANS LE GRID MANAGER
-        if(GameManager.instance.GetState() != GameManager.GameState.PLAYER_TURN) return;
-        if(UnitManager.instance.GetSelectedUnit() == null && unitOnTile != null)
-        {
-            if (unitOnTile.GetFaction() == Faction.ALLY)
-            {
-                UnitManager.instance.SelectUnit(unitOnTile);
-            }
-        }
-        
     }
 
     public void SetCharacter(Unit character)
@@ -74,6 +50,10 @@ public class Tile : MonoBehaviour
     {
         if (walkableValue == -1 || unitOnTile != null) return false;
         return true;
-        
+    }
+
+    public Unit GetCharacter()
+    {
+        return unitOnTile;
     }
 }
