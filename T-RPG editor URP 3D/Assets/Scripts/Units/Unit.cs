@@ -35,7 +35,7 @@ public class Unit : MonoBehaviour
     public List<Vector3> GetReachablePos()
     {
         List<Vector3> reachablePos = new List<Vector3>();
-        List<Vector3> direction = new List<Vector3>() { new Vector3(1, 0, 0), new Vector3(-1, 0, 0), new Vector3(0, 0, 1), new Vector3(0, 0, -1) };
+        
         // Let's try every direction from the current position
         for (int i = 0; i < 4; i++)
         {
@@ -43,7 +43,7 @@ public class Unit : MonoBehaviour
             int movementPointAvailable = movementPoint;
             // List with next position to try & movement point available when position has been saved
             List<Tuple<Vector3, int>> tileToTry = new() { };
-            tileToTry.Add(new Tuple<Vector3, int>(positionOnGrid + direction[i], movementPointAvailable));
+            tileToTry.Add(new Tuple<Vector3, int>(positionOnGrid + GridManager.directions[i], movementPointAvailable));
             do
             {
                 // Get last position to try
@@ -62,7 +62,7 @@ public class Unit : MonoBehaviour
                     {
                         for (int j = 0; j < 4; j++)
                         {
-                            tileToTry.Add(new Tuple<Vector3, int>(PositionToTry + direction[j], movementPointAvailable));
+                            tileToTry.Add(new Tuple<Vector3, int>(PositionToTry + GridManager.directions[j], movementPointAvailable));
                         }
 
                     }
@@ -72,5 +72,10 @@ public class Unit : MonoBehaviour
 
         }
         return reachablePos;
+    }
+
+    public Vector3 GetPositionOnGrid()
+    {
+        return positionOnGrid;
     }
 }

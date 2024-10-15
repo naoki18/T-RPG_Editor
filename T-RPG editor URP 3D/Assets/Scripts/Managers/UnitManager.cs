@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -68,12 +69,21 @@ public class UnitManager : MonoBehaviour
         OnSelectUnit.Invoke(unit);
     }
 
-    public void MoveUnit(Unit unit, Vector3 position)
+    public IEnumerator MoveUnit(Unit unit, List<Vector3> positions)
+    {
+        foreach (var position in positions)
+        {
+            HardMoveUnit(unit, position);
+            yield return new WaitForSeconds(1f);
+        }
+        yield return null;
+    }
+    public void HardMoveUnit(Unit unit, Vector3 position)
     {
         unit.SetPosition(position);
     }
 
-    public void MoveUnit(Unit unit, Tile tile)
+    public void HardMoveUnit(Unit unit, Tile tile)
     {
         Vector3 pos = new(tile.transform.position.x, tile.transform.position.y, tile.transform.position.z);
         unit.SetPosition(pos);

@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    public static Vector3[] directions = new Vector3[4] { new Vector3(1, 0, 0), new Vector3(-1, 0, 0), new Vector3(0, 0, 1), new Vector3(0, 0, -1) };
     public static GridManager instance { get; private set; }
     [SerializeField] int width;
     [SerializeField] int height;
@@ -120,6 +119,8 @@ public class GridManager : MonoBehaviour
             GetTileAtPos(pos).Highlight(0.5f);
         }
     }
+
+    
     public void ClearReachablePos()
     {
         foreach (var pos in reachablePosition)
@@ -179,10 +180,11 @@ public class GridManager : MonoBehaviour
     private void SelectNewPosition()
     {
         Unit selectedUnit = UnitManager.instance.GetSelectedUnit();
+        Tile tileOccupied = GetTileAtPos(selectedUnit.GetPositionOnGrid());
         if (selectedUnit != null && tileOnMouse != null && tileOnMouse.GetCharacter() == null && IsReachable(tileOnMouse))
         {
-            UnitManager.instance.MoveUnit(selectedUnit, tileOnMouse);
-            GameManager.instance.ChangeState(GameManager.GameState.PLAYER_TURN);
+            StartCoroutine(UnitManager.instance.MoveUnit(selectedUnit, AStar.GetPath(tileOccupied, tileOnMouse)));
+            //GameManager.instance.ChangeState(GameManager.GameState.PLAYER_TURN);
         }
     }
 
@@ -209,5 +211,16 @@ public class GridManager : MonoBehaviour
         {
             tileOnMouse = newTile;
         }
+    }
+
+    public static Vector3[] GetNeighbours(Vector3 pos)
+    {
+        Vector3[] neighbours = new Vector3[4];
+        for (int i = 0; i < 4; i++)
+        {
+            neighbours[i] = pos + directions[i];
+        }
+
+        return neighbours;
     }
 }
