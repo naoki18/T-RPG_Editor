@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
     public static Vector3[] directions = new Vector3[4] { new Vector3(1, 0, 0), new Vector3(-1, 0, 0), new Vector3(0, 0, 1), new Vector3(0, 0, -1) };
-    public static GridManager instance { get; private set; }
+    public static GridManager Instance { get; private set; }
     [SerializeField] int width;
     [SerializeField] int height;
     [SerializeField] Tile[] tilePf;
@@ -16,7 +17,7 @@ public class GridManager : MonoBehaviour
     Tile tileOnMouse = null;
     private void Awake()
     {
-        if (instance == null) instance = this;
+        if (Instance == null) Instance = this;
         else Destroy(this);
     }
 
@@ -43,7 +44,7 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        GameManager.instance.ChangeState(GameManager.GameState.PLAYER_SPAWN);
+        GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_SPAWN);
     }
 
 
@@ -135,7 +136,7 @@ public class GridManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out var info))
         {
-            switch(GameManager.instance.GetState())
+            switch(GameManager.Instance.GetState())
             {
                 case GameManager.GameState.PLAYER_TURN:
                     HightlightHoveredTile(info);
@@ -153,7 +154,7 @@ public class GridManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            switch(GameManager.instance.GetState())
+            switch(GameManager.Instance.GetState())
             {
                 case GameManager.GameState.PLAYER_TURN:
                     SelectUnit();
@@ -173,7 +174,8 @@ public class GridManager : MonoBehaviour
         if (characterOnTile != null && characterOnTile.GetFaction() == Faction.ALLY)
         {
             UnitManager.instance.SelectUnit(characterOnTile);
-            GameManager.instance.ChangeState(GameManager.GameState.PLAYER_MOVE_CHARACTER);
+            GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_MOVE_CHARACTER);
+            tileOnMouse.RemoveHighlight();
         }
     }
 
@@ -184,7 +186,6 @@ public class GridManager : MonoBehaviour
         if (selectedUnit != null && tileOnMouse != null && tileOnMouse.GetCharacter() == null && IsReachable(tileOnMouse))
         {
             StartCoroutine(UnitManager.instance.MoveUnit(selectedUnit, AStar.GetPath(tileOccupied, tileOnMouse)));
-            //GameManager.instance.ChangeState(GameManager.GameState.PLAYER_TURN);
         }
     }
 

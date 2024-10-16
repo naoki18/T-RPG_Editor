@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -11,14 +14,14 @@ public class GameManager : MonoBehaviour
         PLAYER_MOVE_CHARACTER,
         ENEMIES_TURN
     }
-    public static GameManager instance { get; private set; }
+    public static GameManager Instance { get; private set; }
 
     [SerializeField] private GameState baseState;
     private GameState gameState;
 
     private void Awake()
     {
-        if (instance == null) instance = this;
+        if (Instance == null) Instance = this;
         else Destroy(this);
     }
     void Start()
@@ -33,7 +36,7 @@ public class GameManager : MonoBehaviour
         switch(gameState)
         {
             case GameState.GENERATE_GRID:
-                GridManager.instance.GenerateGrid();
+                GridManager.Instance.GenerateGrid();
                 break;
             case GameState.PLAYER_SPAWN:
                 UnitManager.instance.SpawnAllies();
@@ -42,7 +45,7 @@ public class GameManager : MonoBehaviour
                 UnitManager.instance.SpawnEnemies();
                 break;
             case GameState.PLAYER_TURN:
-                GridManager.instance.ClearReachablePos();
+                GridManager.Instance.ClearReachablePos();
                 break;
             default:
                 break;

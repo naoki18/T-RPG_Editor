@@ -30,27 +30,27 @@ public class UnitManager : MonoBehaviour
         Unit unit = InstantiateRandomUnit(Faction.ALLY);
         if (unit == null)
         {
-            GameManager.instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
+            GameManager.Instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
             return;
         }
-        Vector3 pos = GridManager.instance.GetRandomValidPos();
+        Vector3 pos = GridManager.Instance.GetRandomValidPos();
         unit.transform.position = new Vector3(pos.x, pos.y + 1, pos.z);
         unit.SetPosition(pos);
-        GameManager.instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
+        GameManager.Instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
     }
     public void SpawnEnemies()
     {
         Unit unit = InstantiateRandomUnit(Faction.ENEMY);
         if (unit == null)
         {
-            GameManager.instance.ChangeState(GameManager.GameState.PLAYER_TURN);
+            GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
             return;
         }
         
-        Vector3 pos = GridManager.instance.GetRandomValidPos();
+        Vector3 pos = GridManager.Instance.GetRandomValidPos();
         unit.transform.position = new Vector3(pos.x, pos.y + 1, pos.z);
         unit.SetPosition(pos);
-        GameManager.instance.ChangeState(GameManager.GameState.PLAYER_TURN);
+        GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
     }
     private Unit InstantiateRandomUnit(Faction faction)
     {
@@ -71,11 +71,13 @@ public class UnitManager : MonoBehaviour
 
     public IEnumerator MoveUnit(Unit unit, List<Vector3> positions)
     {
+        GridManager.Instance.ClearReachablePos();
         foreach (var position in positions)
         {
             HardMoveUnit(unit, position);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.3f);
         }
+        GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
         yield return null;
     }
     public void HardMoveUnit(Unit unit, Vector3 position)

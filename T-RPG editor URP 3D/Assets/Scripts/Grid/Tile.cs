@@ -22,6 +22,7 @@ public class Tile : MonoBehaviour
 
     public short GetWalkableValue()
     {
+        if (unitOnTile != null) return -1;
         return walkableValue;
     }
 

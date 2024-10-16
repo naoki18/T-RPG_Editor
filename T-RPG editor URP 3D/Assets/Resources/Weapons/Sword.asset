@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4a7a79aca8a0fe4198a6692fbb49e36, type: 3}
-  m_Name: Heros
+  m_Script: {fileID: 11500000, guid: 6b0166d0c6fea2e4f9526c21edfa5390, type: 3}
+  m_Name: Sword
   m_EditorClassIdentifier: 
-  faction: 0
-  sprite: {fileID: 1488531949, guid: a1f868d870f5b9f4f8438cabbe8bcf22, type: 3}
-  movementPoint: 5
-  attack: 3
-  hp: 10
+  attack: 10
+  range: 1

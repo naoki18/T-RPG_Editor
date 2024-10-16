@@ -11,8 +11,10 @@ public static class AStar
         while (cameFrom.ContainsKey(current))
         {
             current = cameFrom[current];
-            path.Prepend(current);
+            path.Insert(0, current);
         }
+        // The first tile is the one where the character is on
+        path.RemoveAt(0);
         return path;
     }
     public static List<Vector3> GetPath(Tile tileA, Tile tileB)
@@ -28,26 +30,36 @@ public static class AStar
 
         while (set.Count > 0)
         {
-            Vector3 current = gScore.OrderBy(x => x.Value).First().Key;
+            Vector3 current = GetPosWithLowestScore(set, gScore);
             if(current == end) return AStar.ReconstructPath(cameFrom, current);
 
             set.Remove(current);
-            foreach (var neighbours in GridManager.GetNeighbours(current))
+            foreach (var neighbour in GridManager.GetNeighbours(current))
             {
-                if (GridManager.instance.GetTileAtPos(neighbours) == null) continue;
-                int neighboursGScore = gScore[current] + GridManager.instance.GetTileAtPos(neighbours).GetWalkableValue();
-                if (!gScore.TryGetValue(neighbours, out _) || gScore[neighbours] < neighboursGScore)
+                if (GridManager.Instance.GetTileAtPos(neighbour) == null || GridManager.Instance.GetTileAtPos(neighbour).GetWalkableValue() == -1) continue;
+                int neighboursGScore = gScore[current] + GridManager.Instance.GetTileAtPos(neighbour).GetWalkableValue();
+                if (!gScore.TryGetValue(neighbour, out _) || gScore[neighbour] > neighboursGScore)
                 {
-                    cameFrom[neighbours] = current;
-                    gScore[neighbours] = neighboursGScore;
-                    if(!set.Contains(neighbours))
+                    cameFrom[neighbour] = current;
+                    gScore[neighbour] = neighboursGScore;
+                    if(!set.Contains(neighbour))
                     {
-                        set.Add(neighbours);
+                        set.Add(neighbour);
                     }
                 }
             }
         }
 
         return new();
+    }
+
+    private static Vector3 GetPosWithLowestScore(List<Vector3> set, Dictionary<Vector3, int> dic)
+    {
+        Vector3 lowest = set.First();
+        foreach(var pos in set)
+        {
+            if (dic[pos] < dic[lowest]) lowest = pos;
+        }
+        return lowest;
     }
 }

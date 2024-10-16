@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faction: 1
   sprite: {fileID: -577577312, guid: c239e76c73e93e44f861f6a8987a4ff5, type: 3}
-  movementPoint: 0
+  movementPoint: 2
+  attack: 2
+  hp: 5

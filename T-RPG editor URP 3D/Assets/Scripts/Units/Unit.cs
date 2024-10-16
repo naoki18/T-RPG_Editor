@@ -6,6 +6,7 @@ public class Unit : MonoBehaviour
 {
     Faction faction;
     int movementPoint;
+    int hp;
     Vector3 positionOnGrid;
     public static Unit InstantiateUnit(ScriptableUnit unitData)
     {
@@ -13,16 +14,17 @@ public class Unit : MonoBehaviour
         unit.faction = unitData.faction;
         unit.gameObject.GetComponent<SpriteRenderer>().sprite = unitData.sprite;
         unit.movementPoint = unitData.movementPoint;
+        unit.hp = unitData.hp;
         return unit;
     }
 
     public Faction GetFaction() { return faction; }
     public void SetPosition(Vector3 position)
     {
-        Tile tile = GridManager.instance.GetTileAtPos(position);
+        Tile tile = GridManager.Instance.GetTileAtPos(position);
         if (tile != null)
         {
-            GridManager.instance.GetTileAtPos(this.positionOnGrid).SetCharacter(null);
+            GridManager.Instance.GetTileAtPos(this.positionOnGrid).SetCharacter(null);
             this.positionOnGrid = position;
             Vector3 wPos = this.positionOnGrid;
             wPos.y += 1;
@@ -50,7 +52,7 @@ public class Unit : MonoBehaviour
                 Tuple<Vector3, int> tuple = tileToTry[^1];
                 Vector3 PositionToTry = tuple.Item1;
                 movementPointAvailable = tuple.Item2;
-                Tile tile = GridManager.instance.GetTileAtPos(PositionToTry);
+                Tile tile = GridManager.Instance.GetTileAtPos(PositionToTry);
                 if (tile != null && tile.GetWalkableValue() > -1)
                 {
                     movementPointAvailable -= tile.GetWalkableValue();
@@ -77,5 +79,10 @@ public class Unit : MonoBehaviour
     public Vector3 GetPositionOnGrid()
     {
         return positionOnGrid;
+    }
+
+    public void Damage(int amount)
+    {
+        hp -= amount;
     }
 }
