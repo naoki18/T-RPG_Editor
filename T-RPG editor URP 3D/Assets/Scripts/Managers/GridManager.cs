@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,16 +9,21 @@ public class GridManager : MonoBehaviour
     public static GridManager Instance { get; private set; }
     [SerializeField] int width;
     [SerializeField] int height;
-    [SerializeField] Tile[] tilePf;
+    [SerializeField] Tile tilePf;
 
-    [SerializeField] Unit c;
+    List<ScriptableTile> tiles = new List<ScriptableTile>();
     Dictionary<Vector3, Tile> tileMap;
 
     List<Vector3> reachablePosition = new List<Vector3>();
     Tile tileOnMouse = null;
     private void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            tiles = Resources.LoadAll<ScriptableTile>("Tiles").ToList();
+            Debug.Log(tiles.Count);
+        }
         else Destroy(this);
     }
 
@@ -46,7 +52,8 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                Tile newTile = Instantiate(tilePf[Random.Range(0, tilePf.Length)], new Vector3(x, 0, y), Quaternion.identity);
+                Tile newTile = Tile.CreateTile(tiles[Random.Range(0, tiles.Count)]);
+                newTile.transform.position = new Vector3(x, 0, y);
                 newTile.name = $"Tile {y} {x}";
                 tileMap[new Vector3(x, 0, y)] = newTile;
             }
@@ -57,6 +64,10 @@ public class GridManager : MonoBehaviour
 
 
     #region Getters
+    public Tile GetTilePf()
+    {
+        return tilePf;
+    }
     public Tile GetTileAtPos(int x, int y)
     {
         return (tileMap.TryGetValue(new Vector3(x, 0, y), out Tile tile) ? tile : null);
@@ -212,7 +223,10 @@ public class GridManager : MonoBehaviour
                 }
                 newTile.Highlight(0.5f);
             }
+            if (tileOnMouse != null) tileOnMouse.HideInformation();
+            
             tileOnMouse = newTile;
+            newTile.ShowInformation();
         }
     }
 

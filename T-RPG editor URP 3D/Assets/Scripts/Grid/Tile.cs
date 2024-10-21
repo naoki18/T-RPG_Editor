@@ -9,10 +9,17 @@ public class Tile : MonoBehaviour
 
     Color baseColor;
 
-    private void Awake()
+    [SerializeField] TileInformationUI informationUi;
+
+    public static Tile CreateTile(ScriptableTile data)
     {
-        mRenderer = GetComponent<MeshRenderer>();
-        baseColor = mRenderer.material.color;
+        Tile tile = Instantiate(GridManager.Instance.GetTilePf(), Vector3.zero, Quaternion.identity);
+        tile.mRenderer = tile.GetComponent<MeshRenderer>();
+        tile.unitOnTile = null;
+        tile.walkableValue = data.walkableValue;
+        tile.mRenderer.material = data.material;
+        tile.baseColor = tile.mRenderer.material.color;
+        return tile;
     }
 
     public void SetCharacter(Unit character)
@@ -56,5 +63,16 @@ public class Tile : MonoBehaviour
     public Unit GetCharacter()
     {
         return unitOnTile;
+    }
+
+    public void ShowInformation()
+    {
+        informationUi.UpdateUi();
+        informationUi.gameObject.SetActive(true);
+    }
+
+    public void HideInformation()
+    {
+        informationUi.gameObject.SetActive(false);
     }
 }

@@ -10,5 +10,13 @@ public class TileInformationUI : MonoBehaviour
         Tile tile = GetComponentInParent<Tile>();
         TileName.text = tile.gameObject.name;
         TileCost.text = "Cost : " + tile.GetWalkableValue();
+        this.gameObject.SetActive(false);
+    }
+
+    public void UpdateUi()
+    {
+        Tile tile = GetComponentInParent<Tile>();
+        TileName.text = tile.gameObject.name;
+        TileCost.text = "Cost : " + tile.GetWalkableValue();
     }
 }
