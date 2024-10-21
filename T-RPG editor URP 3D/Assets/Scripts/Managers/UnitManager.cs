@@ -74,10 +74,23 @@ public class UnitManager : MonoBehaviour
         GridManager.Instance.ClearReachablePos();
         foreach (var position in positions)
         {
-            HardMoveUnit(unit, position);
-            yield return new WaitForSeconds(0.3f);
+            Vector3 positionToReach = position;
+            positionToReach.y += 1;
+            float timer = 0f;
+            do
+            {
+                unit.transform.position = Vector3.Lerp(unit.transform.position, positionToReach, timer);
+                timer += Time.deltaTime / 0.33f;
+                timer = Mathf.Clamp01(timer);
+                yield return null;
+            } while (timer < 1f);
+            
+            // Call this to set the unit on the tile. Because before we only move its sprite
+            unit.SetPosition(position);
+            yield return null;
         }
         GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
+        selectedUnit = null;
         yield return null;
     }
     public void HardMoveUnit(Unit unit, Vector3 position)

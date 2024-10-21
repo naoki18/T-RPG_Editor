@@ -8,6 +8,7 @@ public class ScriptableUnit : ScriptableObject
     public ScriptableWeapon baseWeapon;
     public int movementPoint;
     public int hp;
+    public int speed;
 }
 
 public enum Faction

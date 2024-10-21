@@ -6,15 +6,23 @@ public class Unit : MonoBehaviour
 {
     Faction faction;
     int movementPoint;
-    int hp;
+    int maxHp;
+    int currentHp;
+    int speed;
+    // This allows you to get the tile position, because the character sprite is above so its object position is (pos.x, pos.y + 1, pos.z )
     Vector3 positionOnGrid;
+
+    public delegate void OnDamageDelegate(int currentHp, int maxHp);
+    public event OnDamageDelegate OnDamage;
     public static Unit InstantiateUnit(ScriptableUnit unitData)
     {
         Unit unit = Instantiate(UnitManager.instance.unitPf, Vector3.zero, Quaternion.identity);
         unit.faction = unitData.faction;
         unit.gameObject.GetComponent<SpriteRenderer>().sprite = unitData.sprite;
         unit.movementPoint = unitData.movementPoint;
-        unit.hp = unitData.hp;
+        unit.maxHp = unitData.hp;
+        unit.currentHp = unitData.hp;
+        unit.speed = unitData.speed;
         return unit;
     }
 
@@ -81,8 +89,20 @@ public class Unit : MonoBehaviour
         return positionOnGrid;
     }
 
+    public int GetSpeed()
+    {
+        return speed;
+    }
     public void Damage(int amount)
     {
-        hp -= amount;
+        currentHp -= amount;
+        currentHp = Mathf.Clamp(currentHp, 0, maxHp);
+        OnDamage?.Invoke(currentHp, maxHp);
+
+        if(currentHp <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
+
 }

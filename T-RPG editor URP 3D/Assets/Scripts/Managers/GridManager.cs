@@ -30,6 +30,14 @@ public class GridManager : MonoBehaviour
     {
         UpdateTileOnMouse();
         UpdateMouseInput();
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Unit unit = UnitManager.instance.GetSelectedUnit();
+            if (unit != null)
+            {
+                unit.Damage(10);
+            }
+        }
     }
     public void GenerateGrid()
     {
@@ -107,6 +115,7 @@ public class GridManager : MonoBehaviour
     }
     #endregion
 
+    #region REACHABLE_POSITION
     private void FindReachablePosition(Unit unit)
     {
         ClearReachablePos();
@@ -120,7 +129,6 @@ public class GridManager : MonoBehaviour
             GetTileAtPos(pos).Highlight(0.5f);
         }
     }
-
     
     public void ClearReachablePos()
     {
@@ -130,6 +138,7 @@ public class GridManager : MonoBehaviour
         }
         reachablePosition.Clear();
     }
+    #endregion
 
     public void UpdateTileOnMouse()
     {
@@ -139,10 +148,10 @@ public class GridManager : MonoBehaviour
             switch(GameManager.Instance.GetState())
             {
                 case GameManager.GameState.PLAYER_TURN:
-                    HightlightHoveredTile(info);
+                    UpdateHoveredTile(info, true);
                     break;
                 case GameManager.GameState.PLAYER_MOVE_CHARACTER:
-                    UpdateHoveredTile(info);
+                    UpdateHoveredTile(info, false);
                     break;
             }
             
@@ -189,27 +198,20 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void HightlightHoveredTile(RaycastHit hit)
+    private void UpdateHoveredTile(RaycastHit hit, bool highlight = true)
     {
         Vector3 position = new(Mathf.Round(hit.point.x), Mathf.Round(hit.point.y), Mathf.Round(hit.point.z));
         Tile newTile = GetTileAtPos(position);
         if (newTile != null && tileOnMouse != newTile)
         {
-            if (tileOnMouse != null)
+            if(highlight)
             {
-                tileOnMouse.RemoveHighlight();
+                if (tileOnMouse != null)
+                {
+                    tileOnMouse.RemoveHighlight();
+                }
+                newTile.Highlight(0.5f);
             }
-            newTile.Highlight(0.5f);
-            tileOnMouse = newTile;
-        }
-    }
-
-    private void UpdateHoveredTile(RaycastHit hit)
-    {
-        Vector3 position = new(Mathf.Round(hit.point.x), Mathf.Round(hit.point.y), Mathf.Round(hit.point.z));
-        Tile newTile = GetTileAtPos(position);
-        if (newTile != null && tileOnMouse != newTile)
-        {
             tileOnMouse = newTile;
         }
     }
