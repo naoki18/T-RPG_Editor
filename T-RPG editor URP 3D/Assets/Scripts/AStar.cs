@@ -14,7 +14,7 @@ public static class AStar
             path.Insert(0, current);
         }
         // The first tile is the one where the character is on
-        path.RemoveAt(0);
+        //path.RemoveAt(0);
         return path;
     }
     public static List<Vector3> GetPath(Tile tileA, Tile tileB)

@@ -7,6 +7,8 @@ public class Tile : MonoBehaviour
     MeshRenderer mRenderer;
     Unit unitOnTile;
 
+    string tileName;
+
     Color baseColor;
 
     [SerializeField] TileInformationUI informationUi;
@@ -19,6 +21,7 @@ public class Tile : MonoBehaviour
         tile.walkableValue = data.walkableValue;
         tile.mRenderer.material = data.material;
         tile.baseColor = tile.mRenderer.material.color;
+        tile.tileName = data.tileName;
         return tile;
     }
 
@@ -65,6 +68,10 @@ public class Tile : MonoBehaviour
         return unitOnTile;
     }
 
+    public string GetName()
+    {
+        return tileName;
+    }
     public void ShowInformation()
     {
         informationUi.UpdateUi();

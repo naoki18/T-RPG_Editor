@@ -167,6 +167,7 @@ public class GridManager : MonoBehaviour
             }
             
         }
+        else if (tileOnMouse != null) SetHoveredTileNull();
         Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
     }
 
@@ -239,5 +240,12 @@ public class GridManager : MonoBehaviour
         }
 
         return neighbours;
+    }
+
+    private void SetHoveredTileNull()
+    {
+        tileOnMouse.HideInformation();
+        tileOnMouse.RemoveHighlight();
+        tileOnMouse = null;
     }
 }

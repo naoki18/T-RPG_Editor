@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5243c638cc4ef8c4aa24abc583d5a584, type: 3}
   m_Name: Mud
   m_EditorClassIdentifier: 
+  tileName: Mud
   material: {fileID: 2100000, guid: 1f8dc501efea8d145b637e84bbae0f8b, type: 2}
   walkableValue: 2

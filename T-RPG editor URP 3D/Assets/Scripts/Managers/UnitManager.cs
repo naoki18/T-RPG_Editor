@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class UnitManager : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class UnitManager : MonoBehaviour
             GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
             return;
         }
-        
+
         Vector3 pos = GridManager.Instance.GetRandomValidPos();
         unit.transform.position = new Vector3(pos.x, pos.y + 1, pos.z);
         unit.SetPosition(pos);
@@ -72,21 +73,33 @@ public class UnitManager : MonoBehaviour
     public IEnumerator MoveUnit(Unit unit, List<Vector3> positions)
     {
         GridManager.Instance.ClearReachablePos();
-        foreach (var position in positions)
+        Vector3 beginPos = positions[0];
+        beginPos.y += 1;
+        Vector3 currentDirection = positions[1] - positions[0];
+        int range = 1;
+        for (int i = 0; i < positions.Count; i++)
         {
-            Vector3 positionToReach = position;
+            if (i < positions.Count - 1 && currentDirection == positions[i + 1] - positions[i])
+            {
+                range++;
+                continue;
+            }
+            if(i < positions.Count - 1) currentDirection = positions[i+1] - positions[i];
+            Vector3 positionToReach = positions[i];
             positionToReach.y += 1;
             float timer = 0f;
             do
             {
-                unit.transform.position = Vector3.Lerp(unit.transform.position, positionToReach, timer);
-                timer += Time.deltaTime / 0.33f;
+                unit.transform.position = Vector3.Lerp(beginPos, positionToReach, timer);
+                timer += Time.deltaTime / (0.5f * (Mathf.Log(range) +0.2f) );
                 timer = Mathf.Clamp01(timer);
                 yield return null;
             } while (timer < 1f);
-            
             // Call this to set the unit on the tile. Because before we only move its sprite
-            unit.SetPosition(position);
+            unit.SetPosition(positions[i]);
+            beginPos = positions[i];
+            beginPos.y += 1;
+            range = 1;
             yield return null;
         }
         GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);

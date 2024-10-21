@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5243c638cc4ef8c4aa24abc583d5a584, type: 3}
   m_Name: Grass
   m_EditorClassIdentifier: 
+  tileName: Grass
   material: {fileID: 2100000, guid: eef66aecd99cf9a408e750344eaf7ba5, type: 2}
   walkableValue: 1
