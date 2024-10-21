@@ -76,7 +76,7 @@ public class UnitManager : MonoBehaviour
         Vector3 beginPos = positions[0];
         beginPos.y += 1;
         Vector3 currentDirection = positions[1] - positions[0];
-        int range = 1;
+        int range = 0;
         for (int i = 0; i < positions.Count; i++)
         {
             if (i < positions.Count - 1 && currentDirection == positions[i + 1] - positions[i])
@@ -91,7 +91,7 @@ public class UnitManager : MonoBehaviour
             do
             {
                 unit.transform.position = Vector3.Lerp(beginPos, positionToReach, timer);
-                timer += Time.deltaTime / (0.5f * (Mathf.Log(range) +0.2f) );
+                timer += (Time.deltaTime / 0.2f) / range;
                 timer = Mathf.Clamp01(timer);
                 yield return null;
             } while (timer < 1f);
