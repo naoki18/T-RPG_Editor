@@ -34,8 +34,7 @@ public class UnitManager : MonoBehaviour
             GameManager.Instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
             return;
         }
-        Vector3 pos = GridManager.Instance.GetRandomValidPos();
-        unit.transform.position = new Vector3(pos.x, pos.y + 1, pos.z);
+        Vector3Int pos = GridManager.Instance.GetRandomValidPos();
         unit.SetPosition(pos);
         GameManager.Instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
     }
@@ -48,8 +47,7 @@ public class UnitManager : MonoBehaviour
             return;
         }
 
-        Vector3 pos = GridManager.Instance.GetRandomValidPos();
-        unit.transform.position = new Vector3(pos.x, pos.y + 1, pos.z);
+        Vector3Int pos = GridManager.Instance.GetRandomValidPos();
         unit.SetPosition(pos);
         GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
     }
@@ -70,51 +68,9 @@ public class UnitManager : MonoBehaviour
         OnSelectUnit.Invoke(unit);
     }
 
-    public IEnumerator MoveUnit(Unit unit, List<Vector3> positions)
+    public void UnselectUnit()
     {
-        GridManager.Instance.ClearReachablePos();
-        Vector3 beginPos = positions[0];
-        beginPos.y += 1;
-        Vector3 currentDirection = positions[1] - positions[0];
-        int range = 0;
-        for (int i = 0; i < positions.Count; i++)
-        {
-            if (i < positions.Count - 1 && currentDirection == positions[i + 1] - positions[i])
-            {
-                range++;
-                continue;
-            }
-            if(i < positions.Count - 1) currentDirection = positions[i+1] - positions[i];
-            Vector3 positionToReach = positions[i];
-            positionToReach.y += 1;
-            float timer = 0f;
-            do
-            {
-                unit.transform.position = Vector3.Lerp(beginPos, positionToReach, timer);
-                timer += (Time.deltaTime / 0.2f) / range;
-                timer = Mathf.Clamp01(timer);
-                yield return null;
-            } while (timer < 1f);
-            // Call this to set the unit on the tile. Because before we only move its sprite
-            unit.SetPosition(positions[i]);
-            beginPos = positions[i];
-            beginPos.y += 1;
-            range = 1;
-            yield return null;
-        }
-        GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
         selectedUnit = null;
-        yield return null;
-    }
-    public void HardMoveUnit(Unit unit, Vector3 position)
-    {
-        unit.SetPosition(position);
-    }
-
-    public void HardMoveUnit(Unit unit, Tile tile)
-    {
-        Vector3 pos = new(tile.transform.position.x, tile.transform.position.y, tile.transform.position.z);
-        unit.SetPosition(pos);
     }
     #endregion
 

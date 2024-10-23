@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public static Vector3[] directions = new Vector3[4] { new Vector3(1, 0, 0), new Vector3(-1, 0, 0), new Vector3(0, 0, 1), new Vector3(0, 0, -1) };
+    public static Vector3Int[] directions = new Vector3Int[4] { new Vector3Int(1, 0, 0), new Vector3Int(-1, 0, 0), new Vector3Int(0, 0, 1), new Vector3Int(0, 0, -1) };
     public static GridManager Instance { get; private set; }
     [SerializeField] int width;
     [SerializeField] int height;
     [SerializeField] Tile tilePf;
 
     List<ScriptableTile> tiles = new List<ScriptableTile>();
-    Dictionary<Vector3, Tile> tileMap;
+    Dictionary<Vector3Int, Tile> tileMap;
 
-    List<Vector3> reachablePosition = new List<Vector3>();
+    List<Vector3Int> reachablePosition = new List<Vector3Int>();
     Tile tileOnMouse = null;
     private void Awake()
     {
@@ -47,15 +47,15 @@ public class GridManager : MonoBehaviour
     }
     public void GenerateGrid()
     {
-        tileMap = new Dictionary<Vector3, Tile>();
+        tileMap = new Dictionary<Vector3Int, Tile>();
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 Tile newTile = Tile.CreateTile(tiles[Random.Range(0, tiles.Count)]);
-                newTile.transform.position = new Vector3(x, 0, y);
+                newTile.transform.position = new Vector3Int(x, 0, y);
                 newTile.name = $"Tile {y} {x}";
-                tileMap[new Vector3(x, 0, y)] = newTile;
+                tileMap[new Vector3Int(x, 0, y)] = newTile;
             }
         }
 
@@ -70,31 +70,35 @@ public class GridManager : MonoBehaviour
     }
     public Tile GetTileAtPos(int x, int y)
     {
-        return (tileMap.TryGetValue(new Vector3(x, 0, y), out Tile tile) ? tile : null);
+        return (tileMap.TryGetValue(new Vector3Int(x, 0, y), out Tile tile) ? tile : null);
     }
-    public Tile GetTileAtPos(Vector3 pos)
+    public Tile GetTileAtPos(Vector3Int pos)
     {
-        return (tileMap.TryGetValue(pos, out Tile tile) ? tile : null);
+        if(tileMap.TryGetValue(pos, out Tile tile))
+        {
+            return tile;
+        }
+        return null;
     }
 
-    public Tile GetRandomTile(out Vector3 pos)
+    public Tile GetRandomTile(out Vector3Int pos)
     {
         int x, y;
         x = Random.Range(0, width);
         y = Random.Range(0, height);
-        pos = new Vector3(x, 0, y);
+        pos = new Vector3Int(x, 0, y);
         return tileMap.TryGetValue(pos, out Tile tile) ? tile : null;
     }
 
-    public Vector3 GetRandomPos()
+    public Vector3Int GetRandomPos()
     {
         int x, y;
         x = Random.Range(0, width);
         y = Random.Range(0, height);
-        return new Vector3(x, 0, y);
+        return new Vector3Int(x, 0, y);
     }
 
-    public Vector3 GetRandomValidPos()
+    public Vector3Int GetRandomValidPos()
     {
         const int LIMIT = 1000;
         int x, y;
@@ -109,19 +113,19 @@ public class GridManager : MonoBehaviour
         if (i == LIMIT && GetTileAtPos(x, y).IsValid())
         {
             Debug.LogError("Impossible to find a valid position");
-            return Vector3.zero;
+            return Vector3Int.zero;
         }
-        return new Vector3(x, 0, y);
+        return new Vector3Int(x, 0, y);
     }
 
-    public bool IsReachable(Vector3 position)
+    public bool IsReachable(Vector3Int position)
     {
         return reachablePosition.Contains(position);
     }
 
     public bool IsReachable(Tile tile)
     {
-        Vector3 pos = tile.transform.position;
+        Vector3Int pos = tile.transform.position.ToInt();
         return reachablePosition.Contains(pos);
     }
     #endregion
@@ -203,16 +207,16 @@ public class GridManager : MonoBehaviour
     private void SelectNewPosition()
     {
         Unit selectedUnit = UnitManager.instance.GetSelectedUnit();
-        Tile tileOccupied = GetTileAtPos(selectedUnit.GetPositionOnGrid());
+        Tile tileOccupied = GetTileAtPos(selectedUnit.transform.position.ToInt());
         if (selectedUnit != null && tileOnMouse != null && tileOnMouse.GetCharacter() == null && IsReachable(tileOnMouse))
         {
-            StartCoroutine(UnitManager.instance.MoveUnit(selectedUnit, AStar.GetPath(tileOccupied, tileOnMouse)));
+            StartCoroutine(selectedUnit.MoveUnit(AStar.GetPath(tileOccupied, tileOnMouse)));
         }
     }
 
     private void UpdateHoveredTile(RaycastHit hit, bool highlight = true)
     {
-        Vector3 position = new(Mathf.Round(hit.point.x), Mathf.Round(hit.point.y), Mathf.Round(hit.point.z));
+        Vector3Int position = hit.point.ToInt();
         Tile newTile = GetTileAtPos(position);
         if (newTile != null && tileOnMouse != newTile)
         {
@@ -231,9 +235,9 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public static Vector3[] GetNeighbours(Vector3 pos)
+    public static Vector3Int[] GetNeighbours(Vector3Int pos)
     {
-        Vector3[] neighbours = new Vector3[4];
+        Vector3Int[] neighbours = new Vector3Int[4];
         for (int i = 0; i < 4; i++)
         {
             neighbours[i] = pos + directions[i];

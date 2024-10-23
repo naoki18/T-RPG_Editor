@@ -5,9 +5,9 @@ using UnityEngine;
 
 public static class AStar
 {
-    private static List<Vector3> ReconstructPath(Dictionary<Vector3, Vector3> cameFrom, Vector3 current)
+    private static List<Vector3Int> ReconstructPath(Dictionary<Vector3Int, Vector3Int> cameFrom, Vector3Int current)
     {
-        List<Vector3> path = new List<Vector3>() { current };
+        List<Vector3Int> path = new List<Vector3Int>() { current };
         while (cameFrom.ContainsKey(current))
         {
             current = cameFrom[current];
@@ -17,20 +17,20 @@ public static class AStar
         //path.RemoveAt(0);
         return path;
     }
-    public static List<Vector3> GetPath(Tile tileA, Tile tileB)
+    public static List<Vector3Int> GetPath(Tile tileA, Tile tileB)
     {
-        Vector3 start = tileA.transform.position;
-        Vector3 end = tileB.transform.position;
+        Vector3Int start = tileA.transform.position.ToInt();
+        Vector3Int end = tileB.transform.position.ToInt();
 
-        List<Vector3> set = new List<Vector3>() { start };
-        Dictionary<Vector3, Vector3> cameFrom = new();
+        List<Vector3Int> set = new List<Vector3Int>() { start };
+        Dictionary<Vector3Int, Vector3Int> cameFrom = new();
 
-        Dictionary<Vector3, int> gScore = new();
+        Dictionary<Vector3Int, int> gScore = new();
         gScore[start] = 0;
 
         while (set.Count > 0)
         {
-            Vector3 current = GetPosWithLowestScore(set, gScore);
+            Vector3Int current = GetPosWithLowestScore(set, gScore);
             if(current == end) return AStar.ReconstructPath(cameFrom, current);
 
             set.Remove(current);
@@ -53,9 +53,9 @@ public static class AStar
         return new();
     }
 
-    private static Vector3 GetPosWithLowestScore(List<Vector3> set, Dictionary<Vector3, int> dic)
+    private static Vector3Int GetPosWithLowestScore(List<Vector3Int> set, Dictionary<Vector3Int, int> dic)
     {
-        Vector3 lowest = set.First();
+        Vector3Int lowest = set.First();
         foreach(var pos in set)
         {
             if (dic[pos] < dic[lowest]) lowest = pos;
