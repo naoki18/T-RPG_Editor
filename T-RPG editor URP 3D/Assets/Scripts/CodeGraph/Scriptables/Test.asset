@@ -12,3 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a9473b35814e945a8af90e5ba13098, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
+  _nodes:
+  - rid: 6442822057035300866
+  - rid: 6442822057035300867
+  references:
+    version: 2
+    RefIds:
+    - rid: 6442822057035300866
+      type: {class: StartNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: e89e59a0-d050-41b5-bd5e-10fa95b6e27a
+        _position:
+          serializedVersion: 2
+          x: 452
+          y: 310
+          width: 0
+          height: 0
+        typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 6442822057035300867
+      type: {class: StartNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: ce5ac323-9c27-4699-964d-5a470415af63
+        _position:
+          serializedVersion: 2
+          x: 590
+          y: 272
+          width: 0
+          height: 0
+        typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

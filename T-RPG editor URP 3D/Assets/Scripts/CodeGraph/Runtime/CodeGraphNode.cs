@@ -11,7 +11,7 @@ public class CodeGraphNode
 
     public string typeName;
     public string id => _guid;
-    public Rect position => position;
+    public Rect position => _position;
 
     public CodeGraphNode()
     {
