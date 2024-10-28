@@ -1,6 +1,7 @@
 using System;
 using UnityEditor;
 using UnityEditor.Build.Content;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 
@@ -27,6 +28,24 @@ public class CodeGraphEditorWindow : EditorWindow
         newWindow.Load(target);
     }
 
+    private void OnEnable()
+    {
+        if (graph != null)
+        {
+            DrawGraph();
+        }
+    }
+    public void OnGUI()
+    {
+        if(EditorUtility.IsDirty(currentGraph))
+        {
+            this.hasUnsavedChanges = true;
+        }
+        else
+        {
+            this.hasUnsavedChanges = false;
+        }
+    }
     public void Load(CodeGraphAsset target)
     {
         graph = target;
@@ -37,6 +56,13 @@ public class CodeGraphEditorWindow : EditorWindow
     {
         serializedObject = new SerializedObject(graph);
         view = new CodeGraphView(serializedObject, this);
+        view.graphViewChanged += OnChange;
         rootVisualElement.Add(view);
+    }
+
+    private GraphViewChange OnChange(GraphViewChange graphViewChange)
+    {
+        EditorUtility.SetDirty(currentGraph);
+        return graphViewChange;
     }
 }
