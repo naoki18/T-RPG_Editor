@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -160,6 +161,7 @@ public class CodeGraphView : GraphView
         {
             AddNodeToGraph(node);
         }
+        Bind();
     }
     private void DrawConnections()
     {
@@ -205,6 +207,7 @@ public class CodeGraphView : GraphView
         _serializedObject.Update();
 
         AddNodeToGraph(node);
+        Bind();
     }
 
     private void AddNodeToGraph(CodeGraphNode node)
@@ -217,5 +220,11 @@ public class CodeGraphView : GraphView
         _nodeDict.Add(node.id, editorNode);
 
         AddElement(editorNode);
+    }
+
+    private void Bind()
+    {
+        _serializedObject.Update();
+        this.Bind(_serializedObject);
     }
 }

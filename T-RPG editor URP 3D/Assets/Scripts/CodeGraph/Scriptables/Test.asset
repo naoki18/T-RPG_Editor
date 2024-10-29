@@ -14,20 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nodes:
   - rid: 6442822148687659011
-  - rid: 6442822148687659012
-  - rid: 6442822149051252736
+  - rid: 6442822149051252745
   _connections:
   - inputPort:
-      nodeId: 80e9605e-4b58-408f-98fb-091b906149cd
+      nodeId: c774e6cb-2a95-49f3-807d-44a68d64277c
       portIndex: 1
     outputPort:
       nodeId: 36d02b46-50b5-42f5-8101-b1a176bd5f82
-      portIndex: 0
-  - inputPort:
-      nodeId: da22a9ae-39ea-4678-b719-9dc0cc0305e1
-      portIndex: 1
-    outputPort:
-      nodeId: 80e9605e-4b58-408f-98fb-091b906149cd
       portIndex: 0
   references:
     version: 2
@@ -43,29 +36,17 @@ MonoBehaviour:
           width: 106
           height: 77
         typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    - rid: 6442822148687659012
+    - rid: 6442822149051252745
       type: {class: DebugLogNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: 80e9605e-4b58-408f-98fb-091b906149cd
+        _guid: c774e6cb-2a95-49f3-807d-44a68d64277c
         _position:
           serializedVersion: 2
-          x: 350
-          y: 269
-          width: 108
-          height: 101
+          x: 340
+          y: 271
+          width: 184
+          height: 140
         typeName: DebugLogNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
-        message: 
-    - rid: 6442822149051252736
-      type: {class: DebugLogNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: da22a9ae-39ea-4678-b719-9dc0cc0305e1
-        _position:
-          serializedVersion: 2
-          x: 534
-          y: 243
-          width: 108
-          height: 101
-        typeName: DebugLogNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        message: 
+        message: zaz
+        test: 10

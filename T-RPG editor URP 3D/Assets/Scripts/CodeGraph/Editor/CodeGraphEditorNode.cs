@@ -51,7 +51,7 @@ public class CodeGraphEditorNode : Node
                 //field.RegisterValueChangeCallback(OnFieldChange);
             }
         }
-        
+        RefreshExpandedState();
     }
 
     private void OnFieldChange(SerializedPropertyChangeEvent evt)
@@ -83,7 +83,9 @@ public class CodeGraphEditorNode : Node
         {
             FetchSerializedProperty();
         }
+
         SerializedProperty prop = _serializedProperty.FindPropertyRelative(name);
+
         PropertyField field = new PropertyField(prop);
         field.bindingPath = prop.propertyPath;
         extensionContainer.Add(field);

@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.FullSerializer;
+using System;
 using UnityEngine;
+
 
 [NodeInfo("Debug Log", "Debug/Log")]
 public class DebugLogNode : CodeGraphNode
 {
-    [ExposedProperty] public string message;
+    
+    [ExposedProperty()] public string message;
     public override string OnProcess(CodeGraphAsset graph)
     {
         Debug.Log(message);
