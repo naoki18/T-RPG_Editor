@@ -4,12 +4,12 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
-using UnityEngine;
 
 public class CodeGraphEditorNode : Node
 {
     private CodeGraphNode node;
     private Port _outputPort;
+    private Port _inputPort;
     private List<Port> _ports;
     private SerializedObject _serializedObject;
     public CodeGraphNode Node => node;
@@ -45,19 +45,22 @@ public class CodeGraphEditorNode : Node
 
         foreach (FieldInfo variable in type.GetFields())
         {
-            if (variable.GetCustomAttribute<ExposedPropertyAttribute>() != null)
+
+            bool hasExposedProperty = variable.GetCustomAttribute<ExposedPropertyAttribute>() != null;
+            bool hasInputProperty = variable.GetCustomAttribute<InputAttribute>() != null;
+            bool hasOutputAttribute = variable.GetCustomAttribute<OutputAttribute>() != null;
+
+            if (hasExposedProperty || hasInputProperty || hasOutputAttribute)
             {
-                PropertyField field = DrawProperty(variable.Name);
-                //field.RegisterValueChangeCallback(OnFieldChange);
+                if(hasInputProperty) CreatePropertyInput(variable.Name, variable.FieldType);
+                else if(hasOutputAttribute) CreatePropertyOutput(variable.Name, variable.FieldType);
+                else DrawProperty(variable.Name);
+                
             }
         }
         RefreshExpandedState();
     }
 
-    private void OnFieldChange(SerializedPropertyChangeEvent evt)
-    {
-        throw new NotImplementedException();
-    }
 
     private void FetchSerializedProperty()
     {
@@ -92,13 +95,30 @@ public class CodeGraphEditorNode : Node
         return field;
     }
 
+    private void CreatePropertyInput(string name, Type type)
+    {
+        Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, type);
+        inputPort.portName = name;
+        _ports.Add(inputPort);
+        inputContainer.Add(inputPort);
+    }
+
+    private void CreatePropertyOutput(string name, Type type)
+    {
+        Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, type);
+        outputPort.portName = name;
+
+        _ports.Add(outputPort);
+        outputContainer.Add(outputPort);
+    }
+
     private void CreateFlowInput()
     {
-        Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(PortType.FlowPort));
-        inputPort.portName = "Input";
+        _inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(PortType.FlowPort));
+        _inputPort.portName = "Input";
         
-        _ports.Add(inputPort);
-        outputContainer.Add(inputPort);
+        _ports.Add(_inputPort);
+        inputContainer.Add(_inputPort);
     }
     private void CreateFlowOutput()
     {

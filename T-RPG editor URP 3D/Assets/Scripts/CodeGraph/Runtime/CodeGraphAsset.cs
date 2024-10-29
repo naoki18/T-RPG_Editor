@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CodeGraph", menuName = "CodeGraph/NewGraph")]
@@ -10,11 +9,14 @@ public class CodeGraphAsset : ScriptableObject
     [SerializeReference]
     private List<CodeGraphNode> _nodes;
     [SerializeField]
-    List<CodeGraphConnection> _connections;
-    public List<CodeGraphNode> Nodes => _nodes;
-    public List<CodeGraphConnection> Connections => _connections;
+    private List<CodeGraphConnection> _connections;
 
     private Dictionary<string, CodeGraphNode> _nodeDict;
+
+    public List<CodeGraphNode> Nodes => _nodes;
+    public List<CodeGraphConnection> Connections => _connections;
+    public GameObject gameObject;
+    
     public Dictionary<string, CodeGraphNode> NodeDict => _nodeDict;
     public CodeGraphAsset()
     {
@@ -22,8 +24,9 @@ public class CodeGraphAsset : ScriptableObject
         _connections = new List<CodeGraphConnection>();
     }
 
-    public void Init()
+    public void Init(GameObject gameObject)
     {
+        this.gameObject = gameObject;
         _nodeDict = new Dictionary<string, CodeGraphNode>();
         foreach (var node in _nodes)
         {
@@ -35,7 +38,16 @@ public class CodeGraphAsset : ScriptableObject
         StartNode node = Nodes.OfType<StartNode>().FirstOrDefault();
         if (node == null)
         {
-            Debug.LogError("Can't find start node in ");
+            return null;
+        }
+        return node;
+    }
+
+    public CodeGraphNode GetUpdateNode()
+    {
+        UpdateNode node = Nodes.OfType<UpdateNode>().FirstOrDefault();
+        if (node == null)
+        {
             return null;
         }
         return node;
@@ -58,4 +70,6 @@ public class CodeGraphAsset : ScriptableObject
         }
         return null;
     }
+
+    
 }

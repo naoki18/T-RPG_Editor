@@ -14,39 +14,110 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nodes:
   - rid: 6442822148687659011
-  - rid: 6442822149051252745
+  - rid: 593922769994121217
+  - rid: 593922769994121222
+  - rid: 593922769994121223
+  - rid: 593922769994121225
   _connections:
   - inputPort:
-      nodeId: c774e6cb-2a95-49f3-807d-44a68d64277c
+      nodeId: 44d93e8c-bfb3-4d98-9339-7ef8f12d8c32
+      portIndex: 1
+    outputPort:
+      nodeId: efb5d304-b6f6-4736-a47e-2eda8537e716
+      portIndex: 0
+  - inputPort:
+      nodeId: 44d93e8c-bfb3-4d98-9339-7ef8f12d8c32
+      portIndex: 2
+    outputPort:
+      nodeId: efb5d304-b6f6-4736-a47e-2eda8537e716
+      portIndex: 2
+  - inputPort:
+      nodeId: efb5d304-b6f6-4736-a47e-2eda8537e716
       portIndex: 1
     outputPort:
       nodeId: 36d02b46-50b5-42f5-8101-b1a176bd5f82
       portIndex: 0
+  - inputPort:
+      nodeId: a3817234-cdd2-4cba-84a9-4bd4e61fb3fc
+      portIndex: 2
+    outputPort:
+      nodeId: 44d93e8c-bfb3-4d98-9339-7ef8f12d8c32
+      portIndex: 3
+  - inputPort:
+      nodeId: a3817234-cdd2-4cba-84a9-4bd4e61fb3fc
+      portIndex: 1
+    outputPort:
+      nodeId: 44d93e8c-bfb3-4d98-9339-7ef8f12d8c32
+      portIndex: 0
+  gameObject: {fileID: 0}
   references:
     version: 2
     RefIds:
+    - rid: 593922769994121217
+      type: {class: UpdateNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 82dff3e4-e6ec-42c9-9e6c-dd776b619ad2
+        _position:
+          serializedVersion: 2
+          x: 336
+          y: 486
+          width: 88
+          height: 77
+        typeName: UpdateNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        outputLinkedValue: 
+    - rid: 593922769994121222
+      type: {class: ToStringNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 44d93e8c-bfb3-4d98-9339-7ef8f12d8c32
+        _position:
+          serializedVersion: 2
+          x: 696
+          y: 298
+          width: 157
+          height: 101
+        typeName: ToStringNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        outputLinkedValue: message
+        fromCast: 
+    - rid: 593922769994121223
+      type: {class: AddNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: efb5d304-b6f6-4736-a47e-2eda8537e716
+        _position:
+          serializedVersion: 2
+          x: 496
+          y: 298
+          width: 156
+          height: 140
+        typeName: AddNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        outputLinkedValue: toCast
+        a: 15
+        b: 10
+        result: 0
+    - rid: 593922769994121225
+      type: {class: DebugLogNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: a3817234-cdd2-4cba-84a9-4bd4e61fb3fc
+        _position:
+          serializedVersion: 2
+          x: 881
+          y: 298
+          width: 139
+          height: 101
+        typeName: DebugLogNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        outputLinkedValue: 
+        message: 
     - rid: 6442822148687659011
       type: {class: StartNode, ns: , asm: Assembly-CSharp}
       data:
         _guid: 36d02b46-50b5-42f5-8101-b1a176bd5f82
         _position:
           serializedVersion: 2
-          x: 159
-          y: 295
+          x: 336
+          y: 298
           width: 106
           height: 77
         typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    - rid: 6442822149051252745
-      type: {class: DebugLogNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: c774e6cb-2a95-49f3-807d-44a68d64277c
-        _position:
-          serializedVersion: 2
-          x: 340
-          y: 271
-          width: 184
-          height: 140
-        typeName: DebugLogNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        message: zaz
-        test: 10
+        outputLinkedValue: 

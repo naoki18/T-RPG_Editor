@@ -1,6 +1,6 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.Android;
 public class CodeGraphObject : MonoBehaviour
 {
     [SerializeField]
@@ -8,22 +8,31 @@ public class CodeGraphObject : MonoBehaviour
 
     // This is to modify a new asset and not the main scriptable
     private CodeGraphAsset assetInstance;
-    private void OnEnable()
+
+    private CodeGraphNode startNode;
+    private CodeGraphNode updateNode;
+    private void Start()
     {
         assetInstance = Instantiate(_asset);
-        ExecuteCodeGraph();
+        InitGraph();
+        ProcessAndMoveToNextNode(startNode);
     }
 
-    private void ExecuteCodeGraph()
+    private void InitGraph()
     {
-        assetInstance.Init();
-        CodeGraphNode startNode = assetInstance.GetStartNode();
-        ProcessAndMoveToNextNode(startNode);
+        assetInstance.Init(this.gameObject);
+        startNode = assetInstance.GetStartNode();
+        updateNode = assetInstance.GetUpdateNode();
+    }
+
+    public void Update()
+    {
+        ProcessAndMoveToNextNode(updateNode);
     }
 
     private void ProcessAndMoveToNextNode(CodeGraphNode currentNode)
     {
-        string nextNodeId = currentNode.OnProcess(assetInstance);
+        string nextNodeId = currentNode.OnProcess(assetInstance, null);
         if (!string.IsNullOrEmpty(nextNodeId))
         {
             CodeGraphNode nextNode = assetInstance.GetNode(nextNodeId);

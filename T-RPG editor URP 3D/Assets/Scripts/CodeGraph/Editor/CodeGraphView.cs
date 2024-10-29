@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
@@ -65,10 +66,8 @@ public class CodeGraphView : GraphView
         }
         foreach (var port in allPorts)
         {
-            if (port == startPort) continue;
-            if (port.node == startPort.node) continue;
-            if(port.direction == startPort.direction) continue;
-            if (port.portType == startPort.portType)
+            if (port == startPort || port.node == startPort.node || port.direction == startPort.direction) continue;
+            if (port.portType == typeof(object) || port.portType == startPort.portType)
             {
                 ports.Add(port);
             }
@@ -136,9 +135,27 @@ public class CodeGraphView : GraphView
         CodeGraphEditorNode outputNode = (CodeGraphEditorNode)edge.output.node;
         int outputIndex = outputNode.Ports.IndexOf(edge.output);
 
+        ConnectVariable(edge, inputNode, outputNode);
+
         CodeGraphConnection connection = new CodeGraphConnection(inputNode.Node.id, inputIndex, outputNode.Node.id, outputIndex);
         _codeGraph.Connections.Add(connection);
         _connectionDict.Add(edge, connection);
+    }
+
+    private static void ConnectVariable(Edge edge, CodeGraphEditorNode inputNode, CodeGraphEditorNode outputNode)
+    {
+        System.Type inputType = inputNode.Node.GetType();
+        System.Type outputType = outputNode.Node.GetType();
+
+        FieldInfo outputField = outputType.GetField(edge.output.portName);
+        FieldInfo inputField = inputType.GetField(edge.input.portName);
+
+        if (outputField == null || inputField == null) return;
+        outputNode.Node.outputLinkedValue = edge.input.portName;
+        //object outputVariable = outputField.GetRawConstantValue();
+        //object inputVariable = outputField.GetRawConstantValue();
+
+        //inputNode.Node.connectedVariable.Add(outputVariable, inputVariable);
     }
 
     private void MoveNode(CodeGraphEditorNode node)
@@ -181,6 +198,7 @@ public class CodeGraphView : GraphView
         Port inputPort = inputNode.Ports[connection.inputPort.portIndex];
         Port outputPort = outputNode.Ports[connection.outputPort.portIndex];
         Edge newConnection = inputPort.ConnectTo(outputPort);
+        ConnectVariable(newConnection, inputNode, outputNode);
         AddElement(newConnection);
         _connectionDict[newConnection] = connection;
     }

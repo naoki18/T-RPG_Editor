@@ -1,12 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[NodeInfo("Debug Log", "Debug/Log")]
-public class DebugLogNode : CodeGraphNode
+[NodeInfo("Update", "Process/Update", false, true)]
+public class UpdateNode : CodeGraphNode
 {
-    [Input] public string message;
     public override string OnProcess(CodeGraphAsset graph, object outputValue)
     {
-        Debug.Log(message);
         return base.OnProcess(graph, null);
     }
 }
