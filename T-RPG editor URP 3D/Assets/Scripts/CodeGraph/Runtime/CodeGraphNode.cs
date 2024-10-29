@@ -25,4 +25,14 @@ public class CodeGraphNode
     {
         _position = position; 
     }
+
+    public virtual string OnProcess(CodeGraphAsset graph)
+    {
+        CodeGraphNode node = graph.GetNextNode(_guid, 0);
+        if (node != null)
+        {
+            return node.id;
+        }
+        return string.Empty;
+    }
 }

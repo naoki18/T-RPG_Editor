@@ -210,7 +210,7 @@ public class CodeGraphView : GraphView
     private void AddNodeToGraph(CodeGraphNode node)
     {
         node.typeName = node.GetType().AssemblyQualifiedName;
-        CodeGraphEditorNode editorNode = new CodeGraphEditorNode(node);
+        CodeGraphEditorNode editorNode = new CodeGraphEditorNode(node, _serializedObject);
         editorNode.SetPosition(node.position);
         
         _graphNodes.Add(editorNode);
