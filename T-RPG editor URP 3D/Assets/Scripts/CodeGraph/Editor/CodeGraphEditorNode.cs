@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
+using UnityEngine.UIElements;
 
 public class CodeGraphEditorNode : Node
 {

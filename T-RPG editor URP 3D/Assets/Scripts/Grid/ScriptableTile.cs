@@ -8,4 +8,5 @@ public class ScriptableTile : ScriptableObject
     public string tileName;
     public Material material;
     public short walkableValue;
+    public CodeGraphAsset visualScriptingAsset;
 }

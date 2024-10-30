@@ -22,7 +22,6 @@ public class GridManager : MonoBehaviour
         {
             Instance = this;
             tiles = Resources.LoadAll<ScriptableTile>("Tiles").ToList();
-            Debug.Log(tiles.Count);
         }
         else Destroy(this);
     }

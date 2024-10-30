@@ -1,5 +1,4 @@
-using System;
-using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 public class CodeGraphObject : MonoBehaviour
 {
@@ -11,6 +10,18 @@ public class CodeGraphObject : MonoBehaviour
 
     private CodeGraphNode startNode;
     private CodeGraphNode updateNode;
+
+    public CodeGraphAsset Asset
+    {
+        get => _asset;
+        set
+        {
+            if(_asset == null)
+            {
+                _asset = value;
+            }
+        }
+    }
     private void Start()
     {
         assetInstance = Instantiate(_asset);
@@ -27,12 +38,13 @@ public class CodeGraphObject : MonoBehaviour
 
     public void Update()
     {
-        ProcessAndMoveToNextNode(updateNode);
+        if(updateNode != null) ProcessAndMoveToNextNode(updateNode);
+
     }
 
     private void ProcessAndMoveToNextNode(CodeGraphNode currentNode)
     {
-        string nextNodeId = currentNode.OnProcess(assetInstance, null);
+        string nextNodeId = currentNode.OnProcess(assetInstance);
         if (!string.IsNullOrEmpty(nextNodeId))
         {
             CodeGraphNode nextNode = assetInstance.GetNode(nextNodeId);
