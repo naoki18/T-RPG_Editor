@@ -13,69 +13,9 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   _nodes:
-  - rid: 6442822167692050440
-  - rid: 6442822167692050457
-  - rid: 6442822167692050458
-  - rid: 6442822167692050459
-  - rid: 6442822167692050460
-  - rid: 6442822167692050464
   - rid: 6442822167692050465
   - rid: 6442822167692050467
   _connections:
-  - inputPort:
-      nodeId: c7b53331-b86c-4f59-8187-7b38a47543cf
-      portIndex: 1
-    outputPort:
-      nodeId: c46a739f-f4ea-43a4-93f2-44c20c7ace90
-      portIndex: 0
-  - inputPort:
-      nodeId: 9ae02aff-fee3-4223-a6e3-74251aa979e6
-      portIndex: 1
-    outputPort:
-      nodeId: c7b53331-b86c-4f59-8187-7b38a47543cf
-      portIndex: 0
-  - inputPort:
-      nodeId: 2e6c4113-cd7c-4a5a-ab42-e91cdad11249
-      portIndex: 1
-    outputPort:
-      nodeId: 9ae02aff-fee3-4223-a6e3-74251aa979e6
-      portIndex: 0
-  - inputPort:
-      nodeId: 2e6c4113-cd7c-4a5a-ab42-e91cdad11249
-      portIndex: 3
-    outputPort:
-      nodeId: c7b53331-b86c-4f59-8187-7b38a47543cf
-      portIndex: 2
-  - inputPort:
-      nodeId: 2e6c4113-cd7c-4a5a-ab42-e91cdad11249
-      portIndex: 2
-    outputPort:
-      nodeId: 9ae02aff-fee3-4223-a6e3-74251aa979e6
-      portIndex: 2
-  - inputPort:
-      nodeId: 13534ced-e715-4116-bcc2-19d320646520
-      portIndex: 1
-    outputPort:
-      nodeId: 2e6c4113-cd7c-4a5a-ab42-e91cdad11249
-      portIndex: 0
-  - inputPort:
-      nodeId: 13534ced-e715-4116-bcc2-19d320646520
-      portIndex: 2
-    outputPort:
-      nodeId: 2e6c4113-cd7c-4a5a-ab42-e91cdad11249
-      portIndex: 4
-  - inputPort:
-      nodeId: 16cc09a2-289e-47e9-80c6-67d22c45e68a
-      portIndex: 1
-    outputPort:
-      nodeId: 13534ced-e715-4116-bcc2-19d320646520
-      portIndex: 0
-  - inputPort:
-      nodeId: 16cc09a2-289e-47e9-80c6-67d22c45e68a
-      portIndex: 2
-    outputPort:
-      nodeId: 13534ced-e715-4116-bcc2-19d320646520
-      portIndex: 3
   - inputPort:
       nodeId: dae9295d-a805-48c6-850b-7907b271fd9f
       portIndex: 1
@@ -86,104 +26,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6442822167692050440
-      type: {class: StartNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: c46a739f-f4ea-43a4-93f2-44c20c7ace90
-        _position:
-          serializedVersion: 2
-          x: -343
-          y: 161
-          width: 106
-          height: 77
-        typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        linkedValues: []
-    - rid: 6442822167692050457
-      type: {class: AddNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 2e6c4113-cd7c-4a5a-ab42-e91cdad11249
-        _position:
-          serializedVersion: 2
-          x: 181
-          y: 136
-          width: 130
-          height: 125
-        typeName: AddNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        linkedValues:
-        - inputValue: toCast
-          outputValue: result
-          inputNodeId: 13534ced-e715-4116-bcc2-19d320646520
-        _a: 0
-        _b: 0
-        result: 0
-    - rid: 6442822167692050458
-      type: {class: LitteralIntNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: c7b53331-b86c-4f59-8187-7b38a47543cf
-        _position:
-          serializedVersion: 2
-          x: -196
-          y: 161
-          width: 164
-          height: 121
-        typeName: LitteralIntNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues:
-        - inputValue: _b
-          outputValue: outputValue
-          inputNodeId: 2e6c4113-cd7c-4a5a-ab42-e91cdad11249
-        value: 10
-        outputValue: 0
-    - rid: 6442822167692050459
-      type: {class: LitteralIntNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 9ae02aff-fee3-4223-a6e3-74251aa979e6
-        _position:
-          serializedVersion: 2
-          x: -7
-          y: 92
-          width: 164
-          height: 121
-        typeName: LitteralIntNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues:
-        - inputValue: _a
-          outputValue: outputValue
-          inputNodeId: 2e6c4113-cd7c-4a5a-ab42-e91cdad11249
-        value: 15
-        outputValue: 0
-    - rid: 6442822167692050460
-      type: {class: ToStringNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 13534ced-e715-4116-bcc2-19d320646520
-        _position:
-          serializedVersion: 2
-          x: 344
-          y: 136
-          width: 157
-          height: 101
-        typeName: ToStringNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues:
-        - inputValue: message
-          outputValue: fromCast
-          inputNodeId: 16cc09a2-289e-47e9-80c6-67d22c45e68a
-        fromCast: 
-    - rid: 6442822167692050464
-      type: {class: DebugLogNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 16cc09a2-289e-47e9-80c6-67d22c45e68a
-        _position:
-          serializedVersion: 2
-          x: 548
-          y: 136
-          width: 139
-          height: 125
-        typeName: DebugLogNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues: []
-        message: 
-        color: {r: 0, g: 0, b: 0, a: 0}
     - rid: 6442822167692050465
       type: {class: UpdateNode, ns: , asm: Assembly-CSharp}
       data:
@@ -209,4 +51,5 @@ MonoBehaviour:
           height: 97
         typeName: MoveNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         linkedValues: []
-        vector: {x: 0, y: 0.01, z: 0}
+        vector: {x: 0, y: 0, z: 0}
+        speed: 0

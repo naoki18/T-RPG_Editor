@@ -52,7 +52,8 @@ public class CodeGraphNode
             {
                 CodeGraphNode inputNode = graph.GetNode(linkedValue.inputNodeId);
                 object _outputValue = this.GetType().GetField(linkedValue.outputValue).GetValue(this);
-                inputNode.GetType().GetField(linkedValue.inputValue).SetValue(inputNode, _outputValue);
+                if(_outputValue != null)
+                    inputNode.GetType().GetField(linkedValue.inputValue).SetValue(inputNode, _outputValue);
             }
         }
         if (node != null)

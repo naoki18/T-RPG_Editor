@@ -8,3 +8,7 @@ CodeGraphView{
 	--grid-background-color: rgb(35,35,35);
 	--line-color: rgb(32,32,32);
 }
+.node
+{
+	--background-color: rgb(100,0,0);
+}

@@ -10,6 +10,8 @@ using UnityEngine.UIElements;
 
 public class CodeGraphView : GraphView
 {
+    const float MIN_ZOOM = 0.25f;
+    const float MAX_ZOOM = 2f;
     private CodeGraphAsset _codeGraph;
     private SerializedObject _serializedObject;
     private CodeGraphEditorWindow _window;
@@ -35,6 +37,7 @@ public class CodeGraphView : GraphView
         this.nodeCreationRequest += ShowSearchWindow;
         this.graphViewChanged += OnGraphViewChanged;
 
+        SetupZoom(MIN_ZOOM, MAX_ZOOM);
         _window = window;
 
         StyleSheet style = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/CodeGraph/Editor/USS/CodeGraphEditor.uss");
@@ -53,6 +56,8 @@ public class CodeGraphView : GraphView
 
         DrawNodes();
         DrawConnections();
+
+        
     }
 
     
@@ -144,6 +149,7 @@ public class CodeGraphView : GraphView
         _connectionDict.Add(edge, connection);
     }
 
+    // Connect a variable to another during execution flow
     private void ConnectVariable(Edge edge, CodeGraphEditorNode inputNode, CodeGraphEditorNode outputNode)
     {
         System.Type inputType = inputNode.Node.GetType();
@@ -174,14 +180,25 @@ public class CodeGraphView : GraphView
     {
         System.Type inputType = inputNode.Node.GetType();
         System.Type outputType = outputNode.Node.GetType();
+        outputNode.Node.linkedValues.Remove(new CodeGraphNode.LinkedValue(edge.input.portName, edge.output.portName, inputNode.Node.id));
 
         FieldInfo outputField = outputType.GetField(edge.output.portName);
         FieldInfo inputField = inputType.GetField(edge.input.portName);
 
-        
 
         if (outputField == null || inputField == null) return;
-        if (inputField.FieldType != outputField.FieldType && inputType.GetCustomAttribute<NodeInfoAttribute>().isAllInputSameType)
+
+        bool isAllInputSame = inputType.GetCustomAttribute<NodeInfoAttribute>().isAllInputSameType;
+        bool stillHasConnectedVariable = false;
+        foreach (var port in inputNode.Ports)
+        {
+            if(port.portType != typeof(PortType.FlowPort) && port.connected)
+            {
+                stillHasConnectedVariable = true;
+                break;
+            }
+        }
+        if (inputField.FieldType != outputField.FieldType && isAllInputSame && !stillHasConnectedVariable)
         {
             foreach (var port in inputNode.Ports)
             {
@@ -189,7 +206,7 @@ public class CodeGraphView : GraphView
                     port.portType = typeof(object);
             }
         }
-        outputNode.Node.linkedValues.Remove(new CodeGraphNode.LinkedValue(edge.input.portName, edge.output.portName, inputNode.Node.id));
+        
     }
 
     private void MoveNode(CodeGraphEditorNode node)
