@@ -157,7 +157,6 @@ public class CodeGraphEditorNode : Node
     {
         _inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(PortType.FlowPort));
         _inputPort.portName = "Input";
-
         _ports.Add(_inputPort);
         inputContainer.Add(_inputPort);
     }

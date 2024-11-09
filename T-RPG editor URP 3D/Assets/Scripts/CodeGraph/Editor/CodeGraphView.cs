@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -16,6 +17,7 @@ public class CodeGraphView : GraphView
     private SerializedObject _serializedObject;
     private CodeGraphEditorWindow _window;
     private CodeGraphWindowSearchProvider _searchWindow;
+    private EdgeConnectorListener _edgeConnectorListener;
 
     public CodeGraphEditorWindow window => _window;
     public List<CodeGraphEditorNode> _graphNodes;
@@ -34,9 +36,9 @@ public class CodeGraphView : GraphView
         _searchWindow = ScriptableObject.CreateInstance<CodeGraphWindowSearchProvider>();
         _searchWindow.view = this;
 
+        _edgeConnectorListener = new EdgeConnectorListener(this);
         this.nodeCreationRequest += ShowSearchWindow;
         this.graphViewChanged += OnGraphViewChanged;
-
         SetupZoom(MIN_ZOOM, MAX_ZOOM);
         _window = window;
 
@@ -56,11 +58,24 @@ public class CodeGraphView : GraphView
 
         DrawNodes();
         DrawConnections();
-
+        ListenEdge();
         
     }
 
-    
+    private void ListenEdge()
+    {
+        foreach (var node in _graphNodes)
+        {
+            foreach (var port in node.Ports)
+            {
+                if(node.outputContainer.Contains(port))
+                {
+                    port.AddManipulator(new EdgeConnector<Edge>(_edgeConnectorListener));
+                }
+            }
+        }
+
+    }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
     {
@@ -265,7 +280,14 @@ public class CodeGraphView : GraphView
     public void ShowSearchWindow(NodeCreationContext context)
     {
         _searchWindow.target = (VisualElement)focusController.focusedElement;
+        Debug.Log(context.screenMousePosition);
         SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), _searchWindow);
+    }
+
+    public void ShowSearchWindow(Vector2 position)
+    {
+        _searchWindow.target = (VisualElement)focusController.focusedElement;
+        SearchWindow.Open(new SearchWindowContext(position), _searchWindow);
     }
 
 
@@ -279,6 +301,7 @@ public class CodeGraphView : GraphView
         AddNodeToGraph(node);
         Bind();
     }
+
 
     private void AddNodeToGraph(CodeGraphNode node)
     {
