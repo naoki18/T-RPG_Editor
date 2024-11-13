@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
@@ -27,6 +24,7 @@ public class CodeGraphEditorNode : Node
         this.AddToClassList("code-graph-node");
         this.node = _node;
         _ports = new List<Port>();
+
         Type type = _node.GetType();
         NodeInfoAttribute info = type.GetCustomAttribute<NodeInfoAttribute>();
         title = info.title;
@@ -56,7 +54,6 @@ public class CodeGraphEditorNode : Node
             bool hasExposedProperty = variable.GetCustomAttribute<ExposedPropertyAttribute>() != null;
             bool hasInputProperty = variable.GetCustomAttribute<InputAttribute>() != null;
             bool hasOutputAttribute = variable.GetCustomAttribute<OutputAttribute>() != null;
-
             if (hasExposedProperty || hasInputProperty || hasOutputAttribute)
             {
                 VisualElement newRow = new VisualElement();
@@ -108,7 +105,7 @@ public class CodeGraphEditorNode : Node
         // If there is an inputPort connected
         if (rows[rowIndex].childCount > 0)
         {
-
+            field.label = "";
             rows[rowIndex].Add(field);
 
         }
@@ -120,20 +117,20 @@ public class CodeGraphEditorNode : Node
         return field;
     }
 
-    void ApplyMinWidthToStructFields(SerializedProperty property, float minWidth)
-    {
-        SerializedProperty iterator = property.Copy();
-        SerializedProperty endProperty = property.GetEndProperty();
+    //void ApplyMinWidthToStructFields(SerializedProperty property, float minWidth)
+    //{
+    //    SerializedProperty iterator = property.Copy();
+    //    SerializedProperty endProperty = property.GetEndProperty();
 
-        if (property.isArray)
-            return; // Pas besoin de gérer les arrays ici, seulement les structs
+    //    if (property.isArray)
+    //        return; // Pas besoin de gérer les arrays ici, seulement les structs
 
-        while (iterator.NextVisible(true) && !SerializedProperty.EqualContents(iterator, endProperty))
-        {
-            PropertyField subField = new PropertyField(iterator);
-            subField.style.minWidth = minWidth;
-        }
-    }
+    //    while (iterator.NextVisible(true) && !SerializedProperty.EqualContents(iterator, endProperty))
+    //    {
+    //        PropertyField subField = new PropertyField(iterator);
+    //        subField.style.minWidth = minWidth;
+    //    }
+    //}
 
     private void CreatePropertyInput(string name, Type type, int rowIndex)
     {
@@ -168,4 +165,47 @@ public class CodeGraphEditorNode : Node
         outputContainer.Add(_outputPort);
     }
 
+    // Used to remove property field when a variable is already connected to
+    public void RemoveLitteralProperty(Edge edge)
+    {
+        if (edge == null) return;
+        foreach (var row in rows)
+        {
+            if (row.Contains(edge.input))
+            {
+                foreach (var visualElement in row.Children())
+                {
+                    if (visualElement is PropertyField)
+                    {
+                        row.Remove(visualElement);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+    public void AddLitteralProperty(Edge edge)
+    {
+        if (edge == null) return;
+        for (int i = 0; i < rows.Count; i++)
+        {
+            if (rows[i].Contains(edge.input))
+            {
+                //DrawProperty(edge.input.portName, i);
+                if (_serializedProperty == null)
+                {
+                    FetchSerializedProperty();
+                }
+                SerializedProperty prop = _serializedProperty.FindPropertyRelative(edge.input.portName);
+                PropertyField field = new PropertyField(prop);
+
+                field.label = "";
+                rows[i].Add(field);
+                
+                break;
+            }
+        }
+
+    }
 }

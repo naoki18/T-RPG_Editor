@@ -45,6 +45,7 @@ public class CodeGraphObject : MonoBehaviour
     private void ProcessAndMoveToNextNode(CodeGraphNode currentNode)
     {
         string nextNodeId = currentNode.OnProcess(assetInstance);
+
         if (!string.IsNullOrEmpty(nextNodeId))
         {
             CodeGraphNode nextNode = assetInstance.GetNode(nextNodeId);

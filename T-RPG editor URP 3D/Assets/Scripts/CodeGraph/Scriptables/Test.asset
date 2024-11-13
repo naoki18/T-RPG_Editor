@@ -12,44 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a9473b35814e945a8af90e5ba13098, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  _nodes:
-  - rid: 6442822167692050465
-  - rid: 6442822167692050467
+  _nodes: []
   _connections:
   - inputPort:
-      nodeId: dae9295d-a805-48c6-850b-7907b271fd9f
+      nodeId: ef3fe33c-0bb2-4a02-b4ea-f5f37b36d0e1
       portIndex: 1
     outputPort:
-      nodeId: 48ac6b42-ee67-4be7-88fc-e08454e1aeac
+      nodeId: 3c625971-abd2-4d51-affb-05d5fe150da9
+      portIndex: 0
+  - inputPort:
+      nodeId: 96c2ab83-a7f5-41e8-b3e5-b88480d08cfe
+      portIndex: 2
+    outputPort:
+      nodeId: ef3fe33c-0bb2-4a02-b4ea-f5f37b36d0e1
+      portIndex: 2
+  - inputPort:
+      nodeId: 96c2ab83-a7f5-41e8-b3e5-b88480d08cfe
+      portIndex: 3
+    outputPort:
+      nodeId: 1254e898-df0c-4ddd-9f7f-d03832776621
+      portIndex: 2
+  - inputPort:
+      nodeId: 96c2ab83-a7f5-41e8-b3e5-b88480d08cfe
+      portIndex: 1
+    outputPort:
+      nodeId: 56e9e380-1b3f-4e7e-8ab8-ce4f4c3c86b3
       portIndex: 0
   gameObject: {fileID: 0}
   references:
     version: 2
-    RefIds:
-    - rid: 6442822167692050465
-      type: {class: UpdateNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 48ac6b42-ee67-4be7-88fc-e08454e1aeac
-        _position:
-          serializedVersion: 2
-          x: -352
-          y: 342
-          width: 119
-          height: 77
-        typeName: UpdateNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues: []
-    - rid: 6442822167692050467
-      type: {class: MoveNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: dae9295d-a805-48c6-850b-7907b271fd9f
-        _position:
-          serializedVersion: 2
-          x: -202
-          y: 341
-          width: 235
-          height: 97
-        typeName: MoveNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        linkedValues: []
-        vector: {x: 0, y: 0, z: 0}
-        speed: 0
+    RefIds: []

@@ -20,6 +20,8 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
     }
     public CodeGraphView view;
     public VisualElement target;
+    public Port from;
+
     public static List<SearchContextElement> elements;
     public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
     {
@@ -102,7 +104,11 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
         CodeGraphNode node = (CodeGraphNode)element.target;
         node.SetPosition(new Rect(graphMousePos, new Vector2()));
         view.Add(node);
-
+        if(from != null)
+        {
+            view.CreateEdgeFromScratch(from.ConnectTo(view.GetNode(node.id).Ports[1]));
+            from = null;
+        }
         return true;
     }
 }

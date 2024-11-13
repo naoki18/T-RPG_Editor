@@ -58,23 +58,19 @@ public class CodeGraphView : GraphView
 
         DrawNodes();
         DrawConnections();
-        ListenEdge();
-        
+
     }
 
-    private void ListenEdge()
+
+    private void ListenEdge(CodeGraphEditorNode editorNode)
     {
-        foreach (var node in _graphNodes)
+        foreach (var port in editorNode.Ports)
         {
-            foreach (var port in node.Ports)
+            if (editorNode.outputContainer.Contains(port))
             {
-                if(node.outputContainer.Contains(port))
-                {
-                    port.AddManipulator(new EdgeConnector<Edge>(_edgeConnectorListener));
-                }
+                port.AddManipulator(new EdgeConnector<Edge>(_edgeConnectorListener));
             }
         }
-
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -97,7 +93,7 @@ public class CodeGraphView : GraphView
     }
     private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
     {
-        if(graphViewChange.elementsToRemove != null)
+        if (graphViewChange.elementsToRemove != null)
         {
             RemoveNodes(graphViewChange);
             RemoveConnections(graphViewChange);
@@ -110,14 +106,14 @@ public class CodeGraphView : GraphView
                 MoveNode(node);
             }
         }
-        if(graphViewChange.edgesToCreate != null)
+        if (graphViewChange.edgesToCreate != null)
         {
-            foreach(Edge edge in graphViewChange.edgesToCreate)
+            foreach (Edge edge in graphViewChange.edgesToCreate)
             {
                 CreateEdge(edge);
             }
         }
-        
+
         _serializedObject.Update();
         return graphViewChange;
     }
@@ -134,12 +130,19 @@ public class CodeGraphView : GraphView
     private void RemoveConnection(Edge edge)
     {
         if (!_connectionDict.TryGetValue(edge, out CodeGraphConnection toRemove)) return;
-        DisconnectVariable(edge, (CodeGraphEditorNode)edge.input.node, (CodeGraphEditorNode)edge.output.node);
+        CodeGraphEditorNode inputEditorNode = (CodeGraphEditorNode)edge.input.node;
+        CodeGraphEditorNode outputEditorNode = (CodeGraphEditorNode)edge.output.node;
+        inputEditorNode.AddLitteralProperty(edge);
         _codeGraph.Connections.Remove(toRemove);
         _connectionDict.Remove(edge);
+
+        edge.input.Disconnect(edge);
+        edge.output.Disconnect(edge);
+        DisconnectVariable(edge, inputEditorNode, outputEditorNode);
+        Bind();
     }
 
-    
+
 
     private void RemoveNodes(GraphViewChange graphViewChange)
     {
@@ -159,9 +162,40 @@ public class CodeGraphView : GraphView
 
         ConnectVariable(edge, inputNode, outputNode);
 
+        inputNode.RemoveLitteralProperty(edge);
         CodeGraphConnection connection = new CodeGraphConnection(inputNode.Node.id, inputIndex, outputNode.Node.id, outputIndex);
         _codeGraph.Connections.Add(connection);
         _connectionDict.Add(edge, connection);
+    }
+
+    public void CreateEdgeFromScratch(Edge edge)
+    {
+        CodeGraphEditorNode inputNode = (CodeGraphEditorNode)edge.input.node;
+        int inputIndex = inputNode.Ports.IndexOf(edge.input);
+        CodeGraphEditorNode outputNode = (CodeGraphEditorNode)edge.output.node;
+        int outputIndex = outputNode.Ports.IndexOf(edge.output);
+
+        CodeGraphConnection connection = new CodeGraphConnection(inputNode.Node.id, inputIndex, outputNode.Node.id, outputIndex);
+        _codeGraph.Connections.Add(connection);
+        _connectionDict.Add(edge, connection);
+        ConnectVariable(edge, inputNode, outputNode);
+        AddElement(edge);
+    }
+    private void DrawConnection(CodeGraphConnection connection)
+    {
+        CodeGraphEditorNode inputNode = GetNode(connection.inputPort.nodeId);
+        CodeGraphEditorNode outputNode = GetNode(connection.outputPort.nodeId);
+        if (inputNode == null || outputNode == null) return;
+
+        Port inputPort = inputNode.Ports[connection.inputPort.portIndex];
+        Port outputPort = outputNode.Ports[connection.outputPort.portIndex];
+        Edge newConnection = inputPort.ConnectTo(outputPort);
+
+        inputNode.RemoveLitteralProperty(newConnection);
+        ConnectVariable(newConnection, inputNode, outputNode);
+
+        AddElement(newConnection);
+        _connectionDict[newConnection] = connection;
     }
 
     // Connect a variable to another during execution flow
@@ -173,8 +207,9 @@ public class CodeGraphView : GraphView
         FieldInfo outputField = outputType.GetField(edge.output.portName);
         FieldInfo inputField = inputType.GetField(edge.input.portName);
 
-        
+
         if (outputField == null || inputField == null) return;
+        // If a node takes generic type, makes all port the same type ( expect Input & Output flow )
         if (inputField.FieldType != outputField.FieldType && inputType.GetCustomAttribute<NodeInfoAttribute>().isAllInputSameType)
         {
             foreach (var port in inputNode.Ports)
@@ -188,7 +223,7 @@ public class CodeGraphView : GraphView
         {
             outputNode.Node.linkedValues.Add(linkedValue);
         }
-        
+
     }
 
     private void DisconnectVariable(Edge edge, CodeGraphEditorNode inputNode, CodeGraphEditorNode outputNode)
@@ -207,7 +242,7 @@ public class CodeGraphView : GraphView
         bool stillHasConnectedVariable = false;
         foreach (var port in inputNode.Ports)
         {
-            if(port.portType != typeof(PortType.FlowPort) && port.connected)
+            if (port.portType != typeof(PortType.FlowPort) && port.connected)
             {
                 stillHasConnectedVariable = true;
                 break;
@@ -221,7 +256,7 @@ public class CodeGraphView : GraphView
                     port.portType = typeof(object);
             }
         }
-        
+
     }
 
     private void MoveNode(CodeGraphEditorNode node)
@@ -255,21 +290,9 @@ public class CodeGraphView : GraphView
         }
     }
 
-    private void DrawConnection(CodeGraphConnection connection)
-    {
-        CodeGraphEditorNode inputNode = GetNode(connection.inputPort.nodeId);
-        CodeGraphEditorNode outputNode = GetNode(connection.outputPort.nodeId);
-        if(inputNode == null || outputNode == null) return;
 
-        Port inputPort = inputNode.Ports[connection.inputPort.portIndex];
-        Port outputPort = outputNode.Ports[connection.outputPort.portIndex];
-        Edge newConnection = inputPort.ConnectTo(outputPort);
-        ConnectVariable(newConnection, inputNode, outputNode);
-        AddElement(newConnection);
-        _connectionDict[newConnection] = connection;
-    }
 
-    private CodeGraphEditorNode GetNode(string nodeId)
+    public CodeGraphEditorNode GetNode(string nodeId)
     {
         CodeGraphEditorNode node = null;
         _nodeDict.TryGetValue(nodeId, out node);
@@ -280,13 +303,13 @@ public class CodeGraphView : GraphView
     public void ShowSearchWindow(NodeCreationContext context)
     {
         _searchWindow.target = (VisualElement)focusController.focusedElement;
-        Debug.Log(context.screenMousePosition);
         SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), _searchWindow);
     }
 
-    public void ShowSearchWindow(Vector2 position)
+    public void ShowSearchWindow(Vector2 position, Port from)
     {
         _searchWindow.target = (VisualElement)focusController.focusedElement;
+        _searchWindow.from = from;
         SearchWindow.Open(new SearchWindowContext(position), _searchWindow);
     }
 
@@ -310,7 +333,7 @@ public class CodeGraphView : GraphView
         editorNode.SetPosition(node.position);
         _graphNodes.Add(editorNode);
         _nodeDict.Add(node.id, editorNode);
-
+        ListenEdge(editorNode);
         AddElement(editorNode);
     }
 
