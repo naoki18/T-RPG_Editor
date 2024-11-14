@@ -12,82 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a9473b35814e945a8af90e5ba13098, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  _nodes:
-  - rid: 4027955603267911680
-  - rid: 4027955603267911681
-  - rid: 4027955603267911684
-  _connections:
-  - inputPort:
-      nodeId: ef3fe33c-0bb2-4a02-b4ea-f5f37b36d0e1
-      portIndex: 1
-    outputPort:
-      nodeId: 3c625971-abd2-4d51-affb-05d5fe150da9
-      portIndex: 0
-  - inputPort:
-      nodeId: 96c2ab83-a7f5-41e8-b3e5-b88480d08cfe
-      portIndex: 2
-    outputPort:
-      nodeId: ef3fe33c-0bb2-4a02-b4ea-f5f37b36d0e1
-      portIndex: 2
-  - inputPort:
-      nodeId: 96c2ab83-a7f5-41e8-b3e5-b88480d08cfe
-      portIndex: 3
-    outputPort:
-      nodeId: 1254e898-df0c-4ddd-9f7f-d03832776621
-      portIndex: 2
-  - inputPort:
-      nodeId: 96c2ab83-a7f5-41e8-b3e5-b88480d08cfe
-      portIndex: 1
-    outputPort:
-      nodeId: 56e9e380-1b3f-4e7e-8ab8-ce4f4c3c86b3
-      portIndex: 0
-  - inputPort:
-      nodeId: ee10147f-a521-40ac-8c7a-1cc8e27d253e
-      portIndex: 1
-    outputPort:
-      nodeId: 177f02bd-1c92-4620-abb8-5607c503e0aa
-      portIndex: 0
+  _nodes: []
+  _connections: []
   gameObject: {fileID: 0}
   references:
     version: 2
-    RefIds:
-    - rid: 4027955603267911680
-      type: {class: StartNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 177f02bd-1c92-4620-abb8-5607c503e0aa
-        _position:
-          serializedVersion: 2
-          x: 271
-          y: 424
-          width: 0
-          height: 0
-        typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        linkedValues: []
-    - rid: 4027955603267911681
-      type: {class: ToStringNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: ee10147f-a521-40ac-8c7a-1cc8e27d253e
-        _position:
-          serializedVersion: 2
-          x: 438
-          y: 424
-          width: 157
-          height: 101
-        typeName: ToStringNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues: []
-        fromCast: 
-    - rid: 4027955603267911684
-      type: {class: GetComponentNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 81337d9c-c221-4d66-a085-9647ada7d74b
-        _position:
-          serializedVersion: 2
-          x: 705
-          y: 424
-          width: 269
-          height: 177
-        typeName: GetComponentNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues: []
-        target: {fileID: 0}
+    RefIds: []

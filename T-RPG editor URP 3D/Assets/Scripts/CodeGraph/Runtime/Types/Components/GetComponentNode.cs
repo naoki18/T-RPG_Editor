@@ -6,12 +6,12 @@ using UnityEngine;
 public class GetComponentNode : CodeGraphNode
 {
     [Input] public GameObject target;
-    //[ExposedProperty] public SerializableSystemType componentType = new SerializableSystemType(typeof(Weapon));
-    [ExposedProperty] public SystemTypeSerialisation test = new SystemTypeSerialisation();
+    [ExposedProperty] public SystemTypeSerialisation type = new SystemTypeSerialisation();
     [Output] public object component;
     public override string OnProcess(CodeGraphAsset graph)
     {
-        //component = target.GetComponent(componentType.SystemType);
+        System.Type _type = System.Reflection.Assembly.GetExecutingAssembly().GetType(type.selectedType);
+        Debug.Log(_type.Name);
         return base.OnProcess(graph);
     }
 }
