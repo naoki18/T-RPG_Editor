@@ -9,6 +9,7 @@ public class ScriptableUnit : ScriptableObject
     public int movementPoint;
     public int hp;
     public int speed;
+    public CodeGraphAsset codeGraph;
 }
 
 public enum Faction

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,13 +5,13 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public class CodeGraphView : GraphView
 {
     const float MIN_ZOOM = 0.25f;
     const float MAX_ZOOM = 2f;
+
     private CodeGraphAsset _codeGraph;
     private SerializedObject _serializedObject;
     private CodeGraphEditorWindow _window;
@@ -37,9 +36,13 @@ public class CodeGraphView : GraphView
         _searchWindow.view = this;
 
         _edgeConnectorListener = new EdgeConnectorListener(this);
+
         this.nodeCreationRequest += ShowSearchWindow;
+
         this.graphViewChanged += OnGraphViewChanged;
+
         SetupZoom(MIN_ZOOM, MAX_ZOOM);
+
         _window = window;
 
         StyleSheet style = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/CodeGraph/Editor/USS/CodeGraphEditor.uss");

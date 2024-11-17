@@ -15,5 +15,4 @@ MonoBehaviour:
   tileName: Grass
   material: {fileID: 2100000, guid: eef66aecd99cf9a408e750344eaf7ba5, type: 2}
   walkableValue: 1
-  visualScriptingAsset: {fileID: 11400000, guid: 1423bae99e0b2fd4ba222d2ae499d8f9,
-    type: 2}
+  visualScriptingAsset: {fileID: 0}

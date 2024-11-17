@@ -4,7 +4,6 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 public class CodeGraphEditorNode : Node
@@ -117,20 +116,6 @@ public class CodeGraphEditorNode : Node
         return field;
     }
 
-    //void ApplyMinWidthToStructFields(SerializedProperty property, float minWidth)
-    //{
-    //    SerializedProperty iterator = property.Copy();
-    //    SerializedProperty endProperty = property.GetEndProperty();
-
-    //    if (property.isArray)
-    //        return; // Pas besoin de gérer les arrays ici, seulement les structs
-
-    //    while (iterator.NextVisible(true) && !SerializedProperty.EqualContents(iterator, endProperty))
-    //    {
-    //        PropertyField subField = new PropertyField(iterator);
-    //        subField.style.minWidth = minWidth;
-    //    }
-    //}
 
     private void CreatePropertyInput(string name, Type type, int rowIndex)
     {

@@ -18,3 +18,4 @@ MonoBehaviour:
   movementPoint: 5
   hp: 100
   speed: 0
+  codeGraph: {fileID: 11400000, guid: 1423bae99e0b2fd4ba222d2ae499d8f9, type: 2}

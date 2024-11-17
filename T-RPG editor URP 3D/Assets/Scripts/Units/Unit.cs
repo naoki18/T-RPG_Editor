@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
@@ -23,6 +22,12 @@ public class Unit : MonoBehaviour
         unit.maxHp = unitData.hp;
         unit.currentHp = unitData.hp;
         unit.speed = unitData.speed;
+
+        if(unitData.codeGraph)
+        {
+            unit.gameObject.AddComponent<CodeGraphObject>();
+            unit.GetComponent<CodeGraphObject>().Asset = unitData.codeGraph;
+        }
         return unit;
     }
 
