@@ -13,69 +13,67 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   _nodes:
-  - rid: 4027955694360330240
-  - rid: 4027955694360330245
-  - rid: 4027955694360330246
-  - rid: 4027955695016214532
-  - rid: 4027955695016214533
+  - rid: 2430103677442195460
+  - rid: 2430103677442195461
+  - rid: 2430103677442195462
   _connections:
   - inputPort:
-      nodeId: 05349c50-a25a-4106-bfe0-3a17dc6725f5
+      nodeId: 685d2932-5cc5-4f77-9c26-925b2340df41
+      portIndex: 3
+    outputPort:
+      nodeId: 3debcd6e-9682-483a-9783-a22023cfce9b
+      portIndex: 2
+  - inputPort:
+      nodeId: 3debcd6e-9682-483a-9783-a22023cfce9b
       portIndex: 1
     outputPort:
-      nodeId: 950a8cfc-917a-43e4-9b74-d015138e13a9
+      nodeId: 64bd41e7-fe38-452d-8bf8-bcbf32bb33a9
       portIndex: 0
   - inputPort:
-      nodeId: 5f2d879f-e157-4b73-a3e6-d780c76728d5
+      nodeId: 685d2932-5cc5-4f77-9c26-925b2340df41
       portIndex: 1
     outputPort:
-      nodeId: 05349c50-a25a-4106-bfe0-3a17dc6725f5
-      portIndex: 0
-  - inputPort:
-      nodeId: f18d5fd9-a34d-4533-8168-944f0b7338c6
-      portIndex: 1
-    outputPort:
-      nodeId: ca3bfef0-4863-4aa4-bf29-383e652b7b54
+      nodeId: 3debcd6e-9682-483a-9783-a22023cfce9b
       portIndex: 0
   gameObject: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 4027955694360330240
+    - rid: 2430103677442195460
       type: {class: StartNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: 950a8cfc-917a-43e4-9b74-d015138e13a9
+        _guid: 64bd41e7-fe38-452d-8bf8-bcbf32bb33a9
         _position:
           serializedVersion: 2
-          x: 327
-          y: 259
+          x: 173
+          y: 220
           width: 106
           height: 77
         typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         linkedValues: []
-    - rid: 4027955694360330245
+    - rid: 2430103677442195461
       type: {class: DebugLogNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: 5f2d879f-e157-4b73-a3e6-d780c76728d5
+        _guid: 685d2932-5cc5-4f77-9c26-925b2340df41
         _position:
           serializedVersion: 2
-          x: 942
-          y: 259
-          width: 179
+          x: 812
+          y: 216
+          width: 178
           height: 125
         typeName: DebugLogNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
         linkedValues: []
-        message: Start
+        message: start
         color: {r: 0, g: 0, b: 0, a: 0}
-    - rid: 4027955694360330246
+    - rid: 2430103677442195462
       type: {class: LitteralColorNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: 05349c50-a25a-4106-bfe0-3a17dc6725f5
+        _guid: 3debcd6e-9682-483a-9783-a22023cfce9b
         _position:
           serializedVersion: 2
-          x: 451
-          y: 259
+          x: 326
+          y: 221
           width: 438
           height: 101
         typeName: LitteralColorNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
@@ -83,33 +81,6 @@ MonoBehaviour:
         linkedValues:
         - inputValue: color
           outputValue: outputValue
-          inputNodeId: 5f2d879f-e157-4b73-a3e6-d780c76728d5
-        value: {r: 0.6415094, g: 0.23300104, b: 0.23300104, a: 1}
+          inputNodeId: 685d2932-5cc5-4f77-9c26-925b2340df41
+        value: {r: 0, g: 0, b: 0, a: 0}
         outputValue: {r: 0, g: 0, b: 0, a: 0}
-    - rid: 4027955695016214532
-      type: {class: UpdateNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: ca3bfef0-4863-4aa4-bf29-383e652b7b54
-        _position:
-          serializedVersion: 2
-          x: 327
-          y: 460
-          width: 88
-          height: 77
-        typeName: UpdateNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues: []
-    - rid: 4027955695016214533
-      type: {class: MoveNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: f18d5fd9-a34d-4533-8168-944f0b7338c6
-        _position:
-          serializedVersion: 2
-          x: 451
-          y: 460
-          width: 242
-          height: 120
-        typeName: MoveNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        linkedValues: []
-        direction: {x: 1, y: 0, z: 0}
-        speed: 0.01

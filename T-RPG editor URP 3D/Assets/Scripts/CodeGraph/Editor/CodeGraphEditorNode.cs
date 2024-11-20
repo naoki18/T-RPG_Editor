@@ -1,3 +1,4 @@
+using log4net.Filter;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -5,6 +6,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
+using static UnityEditor.Rendering.FilterWindow;
 
 public class CodeGraphEditorNode : Node
 {
@@ -47,9 +49,9 @@ public class CodeGraphEditorNode : Node
             CreateFlowInput();
         }
 
-        int index = 0;
-        foreach (FieldInfo variable in type.GetFields())
+        for (int i = 0; i < type.GetFields().Length; i++)
         {
+            FieldInfo variable = type.GetFields()[i];
             bool hasExposedProperty = variable.GetCustomAttribute<ExposedPropertyAttribute>() != null;
             bool hasInputProperty = variable.GetCustomAttribute<InputAttribute>() != null;
             bool hasOutputAttribute = variable.GetCustomAttribute<OutputAttribute>() != null;
@@ -58,10 +60,9 @@ public class CodeGraphEditorNode : Node
                 VisualElement newRow = new VisualElement();
                 newRow.style.flexDirection = FlexDirection.Row;
                 rows.Add(newRow);
-                if (hasInputProperty) CreatePropertyInput(variable.Name, variable.FieldType, index);
+                if (hasInputProperty) CreatePropertyInput(variable.Name, variable.FieldType, i);
                 else if (hasOutputAttribute) CreatePropertyOutput(variable.Name, variable.FieldType);
-                if (hasExposedProperty) DrawProperty(variable.Name, index);
-                index++;
+                if (hasExposedProperty) DrawProperty(variable.Name, i);
 
             }
         }
@@ -72,7 +73,10 @@ public class CodeGraphEditorNode : Node
         RefreshExpandedState();
     }
 
+    public void RefreshNode()
+    {
 
+    }
     private void FetchSerializedProperty()
     {
         SerializedProperty nodes = _serializedObject.FindProperty("_nodes");
@@ -113,6 +117,7 @@ public class CodeGraphEditorNode : Node
             rows[rowIndex].Add(field);
             inputContainer.Add(rows[rowIndex]);
         }
+        field.name = name;
         return field;
     }
 
@@ -187,7 +192,7 @@ public class CodeGraphEditorNode : Node
 
                 field.label = "";
                 rows[i].Add(field);
-                
+
                 break;
             }
         }

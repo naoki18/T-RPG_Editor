@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -100,6 +101,10 @@ public class CodeGraphView : GraphView
         {
             RemoveNodes(graphViewChange);
             RemoveConnections(graphViewChange);
+            foreach(var node in _graphNodes)
+            {
+                node.RefreshNode();
+            }
         }
         if (graphViewChange.movedElements != null)
         {
@@ -117,6 +122,13 @@ public class CodeGraphView : GraphView
             }
         }
 
+        if (GUI.changed)
+        {
+            MarkDirtyRepaint();
+            window.Repaint();
+            AssetDatabase.Refresh();
+        }
+        Bind();
         _serializedObject.Update();
         return graphViewChange;
     }
@@ -270,10 +282,10 @@ public class CodeGraphView : GraphView
 
     private void RemoveNode(CodeGraphEditorNode node)
     {
-        Undo.RecordObject(_serializedObject.targetObject, "Object removed");
+        //Undo.RecordObject(_serializedObject.targetObject, "Object removed");
         _codeGraph.Nodes.Remove(node.Node);
-        _nodeDict.Remove(node.Node.id);
-        _graphNodes.Remove(node);
+        //_nodeDict.Remove(node.Node.id);
+        //_graphNodes.Remove(node);
     }
 
     private void DrawNodes()
