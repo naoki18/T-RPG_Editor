@@ -13,74 +13,40 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   _nodes:
-  - rid: 2430103677442195460
-  - rid: 2430103677442195461
-  - rid: 2430103677442195462
-  _connections:
-  - inputPort:
-      nodeId: 685d2932-5cc5-4f77-9c26-925b2340df41
-      portIndex: 3
-    outputPort:
-      nodeId: 3debcd6e-9682-483a-9783-a22023cfce9b
-      portIndex: 2
-  - inputPort:
-      nodeId: 3debcd6e-9682-483a-9783-a22023cfce9b
-      portIndex: 1
-    outputPort:
-      nodeId: 64bd41e7-fe38-452d-8bf8-bcbf32bb33a9
-      portIndex: 0
-  - inputPort:
-      nodeId: 685d2932-5cc5-4f77-9c26-925b2340df41
-      portIndex: 1
-    outputPort:
-      nodeId: 3debcd6e-9682-483a-9783-a22023cfce9b
-      portIndex: 0
+  - rid: 2430103728520429573
+  - rid: 2430103728520429572
+  _connections: []
   gameObject: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 2430103677442195460
-      type: {class: StartNode, ns: , asm: Assembly-CSharp}
+    - rid: 2430103728520429572
+      type: {class: LitteralIntNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: 64bd41e7-fe38-452d-8bf8-bcbf32bb33a9
+        _guid: fc75abcc-c00a-4f84-b7cb-1c178d2ca521
         _position:
           serializedVersion: 2
-          x: 173
-          y: 220
-          width: 106
-          height: 77
-        typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        linkedValues: []
-    - rid: 2430103677442195461
-      type: {class: DebugLogNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 685d2932-5cc5-4f77-9c26-925b2340df41
-        _position:
-          serializedVersion: 2
-          x: 812
-          y: 216
-          width: 178
-          height: 125
-        typeName: DebugLogNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues: []
-        message: start
-        color: {r: 0, g: 0, b: 0, a: 0}
-    - rid: 2430103677442195462
-      type: {class: LitteralColorNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 3debcd6e-9682-483a-9783-a22023cfce9b
-        _position:
-          serializedVersion: 2
-          x: 326
-          y: 221
-          width: 438
+          x: 454
+          y: 134
+          width: 255
           height: 101
-        typeName: LitteralColorNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        typeName: LitteralIntNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
-        linkedValues:
-        - inputValue: color
-          outputValue: outputValue
-          inputNodeId: 685d2932-5cc5-4f77-9c26-925b2340df41
-        value: {r: 0, g: 0, b: 0, a: 0}
-        outputValue: {r: 0, g: 0, b: 0, a: 0}
+        linkedValues: []
+        value: 15
+        outputValue: 0
+    - rid: 2430103728520429573
+      type: {class: LitteralIntNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: c7a86cee-1368-453d-af23-a743b7b45f8f
+        _position:
+          serializedVersion: 2
+          x: 454
+          y: 356
+          width: 0
+          height: 0
+        typeName: LitteralIntNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        linkedValues: []
+        value: 80
+        outputValue: 0

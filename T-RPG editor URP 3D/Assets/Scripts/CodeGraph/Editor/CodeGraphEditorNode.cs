@@ -5,6 +5,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEditor.Rendering.FilterWindow;
 
@@ -73,10 +74,6 @@ public class CodeGraphEditorNode : Node
         RefreshExpandedState();
     }
 
-    public void RefreshNode()
-    {
-
-    }
     private void FetchSerializedProperty()
     {
         SerializedProperty nodes = _serializedObject.FindProperty("_nodes");
@@ -121,6 +118,21 @@ public class CodeGraphEditorNode : Node
         return field;
     }
 
+    public void RebindProperties(int index)
+    {
+        for (int i = 0; i < rows.Count; i++)
+        {
+            foreach (var content in rows[i].Children())
+            {
+                if (content.GetType() == typeof(PropertyField))
+                {
+                    SerializedProperty prop = _serializedProperty.FindPropertyRelative(content.name);
+                    UnityEngine.Debug.Log(prop.propertyPath);
+                    (content as PropertyField).bindingPath = $"_nodes.Array.data[{index}].{content.name}";
+                }
+            }
+        }
+    }
 
     private void CreatePropertyInput(string name, Type type, int rowIndex)
     {

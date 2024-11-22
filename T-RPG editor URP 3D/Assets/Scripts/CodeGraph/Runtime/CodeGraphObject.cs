@@ -26,7 +26,7 @@ public class CodeGraphObject : MonoBehaviour
     {
         assetInstance = Instantiate(_asset);
         InitGraph();
-        ProcessAndMoveToNextNode(startNode);
+        if(startNode != null) ProcessAndMoveToNextNode(startNode);
     }
 
     private void InitGraph()

@@ -101,10 +101,6 @@ public class CodeGraphView : GraphView
         {
             RemoveNodes(graphViewChange);
             RemoveConnections(graphViewChange);
-            foreach(var node in _graphNodes)
-            {
-                node.RefreshNode();
-            }
         }
         if (graphViewChange.movedElements != null)
         {
@@ -122,12 +118,6 @@ public class CodeGraphView : GraphView
             }
         }
 
-        if (GUI.changed)
-        {
-            MarkDirtyRepaint();
-            window.Repaint();
-            AssetDatabase.Refresh();
-        }
         Bind();
         _serializedObject.Update();
         return graphViewChange;
@@ -282,12 +272,16 @@ public class CodeGraphView : GraphView
 
     private void RemoveNode(CodeGraphEditorNode node)
     {
-        //Undo.RecordObject(_serializedObject.targetObject, "Object removed");
+        Undo.RecordObject(_serializedObject.targetObject, "Object removed");
         _codeGraph.Nodes.Remove(node.Node);
-        //_nodeDict.Remove(node.Node.id);
-        //_graphNodes.Remove(node);
-    }
+        _nodeDict.Remove(node.Node.id);
+        _graphNodes.Remove(node);
 
+        for(int i = 0; i < _graphNodes.Count; i++)
+        {
+            _graphNodes[i].RebindProperties(i);
+        }
+    }
     private void DrawNodes()
     {
         foreach (CodeGraphNode node in _codeGraph.Nodes)
@@ -337,6 +331,7 @@ public class CodeGraphView : GraphView
         _serializedObject.Update();
 
         AddNodeToGraph(node);
+        _serializedObject.Update();
         Bind();
     }
 
