@@ -127,7 +127,6 @@ public class CodeGraphEditorNode : Node
                 if (content.GetType() == typeof(PropertyField))
                 {
                     SerializedProperty prop = _serializedProperty.FindPropertyRelative(content.name);
-                    UnityEngine.Debug.Log(prop.propertyPath);
                     (content as PropertyField).bindingPath = $"_nodes.Array.data[{index}].{content.name}";
                 }
             }
