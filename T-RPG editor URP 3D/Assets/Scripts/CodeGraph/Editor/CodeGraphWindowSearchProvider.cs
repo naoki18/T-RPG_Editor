@@ -34,10 +34,10 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
         {
             foreach (Type type in assembly.GetTypes())
             {
-                if(type.CustomAttributes.ToList() != null)
+                if (type.CustomAttributes.ToList() != null)
                 {
                     var attribute = type.GetCustomAttribute(typeof(NodeInfoAttribute));
-                    if(attribute != null)
+                    if (attribute != null)
                     {
                         NodeInfoAttribute att = (NodeInfoAttribute)attribute;
                         var node = Activator.CreateInstance(type);
@@ -55,14 +55,14 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
 
             for (int i = 0; i < splitFirst.Length; i++)
             {
-                if(i >= splitSecond.Length)
+                if (i >= splitSecond.Length)
                 {
                     return 1;
                 }
                 int value = splitFirst[i].CompareTo(splitSecond[i]);
-                if(value != 0)
+                if (value != 0)
                 {
-                    if(splitFirst.Length != splitSecond.Length && (i == splitFirst.Length - 1 || i == splitSecond.Length - 1))
+                    if (splitFirst.Length != splitSecond.Length && (i == splitFirst.Length - 1 || i == splitSecond.Length - 1))
                         return splitFirst.Length < splitSecond.Length ? 1 : -1;
                     return value;
                 }
@@ -80,7 +80,7 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
             for (int i = 0; i < entryTitle.Length - 1; i++)
             {
                 groupName += entryTitle[i];
-                if(!groups.Contains(groupName))
+                if (!groups.Contains(groupName))
                 {
                     tree.Add(new SearchTreeGroupEntry(new GUIContent(entryTitle[i]), i + 1));
                     groups.Add(groupName);
@@ -104,11 +104,11 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
         CodeGraphNode node = (CodeGraphNode)element.target;
         node.SetPosition(new Rect(graphMousePos, new Vector2()));
         view.Add(node);
-        if(from != null)
+        if (from != null)
         {
             view.CreateEdgeFromScratch(from.ConnectTo(view.GetNode(node.id).Ports[1]));
-            from = null;
         }
+        from = null;
         return true;
     }
 }

@@ -1,30 +1,30 @@
-using log4net.Filter;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Rendering.FilterWindow;
 
 public class CodeGraphEditorNode : Node
 {
-    private CodeGraphNode node;
+    private List<Port> _ports;
+    private List<VisualElement> rows;
+    private CodeGraphNode _node;
     private Port _outputPort;
     private Port _inputPort;
-    private List<Port> _ports;
     private SerializedObject _serializedObject;
-    public CodeGraphNode Node => node;
+    private SerializedProperty _serializedProperty;
+
+
+    public CodeGraphNode Node => _node;
     public List<Port> Ports => _ports;
 
-    private SerializedProperty _serializedProperty;
-    List<VisualElement> rows;
+    
     public CodeGraphEditorNode(CodeGraphNode _node, SerializedObject codeGraphObject)
     {
         this.AddToClassList("code-graph-node");
-        this.node = _node;
+        this._node = _node;
         _ports = new List<Port>();
 
         Type type = _node.GetType();
@@ -85,7 +85,7 @@ public class CodeGraphEditorNode : Node
                 var element = nodes.GetArrayElementAtIndex(i);
                 var elementId = element.FindPropertyRelative("_guid");
 
-                if (elementId.stringValue == node.id)
+                if (elementId.stringValue == _node.id)
                 {
                     _serializedProperty = element;
                 }
@@ -99,7 +99,7 @@ public class CodeGraphEditorNode : Node
             FetchSerializedProperty();
         }
 
-        SerializedProperty prop = _serializedProperty.FindPropertyRelative(name);
+        SerializedProperty prop = _serializedProperty.FindPropertyRelative(name);   
         PropertyField field = new PropertyField(prop);
 
         // If there is an inputPort connected

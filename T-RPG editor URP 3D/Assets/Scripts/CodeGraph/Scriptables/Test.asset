@@ -13,163 +13,48 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   _nodes:
-  - rid: 2430103728937500721
-  - rid: 2430103728937500722
-  - rid: 2430103728937500723
-  - rid: 2430103728937500724
-  - rid: 2430103728937500725
-  - rid: 2430103728937500726
-  _connections:
-  - inputPort:
-      nodeId: cd87ab35-85f6-46c3-a8ec-7635f066ef16
-      portIndex: 1
-    outputPort:
-      nodeId: bc4d5740-b934-45ff-9518-f7be247a7888
-      portIndex: 0
-  - inputPort:
-      nodeId: 6b63b9e9-1033-463a-96a9-9422a509bcfe
-      portIndex: 1
-    outputPort:
-      nodeId: cd87ab35-85f6-46c3-a8ec-7635f066ef16
-      portIndex: 0
-  - inputPort:
-      nodeId: 871909c6-4833-4034-ba7e-da135cc4d8f8
-      portIndex: 1
-    outputPort:
-      nodeId: 6b63b9e9-1033-463a-96a9-9422a509bcfe
-      portIndex: 0
-  - inputPort:
-      nodeId: 871909c6-4833-4034-ba7e-da135cc4d8f8
-      portIndex: 3
-    outputPort:
-      nodeId: 6b63b9e9-1033-463a-96a9-9422a509bcfe
-      portIndex: 2
-  - inputPort:
-      nodeId: 871909c6-4833-4034-ba7e-da135cc4d8f8
-      portIndex: 2
-    outputPort:
-      nodeId: cd87ab35-85f6-46c3-a8ec-7635f066ef16
-      portIndex: 2
-  - inputPort:
-      nodeId: 1055b098-9a7c-440a-8e37-ec0af08afac7
-      portIndex: 1
-    outputPort:
-      nodeId: 871909c6-4833-4034-ba7e-da135cc4d8f8
-      portIndex: 0
-  - inputPort:
-      nodeId: 1055b098-9a7c-440a-8e37-ec0af08afac7
-      portIndex: 2
-    outputPort:
-      nodeId: 871909c6-4833-4034-ba7e-da135cc4d8f8
-      portIndex: 4
-  - inputPort:
-      nodeId: 0217aeda-6857-41fd-bfd4-484b5cd02d77
-      portIndex: 1
-    outputPort:
-      nodeId: 1055b098-9a7c-440a-8e37-ec0af08afac7
-      portIndex: 0
-  - inputPort:
-      nodeId: 0217aeda-6857-41fd-bfd4-484b5cd02d77
-      portIndex: 2
-    outputPort:
-      nodeId: 1055b098-9a7c-440a-8e37-ec0af08afac7
-      portIndex: 3
+  - rid: 2430103836566224896
+  - rid: 2430103836566224903
+  _connections: []
   gameObject: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 2430103728937500721
-      type: {class: LitteralIntNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: cd87ab35-85f6-46c3-a8ec-7635f066ef16
-        _position:
-          serializedVersion: 2
-          x: 424
-          y: 278
-          width: 248
-          height: 101
-        typeName: LitteralIntNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues:
-        - inputValue: _a
-          outputValue: outputValue
-          inputNodeId: 871909c6-4833-4034-ba7e-da135cc4d8f8
-        value: 0
-        outputValue: 0
-    - rid: 2430103728937500722
+    - rid: 2430103836566224896
       type: {class: StartNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: bc4d5740-b934-45ff-9518-f7be247a7888
+        _guid: bd28fa68-1f59-498d-bba3-c97bff2e2ce4
         _position:
           serializedVersion: 2
-          x: 262
-          y: 306
+          x: 372
+          y: 281
           width: 106
           height: 77
         typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         linkedValues: []
-    - rid: 2430103728937500723
-      type: {class: LitteralIntNode, ns: , asm: Assembly-CSharp}
+    - rid: 2430103836566224903
+      type: {class: GetComponentNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: 6b63b9e9-1033-463a-96a9-9422a509bcfe
+        _guid: 9682e382-ff1d-4b47-9e4e-472386e43ebe
         _position:
           serializedVersion: 2
-          x: 701
-          y: 276
-          width: 248
-          height: 101
-        typeName: LitteralIntNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues:
-        - inputValue: _b
-          outputValue: outputValue
-          inputNodeId: 871909c6-4833-4034-ba7e-da135cc4d8f8
-        value: 0
-        outputValue: 0
-    - rid: 2430103728937500724
-      type: {class: AddNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 871909c6-4833-4034-ba7e-da135cc4d8f8
-        _position:
-          serializedVersion: 2
-          x: 1012
-          y: 278
-          width: 130
-          height: 125
-        typeName: AddNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        linkedValues:
-        - inputValue: toCast
-          outputValue: result
-          inputNodeId: 1055b098-9a7c-440a-8e37-ec0af08afac7
-    - rid: 2430103728937500725
-      type: {class: ToStringNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 1055b098-9a7c-440a-8e37-ec0af08afac7
-        _position:
-          serializedVersion: 2
-          x: 1162
-          y: 286
-          width: 157
-          height: 101
-        typeName: ToStringNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues:
-        - inputValue: message
-          outputValue: fromCast
-          inputNodeId: 0217aeda-6857-41fd-bfd4-484b5cd02d77
-        fromCast: 
-    - rid: 2430103728937500726
-      type: {class: DebugLogNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 0217aeda-6857-41fd-bfd4-484b5cd02d77
-        _position:
-          serializedVersion: 2
-          x: 1348
-          y: 284
-          width: 154
-          height: 125
-        typeName: DebugLogNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          x: 552
+          y: 250
+          width: 357
+          height: 141
+        typeName: GetComponentNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
         linkedValues: []
-        message: 
-        color: {r: 0, g: 0, b: 0, a: 0}
+        target: {fileID: 0}
+        type:
+          typeNames:
+          - Billboard
+          - CodeGraphObject
+          - Tile
+          - GameManager
+          - GridManager
+          - UnitManager
+          - HealthUI
+          - TileInformationUI
+          - Unit
+          selectedType: EventSystem

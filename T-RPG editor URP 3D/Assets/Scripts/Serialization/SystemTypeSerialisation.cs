@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [Serializable]
@@ -24,7 +25,7 @@ public class SystemTypeSerialisation
             if (!t.IsSubclassOf(typeof(MonoBehaviour))) continue;
             typeNames.Add(t.Name);
         }
-        
+
     }
 
 }
@@ -36,39 +37,43 @@ public class SystemTypeEditor : PropertyDrawer
     SerializedProperty serializedTypeList;
     SerializedProperty serializedType;
     int nbMember;
-    int selected = 0;
 
+    bool isInit = false;
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         nbMember = -1;
         serializedType = property.FindPropertyRelative("selectedType");
         serializedTypeList = property.FindPropertyRelative("typeNames");
 
-        string[] _typeList = new string[serializedTypeList.arraySize];
-        for (int i = 0; i < serializedTypeList.arraySize; i++)
+        if (GUILayout.Button(serializedType.stringValue, EditorStyles.popup))
         {
-            _typeList[i] = serializedTypeList.GetArrayElementAtIndex(i).stringValue;
-            if (_typeList[i] == serializedType.stringValue) selected = i;
+            Debug.Log(serializedType.stringValue);
+            TypeSearchWindow win = ScriptableObject.CreateInstance<TypeSearchWindow>();
+            win.test += (x) =>
+            {
+                serializedType.stringValue = x;
+                serializedType.serializedObject.ApplyModifiedProperties();
+                Debug.Log(serializedType.stringValue);
+            };
+
+            SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), win);
         }
-        selected = EditorGUILayout.Popup("Label", selected, _typeList, GUILayout.Width(250));
-        serializedType.stringValue = _typeList[selected];
-
-
+        
     }
 
-    private void DrawMember(Rect position, SerializedProperty propertyToDraw)
-    {
-        nbMember++;
-        EditorGUI.indentLevel++;
-        float posX = position.min.x;
-        float posY = position.min.y + EditorGUIUtility.singleLineHeight * nbMember;
-        float width = position.size.x;
-        float height = EditorGUIUtility.singleLineHeight;
+    //private void DrawMember(Rect position, SerializedProperty propertyToDraw)
+    //{
+    //    nbMember++;
+    //    EditorGUI.indentLevel++;
+    //    float posX = position.min.x;
+    //    float posY = position.min.y + EditorGUIUtility.singleLineHeight * nbMember;
+    //    float width = position.size.x;
+    //    float height = EditorGUIUtility.singleLineHeight;
 
-        Rect drawArea = new Rect(posX, posY, width, height);
-        EditorGUI.PropertyField(drawArea, propertyToDraw);
-        EditorGUI.indentLevel--;
-    }
+    //    Rect drawArea = new Rect(posX, posY, width, height);
+    //    EditorGUI.PropertyField(drawArea, propertyToDraw);
+    //    EditorGUI.indentLevel--;
+    //}
 }
 
 

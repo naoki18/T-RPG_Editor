@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,10 +13,10 @@ public class CodeGraphView : GraphView
     const float MAX_ZOOM = 2f;
 
     private CodeGraphAsset _codeGraph;
-    private SerializedObject _serializedObject;
     private CodeGraphEditorWindow _window;
     private CodeGraphWindowSearchProvider _searchWindow;
     private EdgeConnectorListener _edgeConnectorListener;
+    private SerializedObject _serializedObject;
 
     public CodeGraphEditorWindow window => _window;
     public List<CodeGraphEditorNode> _graphNodes;
@@ -42,6 +41,8 @@ public class CodeGraphView : GraphView
 
         this.graphViewChanged += OnGraphViewChanged;
 
+        //Undo.undoRedoEvent += Repaint;
+
         SetupZoom(MIN_ZOOM, MAX_ZOOM);
 
         _window = window;
@@ -65,6 +66,7 @@ public class CodeGraphView : GraphView
 
     }
 
+   
 
     private void ListenEdge(CodeGraphEditorNode editorNode)
     {
@@ -99,8 +101,8 @@ public class CodeGraphView : GraphView
     {
         if (graphViewChange.elementsToRemove != null)
         {
-            RemoveNodes(graphViewChange);
             RemoveConnections(graphViewChange);
+            RemoveNodes(graphViewChange);
         }
         if (graphViewChange.movedElements != null)
         {
@@ -135,6 +137,7 @@ public class CodeGraphView : GraphView
     private void RemoveConnection(Edge edge)
     {
         if (!_connectionDict.TryGetValue(edge, out CodeGraphConnection toRemove)) return;
+        Undo.RecordObject(_serializedObject.targetObject, "Connection Removed");
         CodeGraphEditorNode inputEditorNode = (CodeGraphEditorNode)edge.input.node;
         CodeGraphEditorNode outputEditorNode = (CodeGraphEditorNode)edge.output.node;
         inputEditorNode.AddLitteralProperty(edge);
@@ -290,6 +293,14 @@ public class CodeGraphView : GraphView
         }
         Bind();
     }
+    private void ReDrawNodes()
+    {
+        foreach (CodeGraphNode node in _codeGraph.Nodes)
+        {
+            UndoNode(node);
+        }
+        Bind();
+    }
     private void DrawConnections()
     {
         if (_codeGraph.Connections == null) return;
@@ -347,9 +358,22 @@ public class CodeGraphView : GraphView
         AddElement(editorNode);
     }
 
+    private void UndoNode(CodeGraphNode node)
+    {
+        node.typeName = node.GetType().AssemblyQualifiedName;
+        CodeGraphEditorNode editorNode = new CodeGraphEditorNode(node, _serializedObject);
+        editorNode.SetPosition(node.position);
+        AddElement(editorNode);
+    }
+
     private void Bind()
     {
         _serializedObject.Update();
         this.Bind(_serializedObject);
     }
+
+    //private void Repaint(in UndoRedoInfo undo)
+    //{
+    //    ReDrawNodes();
+    //}
 }

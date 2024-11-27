@@ -1,6 +1,4 @@
-using System;
 using UnityEditor;
-using UnityEditor.Build.Content;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -8,10 +6,10 @@ using UnityEngine;
 public class CodeGraphEditorWindow : EditorWindow
 {
     [SerializeField] private CodeGraphAsset graph;
-    public CodeGraphAsset currentGraph => graph;
     [SerializeField] private CodeGraphView view;
     [SerializeField] private SerializedObject serializedObject;
 
+    public CodeGraphAsset currentGraph => graph;
     public static void Open(CodeGraphAsset target)
     {
         CodeGraphEditorWindow[] windows = Resources.FindObjectsOfTypeAll<CodeGraphEditorWindow>();

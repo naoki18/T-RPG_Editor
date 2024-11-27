@@ -17,8 +17,7 @@ public class EdgeConnectorListener : IEdgeConnectorListener
 
     public void OnDropOutsidePort(Edge edge, Vector2 position)
     {
-        //var position = _currentGraphView.viewTransform.matrix.inverse.MultiplyPoint((Vector3(position))
-        position.x += _currentGraphView.viewport.localBound.width / 4;
+        position = GUIUtility.GUIToScreenPoint(Event.current.mousePosition);
         _currentGraphView.ShowSearchWindow(position, edge.output);
     }
 }
