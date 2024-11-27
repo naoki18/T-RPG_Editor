@@ -11,7 +11,10 @@ public class TypeSearchWindow : ScriptableObject, ISearchWindowProvider
     public Action<string> test;
     public TypeSearchWindow()
     {
-        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        var targetAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+           .Where(assembly => assembly.FullName.Contains("Unity") || assembly == Assembly.GetExecutingAssembly());
+
+        foreach (var assembly in targetAssemblies)
         {
             foreach (System.Type t in assembly.GetTypes())
             {
@@ -23,10 +26,9 @@ public class TypeSearchWindow : ScriptableObject, ISearchWindowProvider
                     test = "MonoBehaviour." + test;
                 }
                 typeNames.Add(test);
-
-                Debug.Log(t.FullName);
             }
         }
+
 
     }
     public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
@@ -36,7 +38,6 @@ public class TypeSearchWindow : ScriptableObject, ISearchWindowProvider
         List<string> groups = new();
         foreach (string type in typeNames)
         {
-            Debug.Log(type);
             string[] entryTitle = type.Split('.');
             string groupName = "";
             for (int i = 0; i < entryTitle.Length - 1; i++)

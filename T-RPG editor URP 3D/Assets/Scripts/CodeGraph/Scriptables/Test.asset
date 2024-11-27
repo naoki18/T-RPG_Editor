@@ -26,8 +26,8 @@ MonoBehaviour:
         _guid: bd28fa68-1f59-498d-bba3-c97bff2e2ce4
         _position:
           serializedVersion: 2
-          x: 372
-          y: 281
+          x: 371
+          y: 261
           width: 106
           height: 77
         typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -57,4 +57,4 @@ MonoBehaviour:
           - HealthUI
           - TileInformationUI
           - Unit
-          selectedType: EventSystem
+          selectedType: PointEffector2D

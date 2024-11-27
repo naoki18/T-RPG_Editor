@@ -53,7 +53,6 @@ public class SystemTypeEditor : PropertyDrawer
             {
                 serializedType.stringValue = x;
                 serializedType.serializedObject.ApplyModifiedProperties();
-                Debug.Log(serializedType.stringValue);
             };
 
             SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), win);
