@@ -26,7 +26,7 @@ MonoBehaviour:
         _guid: bd28fa68-1f59-498d-bba3-c97bff2e2ce4
         _position:
           serializedVersion: 2
-          x: 371
+          x: 366
           y: 261
           width: 106
           height: 77
@@ -38,9 +38,9 @@ MonoBehaviour:
         _guid: 9682e382-ff1d-4b47-9e4e-472386e43ebe
         _position:
           serializedVersion: 2
-          x: 552
-          y: 250
-          width: 357
+          x: 551
+          y: 263
+          width: 282
           height: 141
         typeName: GetComponentNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
@@ -57,4 +57,4 @@ MonoBehaviour:
           - HealthUI
           - TileInformationUI
           - Unit
-          selectedType: PointEffector2D
+          selectedType: Tile

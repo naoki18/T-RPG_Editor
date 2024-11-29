@@ -18,7 +18,7 @@ public class TileCreatorWindow : EditorWindow
     {
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("name : ");
-        newTile.name = GUILayout.TextField(newTile.name);
+        newTile.tileName = GUILayout.TextField(newTile.tileName);
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
@@ -32,6 +32,7 @@ public class TileCreatorWindow : EditorWindow
         EditorGUILayout.EndHorizontal();
         newTile.walkableValue = (short)Mathf.Clamp(newTile.walkableValue, short.MinValue, short.MaxValue);
 
+        newTile.name = newTile.tileName;
 
         if (GUILayout.Button("Save"))
         {
@@ -44,8 +45,16 @@ public class TileCreatorWindow : EditorWindow
         TileDatabase database = TileDatabase.Get();
         if (newTile.name == null || database.GetTileData(newTile.name) != null)
         {
+            Debug.Log("Close");
             return;
         }
+        string folderPath = "Assets/Resources/Tiles";
+        if (AssetDatabase.IsValidFolder(folderPath))
+        {
+            string fullPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + $"/{newTile.name}.asset");
+            AssetDatabase.CreateAsset(newTile, fullPath);
+        }
         database.datas.Add(newTile);
+        Close();
     }
 }

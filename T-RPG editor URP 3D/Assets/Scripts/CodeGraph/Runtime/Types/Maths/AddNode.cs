@@ -15,6 +15,7 @@ public class AddNode : CodeGraphNode
         return base.OnProcess(graph);
     }
 
+
     public object Add(object a, object b)
     {
         if (a is sbyte) result = (sbyte)a + (sbyte)b;

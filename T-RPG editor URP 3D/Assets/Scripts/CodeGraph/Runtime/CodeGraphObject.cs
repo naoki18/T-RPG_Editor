@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 public class CodeGraphObject : MonoBehaviour
 {
@@ -39,7 +38,6 @@ public class CodeGraphObject : MonoBehaviour
     public void Update()
     {
         if(updateNode != null) ProcessAndMoveToNextNode(updateNode);
-
     }
 
     private void ProcessAndMoveToNextNode(CodeGraphNode currentNode)

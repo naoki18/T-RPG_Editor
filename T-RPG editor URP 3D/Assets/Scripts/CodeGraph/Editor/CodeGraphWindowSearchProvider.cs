@@ -106,7 +106,8 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
         view.Add(node);
         if (from != null)
         {
-            view.CreateEdgeFromScratch(from.ConnectTo(view.GetNode(node.id).Ports[1]));
+            if(view.GetNode(node.id).Ports.Count > CodeGraphNode.INPUT)
+                view.CreateEdgeFromScratch(from.ConnectTo(view.GetNode(node.id).Ports[CodeGraphNode.INPUT]));
         }
         from = null;
         return true;

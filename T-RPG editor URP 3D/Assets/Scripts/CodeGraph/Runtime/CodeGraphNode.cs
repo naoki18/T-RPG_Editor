@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 [Serializable]
 public class CodeGraphNode
 {
+    public const int OUTPUT = 0;
+    public const int INPUT = 1;
+
     [Serializable]
     public struct LinkedValue
     {

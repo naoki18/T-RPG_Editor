@@ -1,9 +1,8 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TileDatabaseWindow : EditorWindow
 {
@@ -33,6 +32,18 @@ public class TileDatabaseWindow : EditorWindow
             TileCreatorWindow.OpenWindow();
         }
         EditorGUILayout.EndHorizontal();
+        GUI.color = Color.white;
+
+        for (int i = 0; i < searchTiles.Count; i++)
+        {
+            float yPos = 40 + 20 * i;
+            float width = searchTiles[i].tileName.Length * 16;
+            EditorGUI.LabelField(new Rect(new Vector2(0, yPos), new Vector2(width, 20)), searchTiles[i].tileName);
+            if (GUI.Button(new Rect(new Vector2(width, 40 + 20 * i), new Vector2(100, 20)), new GUIContent("Edit")))
+            {
+
+            }
+        }
     }
 
     private void OnEnable()
