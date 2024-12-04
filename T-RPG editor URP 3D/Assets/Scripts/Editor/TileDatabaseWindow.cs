@@ -41,7 +41,7 @@ public class TileDatabaseWindow : EditorWindow
             EditorGUI.LabelField(new Rect(new Vector2(0, yPos), new Vector2(width, 20)), searchTiles[i].tileName);
             if (GUI.Button(new Rect(new Vector2(width, 40 + 20 * i), new Vector2(100, 20)), new GUIContent("Edit")))
             {
-
+                TileCreatorWindow.OpenWindow(searchTiles[i]);
             }
         }
     }
