@@ -106,6 +106,7 @@ public class TileCreatorWindow : EditorWindow
     {
         targetObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
         targetObject.transform.position = Vector3.zero;
+        targetObject.transform.eulerAngles = new Vector3(15,20,30);
         // Since we want to manage this instance ourselves, hide it
         // from the current active scene, but remember to also destroy it.
         targetObject.hideFlags = HideFlags.HideAndDontSave;
@@ -126,7 +127,6 @@ public class TileCreatorWindow : EditorWindow
             float time = (float)EditorApplication.timeSinceStartup * 15;
             Vector3 mouseDir = new Vector3(mouseMoveDirection.y, mouseMoveDirection.x, 0);
             targetObject.transform.rotation = Quaternion.Euler(mouseDir) * targetObject.transform.rotation;
-            //targetObject.transform.position += mouseDir * Time.deltaTime;
             mouseMoveDirection = Vector2.zero;
         }
         if (scrollDelta != Vector2.zero)

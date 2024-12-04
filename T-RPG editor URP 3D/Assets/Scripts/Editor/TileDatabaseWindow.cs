@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TileDatabaseWindow : EditorWindow
 {
@@ -37,12 +36,37 @@ public class TileDatabaseWindow : EditorWindow
         for (int i = 0; i < searchTiles.Count; i++)
         {
             float yPos = 40 + 20 * i;
-            float width = searchTiles[i].tileName.Length * 16;
-            EditorGUI.LabelField(new Rect(new Vector2(0, yPos), new Vector2(width, 20)), searchTiles[i].tileName);
-            if (GUI.Button(new Rect(new Vector2(width, 40 + 20 * i), new Vector2(100, 20)), new GUIContent("Edit")))
+            #region TileNameBox
+            float nameBoxWidth = 100;
+            Vector2 nameBoxPos = new Vector2(0, yPos);
+            Vector3 nameBoxSize = new Vector2(nameBoxWidth, 20);
+            Rect nameRect = new Rect(nameBoxPos, nameBoxSize);
+            string tileName = searchTiles[i].tileName;
+            EditorGUI.LabelField(nameRect, tileName);
+            #endregion
+
+            #region EditButton
+            float editButtonWidth = 100;
+            Vector2 editButtonBoxPos = new Vector2(nameBoxWidth, 40 + 20 * i);
+            Vector2 editButtonBoxSize = new Vector2(editButtonWidth, 20);
+            Rect editButtonRect = new Rect(editButtonBoxPos, editButtonBoxSize);
+            if (GUI.Button(editButtonRect, new GUIContent("Edit")))
             {
                 TileCreatorWindow.OpenWindow(searchTiles[i]);
             }
+            #endregion
+
+            #region DeleteButton
+            Vector2 deleteButtonBoxPos = new Vector2(nameBoxWidth + editButtonWidth, 40 + 20 * i);
+            Vector2 deleteButtonBoxSize = new Vector2(100, 20);
+            Rect deleteButtonRect = new Rect(deleteButtonBoxPos, deleteButtonBoxSize);
+            GUI.color = Color.red;
+            if (GUI.Button(deleteButtonRect, new GUIContent("X")))
+            {
+                database.RemoveTile(searchTiles[i].tileName);
+            }
+            GUI.color = Color.white;
+            #endregion
         }
     }
 

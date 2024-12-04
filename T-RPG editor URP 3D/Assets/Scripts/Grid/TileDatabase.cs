@@ -23,6 +23,25 @@ public class TileDatabase : ScriptableObject
         return datas.Where(x => x.name == name).FirstOrDefault(); ;
     }
 
+    public void RemoveTile(string name)
+    {
+        string folderPath = "Assets/Resources/Tiles";
+        if(AssetDatabase.IsValidFolder(folderPath))
+        {
+            string fullpath = folderPath + $"/{name}.asset";
+            datas.Remove(GetTileData(name));
+            if(AssetDatabase.DeleteAsset(fullpath))
+            {
+                Debug.Log("<color=green>Success</color>");
+            }
+        }
+        else
+        {
+            Debug.LogError($"Can't remove, path {folderPath} is invalid");
+        }
+        
+        
+    }
     public static TileDatabase Get()
     {
         return Resources.Load<TileDatabase>("TileDatabase");

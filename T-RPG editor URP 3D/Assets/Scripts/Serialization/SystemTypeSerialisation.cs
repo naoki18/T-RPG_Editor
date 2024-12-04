@@ -34,16 +34,11 @@ public class SystemTypeSerialisation
 [CustomPropertyDrawer(typeof(SystemTypeSerialisation))]
 public class SystemTypeEditor : PropertyDrawer
 {
-    SerializedProperty serializedTypeList;
     SerializedProperty serializedType;
-    int nbMember;
 
-    bool isInit = false;
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        nbMember = -1;
         serializedType = property.FindPropertyRelative("selectedType");
-        serializedTypeList = property.FindPropertyRelative("typeNames");
 
         if (GUILayout.Button(serializedType.stringValue, EditorStyles.popup))
         {
