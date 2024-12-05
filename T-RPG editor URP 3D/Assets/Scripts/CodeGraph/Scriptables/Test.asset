@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nodes:
   - rid: 2430103836566224896
-  - rid: 2430103836566224903
   _connections: []
   gameObject: {fileID: 0}
   references:
@@ -32,29 +31,3 @@ MonoBehaviour:
           height: 77
         typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         linkedValues: []
-    - rid: 2430103836566224903
-      type: {class: GetComponentNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: 9682e382-ff1d-4b47-9e4e-472386e43ebe
-        _position:
-          serializedVersion: 2
-          x: 551
-          y: 263
-          width: 282
-          height: 141
-        typeName: GetComponentNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues: []
-        target: {fileID: 0}
-        type:
-          typeNames:
-          - Billboard
-          - CodeGraphObject
-          - Tile
-          - GameManager
-          - GridManager
-          - UnitManager
-          - HealthUI
-          - TileInformationUI
-          - Unit
-          selectedType: Tile

@@ -66,8 +66,9 @@ public class TileCreatorWindow : EditorWindow
             SaveTile();
         }
         EditorGUILayout.Space(10);
-        GUILayout.Label("Preview", EditorStyles.boldLabel);
 
+        // Preview
+        GUILayout.Label("Preview", EditorStyles.boldLabel);
         if(previewUtility.camera != null)
         {
             Rect rect = new Rect(100, 100, 200, 200);
@@ -76,8 +77,8 @@ public class TileCreatorWindow : EditorWindow
             var texture = previewUtility.EndPreview();
             GUI.DrawTexture(rect, texture);
         }
-        
 
+        #region MouseEvent
         if (Event.current.type == EventType.MouseDown)
         {
             lastMousePos = Event.current.mousePosition;
@@ -100,6 +101,7 @@ public class TileCreatorWindow : EditorWindow
         {
             scrollDelta = Event.current.delta.normalized;
         }
+        #endregion
     }
 
     private void SetupPreviewScene()

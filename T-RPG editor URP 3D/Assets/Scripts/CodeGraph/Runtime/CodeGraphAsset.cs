@@ -18,6 +18,8 @@ public class CodeGraphAsset : ScriptableObject
     public GameObject gameObject;
     
     public Dictionary<string, CodeGraphNode> NodeDict => _nodeDict;
+
+    public ScriptableObject scriptable;
     public CodeGraphAsset()
     {
         _nodes = new List<CodeGraphNode>();

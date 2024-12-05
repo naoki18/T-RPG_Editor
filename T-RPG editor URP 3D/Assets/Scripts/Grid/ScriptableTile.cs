@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "new tileData", menuName = "Data/TileData")]
+[CreateAssetMenu(fileName = "new tileData", menuName = "Data/TileData"), ScriptableOf(typeof(Tile))]
 public class ScriptableTile : ScriptableObject, IComparable<ScriptableTile>
 {
     public string tileName;
