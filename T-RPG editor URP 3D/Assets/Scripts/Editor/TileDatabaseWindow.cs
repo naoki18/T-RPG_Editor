@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -23,27 +24,33 @@ public class TileDatabaseWindow : EditorWindow
         {
             selectedTile = searchTiles[0].tileName;
         }
-        using(var searchList = new EditorGUILayout.VerticalScope())
+
+        // Window
+        using (new EditorGUILayout.HorizontalScope())
         {
-            for (int i = 0; i < searchTiles.Count; i++)
+            // Search tile
+            using(new EditorGUILayout.VerticalScope())
             {
-                Rect test = searchList.rect;
-                test.width = 100;
-                test.y = 24 * i;
-                test.height = 24;
-                bool isSelected = searchTiles[i].tileName == selectedTile;
-                GUI.backgroundColor = isSelected ? Color.blue : new Color(0, 0, 0, 0);
-                if(GUI.Button(test, searchTiles[i].tileName, EditorStyles.selectionRect))
+                // Search bar
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Search :", GUILayout.Width(60));
+                search = GUILayout.TextField(search, GUILayout.ExpandWidth(true));
+                EditorGUILayout.EndHorizontal();
+
+                // All tiles
+                for (int i = 0; i < searchTiles.Count; i++)
                 {
-                    selectedTile=searchTiles[i].tileName;
+                    bool isSelected = searchTiles[i].tileName == selectedTile;
+                    GUI.backgroundColor = isSelected ? Color.blue : new Color(0, 0, 0, 0);
+                    if (GUILayout.Button(searchTiles[i].tileName, EditorStyles.selectionRect))
+                    {
+                        selectedTile = searchTiles[i].tileName;
+                    }
                 }
             }
+            EditorGUILayout.LabelField("test");
         }
-        //EditorGUILayout.BeginHorizontal();
-        //EditorGUILayout.LabelField("Search :", GUILayout.Width(60));
-        //search = GUILayout.TextField(search, GUILayout.ExpandWidth(true));
-        //EditorGUILayout.EndHorizontal();
-
+        
         //EditorGUILayout.BeginHorizontal();
         //GUI.color = Color.green;
         //if (GUILayout.Button("Add Item"))
