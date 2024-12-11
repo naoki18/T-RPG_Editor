@@ -152,7 +152,6 @@ public class TileCreatorWindow : EditorWindow
     {
         TileDatabase database = TileDatabase.Get();
 
-
         if (newTile.name == null || (!isEditing && database.GetTileData(newTile.name) != null))
         {
             Debug.Log("name can't be null or in database");

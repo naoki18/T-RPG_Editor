@@ -46,5 +46,26 @@ public class TileDatabase : ScriptableObject
     {
         return Resources.Load<TileDatabase>("TileDatabase");
     }
+    public void AddTile(ScriptableTile tile)
+    {
+        TileDatabase database = TileDatabase.Get();
 
+        if (tile.tileName == null)
+        {
+            int index = 0;
+            foreach (var tileData in datas) {
+                if (tileData.tileName.Contains("newTile")) index++;
+            }
+            tile.tileName = $"newTile[{index}]";
+        }
+        tile.name = tile.tileName;
+        string folderPath = "Assets/Resources/Tiles";
+        if (AssetDatabase.IsValidFolder(folderPath))
+        {
+                string fullPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + $"/{tile.tileName}.asset");
+                AssetDatabase.CreateAsset(tile, fullPath);
+                database.datas.Add(tile);
+
+        }
+    }
 }

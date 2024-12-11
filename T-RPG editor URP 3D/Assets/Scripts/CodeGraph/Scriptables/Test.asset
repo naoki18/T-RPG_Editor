@@ -33,8 +33,8 @@ MonoBehaviour:
         _guid: bd28fa68-1f59-498d-bba3-c97bff2e2ce4
         _position:
           serializedVersion: 2
-          x: 366
-          y: 261
+          x: 376
+          y: 260
           width: 106
           height: 77
         typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
