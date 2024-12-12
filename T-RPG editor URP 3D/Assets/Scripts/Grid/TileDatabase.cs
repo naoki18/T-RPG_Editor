@@ -68,4 +68,16 @@ public class TileDatabase : ScriptableObject
 
         }
     }
+    public void RenameTile(string tile, string name)
+    {
+        ScriptableTile tileData = GetTileData(tile);
+        string folderPath = "Assets/Resources/Tiles";
+        if (AssetDatabase.IsValidFolder(folderPath))
+        {
+            string fullPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + $"/{tileData.tileName}.asset");
+            AssetDatabase.RenameAsset(fullPath, name);
+            tileData.tileName = name;
+            tileData.name = name;
+        }
+    }
 }

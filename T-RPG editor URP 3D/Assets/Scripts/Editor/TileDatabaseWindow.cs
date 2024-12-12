@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class TileDatabaseWindow : EditorWindow
@@ -12,6 +14,11 @@ public class TileDatabaseWindow : EditorWindow
     private float zoom = -3f;
     private string selectedTile = "";
     private string search = "";
+
+    private string nameData = "";
+    private short walkableValueData = 0;
+    private Material materialData = null;
+
 
     private TileDatabase database;
     private ScriptableTile selectedTileData;
@@ -35,7 +42,8 @@ public class TileDatabaseWindow : EditorWindow
         SearchInDatabase();
         if (string.IsNullOrEmpty(selectedTile) && searchTiles.Count > 0)
         {
-            selectedTile = searchTiles[0].tileName;
+            SelectTile(searchTiles[0].tileName);
+
         }
 
         // Window
@@ -44,7 +52,6 @@ public class TileDatabaseWindow : EditorWindow
             ManageTilePart();
             DataPart();
             PreviewTilePart();
-
         }
         MouseEvent();
     }
@@ -54,45 +61,75 @@ public class TileDatabaseWindow : EditorWindow
         if (selectedTileData == null) return;
         using (var test = new EditorGUILayout.VerticalScope(GUILayout.Width(150)))
         {
-            using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 GUILayout.Label("Data", EditorStyles.boldLabel);
+                using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
+                {
+                    GUILayout.Label("name :");
+                    nameData = EditorGUILayout.TextField(nameData);
+                }
+                using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
+                {
+                    GUILayout.Label("walkableValue :");
+                    walkableValueData = (short)EditorGUILayout.IntField(walkableValueData);
+                }
+                using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
+                {
+                    GUILayout.Label("material :");
+                    materialData = (Material)EditorGUILayout.ObjectField(materialData, typeof(Material), true);
+                }
+                if (HasChange())
+                {
+                    GUI.backgroundColor = Color.green;
+                    if (GUILayout.Button("Save"))
+                    {
+                        SaveCurrentTile();
+                    }
+                    GUI.backgroundColor = Color.white;
+                }
             }
-            using(new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
-            {
-                GUILayout.Label("walkableValue :");
-                selectedTileData.walkableValue = (short)EditorGUILayout.IntField(selectedTileData.walkableValue);
-            }
+
 
         }
     }
 
+    private void SaveCurrentTile()
+    {
+        selectedTileData.walkableValue = walkableValueData;
+        selectedTileData.material = materialData;
+        if (selectedTileData.name != nameData) database.RenameTile(selectedTileData.name, nameData);
+
+    }
+
     private void PreviewTilePart()
     {
+        if (selectedTileData == null) return;
         using (var test = new EditorGUILayout.VerticalScope(GUILayout.Width(150)))
         {
-            using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
 
                 GUILayout.Label("Preview", EditorStyles.boldLabel);
-            }
-            GUI.backgroundColor = Color.black;
-            using (var previewBox = new EditorGUILayout.VerticalScope(EditorStyles.helpBox, GUILayout.Height(150)))
-            {
-                // Can't make the box at defined width and height without that
-                EditorGUILayout.LabelField("");
-                if (previewUtility.camera != null)
+                GUI.backgroundColor = Color.black;
+                using (var previewBox = new EditorGUILayout.VerticalScope(EditorStyles.helpBox, GUILayout.Height(150)))
                 {
-                    Rect rect = test.rect;
-                    rect.width = 200;
-                    rect.height = 200;
-                    previewUtility.BeginPreview(rect, previewBackground: GUIStyle.none);
-                    previewUtility.Render(true);
-                    var texture = previewUtility.EndPreview();
-                    GUI.DrawTexture(rect, texture);
+                    // Can't make the box at defined width and height without that
+                    EditorGUILayout.LabelField("");
+                    if (previewUtility.camera != null)
+                    {
+                        Rect rect = test.rect;
+                        rect.width = 200;
+                        rect.height = 200;
+                        previewUtility.BeginPreview(rect, previewBackground: GUIStyle.none);
+                        previewUtility.Render(true);
+                        var texture = previewUtility.EndPreview();
+                        GUI.DrawTexture(rect, texture);
+                    }
                 }
+                GUI.backgroundColor = Color.white;
             }
-            GUI.backgroundColor = Color.white;
+
 
         }
     }
@@ -126,10 +163,9 @@ public class TileDatabaseWindow : EditorWindow
             previewUtility.camera.transform.position = camPos;
             mouseScrollDelta = Vector2.zero;
         }
-        selectedTileData = database.GetTileData(selectedTile);
-        if (selectedTileData.material != null && targetObject.GetComponent<MeshRenderer>().sharedMaterial != selectedTileData.material)
+        if (targetObject.GetComponent<MeshRenderer>().sharedMaterial != materialData)
         {
-            targetObject.GetComponent<MeshRenderer>().sharedMaterial = selectedTileData.material;
+            targetObject.GetComponent<MeshRenderer>().sharedMaterial = materialData;
         }
 
         Repaint();
@@ -209,17 +245,18 @@ public class TileDatabaseWindow : EditorWindow
             EditorGUILayout.EndHorizontal();
 
             //Scroll bar
-            using (new EditorGUILayout.ScrollViewScope(scrollPos))
+            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
             {
+                scrollPos = scrollView.scrollPosition;
                 for (int i = 0; i < searchTiles.Count; i++)
                 {
-                    bool isSelected = searchTiles[i].tileName == selectedTile;
+                    bool isSelected = searchTiles[i].tileName == nameData;
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         GUI.backgroundColor = isSelected ? Color.blue : new Color(1, 1, 1, 1);
                         if (GUILayout.Button(searchTiles[i].tileName))
                         {
-                            selectedTile = searchTiles[i].tileName;
+                            SelectTile(searchTiles[i].tileName);
                         }
                         GUI.backgroundColor = Color.red;
                         if (GUILayout.Button("X", GUILayout.Width(20)))
@@ -231,7 +268,6 @@ public class TileDatabaseWindow : EditorWindow
                             database.RemoveTile(searchTiles[i].tileName);
                         }
                     }
-
                 }
             }
             GUI.backgroundColor = Color.green;
@@ -242,5 +278,24 @@ public class TileDatabaseWindow : EditorWindow
             GUI.backgroundColor = Color.white;
         }
 
+    }
+
+    private void SelectTile(string tile)
+    {
+        selectedTile = tile;
+        selectedTileData = database.GetTileData(selectedTile);
+
+        walkableValueData = selectedTileData.walkableValue;
+        nameData = selectedTileData.name;
+        materialData = selectedTileData.material;
+
+        GUI.FocusControl(null);
+
+    }
+    private bool HasChange()
+    {
+        return (walkableValueData != selectedTileData.walkableValue ||
+            nameData != selectedTileData.name ||
+            materialData != selectedTileData.material);
     }
 }
