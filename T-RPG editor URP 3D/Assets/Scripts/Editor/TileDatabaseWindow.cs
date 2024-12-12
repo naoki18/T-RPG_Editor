@@ -45,7 +45,7 @@ public class TileDatabaseWindow : EditorWindow
             SelectTile(searchTiles[0].tileName);
 
         }
-
+        GUILayout.Space(5);
         // Window
         using (new EditorGUILayout.HorizontalScope())
         {
@@ -64,10 +64,24 @@ public class TileDatabaseWindow : EditorWindow
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 GUILayout.Label("Data", EditorStyles.boldLabel);
-                using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
+                using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
                 {
-                    GUILayout.Label("name :");
-                    nameData = EditorGUILayout.TextField(nameData);
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        GUILayout.Label("name :");
+                        nameData = EditorGUILayout.TextField(nameData);
+                    }
+                    GUI.backgroundColor = Color.red;
+                    bool invalidName = string.IsNullOrEmpty(nameData) || nameData != selectedTileData.tileName && database.GetTileData(nameData) != null;
+                    if (invalidName)
+                    {
+                        using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
+                        {
+                            string error = string.IsNullOrEmpty(nameData) ? "Name can't be empty" : "Can't use this name, it already exists";
+                            GUILayout.Label(error);
+                        }
+                    }
+                    GUI.backgroundColor = Color.white;
                 }
                 using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
                 {
@@ -79,7 +93,7 @@ public class TileDatabaseWindow : EditorWindow
                     GUILayout.Label("material :");
                     materialData = (Material)EditorGUILayout.ObjectField(materialData, typeof(Material), true);
                 }
-                if (HasChange())
+                if (CanSave())
                 {
                     GUI.backgroundColor = Color.green;
                     if (GUILayout.Button("Save"))
@@ -236,7 +250,7 @@ public class TileDatabaseWindow : EditorWindow
 
     void ManageTilePart()
     {
-        using (new EditorGUILayout.VerticalScope(GUILayout.Width(200)))
+        using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox, GUILayout.Width(200)))
         {
             // Search bar
             EditorGUILayout.BeginHorizontal();
@@ -245,12 +259,12 @@ public class TileDatabaseWindow : EditorWindow
             EditorGUILayout.EndHorizontal();
 
             //Scroll bar
-            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
+            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos, GUILayout.Height(500)))
             {
                 scrollPos = scrollView.scrollPosition;
                 for (int i = 0; i < searchTiles.Count; i++)
                 {
-                    bool isSelected = searchTiles[i].tileName == nameData;
+                    bool isSelected = searchTiles[i].tileName == selectedTileData.name;
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         GUI.backgroundColor = isSelected ? Color.blue : new Color(1, 1, 1, 1);
@@ -292,9 +306,10 @@ public class TileDatabaseWindow : EditorWindow
         GUI.FocusControl(null);
 
     }
-    private bool HasChange()
+    private bool CanSave()
     {
-        return (walkableValueData != selectedTileData.walkableValue ||
+        bool invalidName = string.IsNullOrEmpty(nameData) || nameData != selectedTileData.tileName && database.GetTileData(nameData) != null;
+        return !invalidName && (walkableValueData != selectedTileData.walkableValue ||
             nameData != selectedTileData.name ||
             materialData != selectedTileData.material);
     }
