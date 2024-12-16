@@ -7,7 +7,7 @@ public class ScriptableTile : ScriptableObject, IComparable<ScriptableTile>
     public string tileName;
     public short walkableValue;
     public Material material;
-    public CodeGraphAsset visualScriptingAsset;
+    public CodeGraphAsset codeGraphAsset;
 
     public int CompareTo(ScriptableTile other)
     {

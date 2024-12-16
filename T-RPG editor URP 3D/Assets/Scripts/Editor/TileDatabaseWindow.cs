@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class TileDatabaseWindow : EditorWindow
 {
@@ -15,14 +18,16 @@ public class TileDatabaseWindow : EditorWindow
     private string selectedTile = "";
     private string search = "";
 
+    // DATAS
     private string nameData = "";
     private short walkableValueData = 0;
     private Material materialData = null;
-
+    private CodeGraphAsset codeGraphData = null;
+    private CodeGraphEditorWindow codeGraphEditorWindow = null;
 
     private TileDatabase database;
-    private ScriptableTile selectedTileData;
     private PreviewRenderUtility previewUtility;
+    private ScriptableTile selectedTileData;
     private GameObject targetObject;
     private List<ScriptableTile> searchTiles;
 
@@ -31,6 +36,7 @@ public class TileDatabaseWindow : EditorWindow
     private Vector2 lastMousePos = Vector2.zero;
     private Vector2 mouseMoveDirection = Vector2.zero;
 
+    public Rect windowRect = new Rect(100, 100, 200, 200);
     [MenuItem("Tools/TileDatabase")]
     public static void OpenWindow()
     {
@@ -49,13 +55,31 @@ public class TileDatabaseWindow : EditorWindow
         // Window
         using (new EditorGUILayout.HorizontalScope())
         {
+            BeginWindows();
             ManageTilePart();
-            DataPart();
-            PreviewTilePart();
+            EndWindows();
+            using (var dataPartWindow = new EditorGUILayout.VerticalScope())
+            {
+                using(new EditorGUILayout.HorizontalScope())
+                {
+                    DataPart();
+                    PreviewTilePart();
+                    CodeGraphViewPart();
+                }
+            }
         }
         MouseEvent();
     }
 
+    private void CodeGraphViewPart()
+    {
+        if (selectedTileData.codeGraphAsset != null && codeGraphEditorWindow == null)
+        {
+            codeGraphEditorWindow = CodeGraphEditorWindow.CreateSubWindow(selectedTileData.codeGraphAsset, this.GetType());
+            if (!codeGraphEditorWindow.docked)
+                this.Dock(codeGraphEditorWindow, Docker.DockPosition.Bottom);
+        }
+    }
     private void DataPart()
     {
         if (selectedTileData == null) return;
@@ -85,13 +109,18 @@ public class TileDatabaseWindow : EditorWindow
                 }
                 using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
                 {
-                    GUILayout.Label("walkableValue :");
+                    GUILayout.Label("Walkable value :");
                     walkableValueData = (short)EditorGUILayout.IntField(walkableValueData);
                 }
                 using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
                 {
-                    GUILayout.Label("material :");
+                    GUILayout.Label("Material :");
                     materialData = (Material)EditorGUILayout.ObjectField(materialData, typeof(Material), true);
+                }
+                using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
+                {
+                    GUILayout.Label("Visual scripting :");
+                    codeGraphData = (CodeGraphAsset)EditorGUILayout.ObjectField(codeGraphData, typeof(CodeGraphAsset), true);
                 }
                 if (CanSave())
                 {
@@ -112,6 +141,7 @@ public class TileDatabaseWindow : EditorWindow
     {
         selectedTileData.walkableValue = walkableValueData;
         selectedTileData.material = materialData;
+        selectedTileData.codeGraphAsset = codeGraphData;
         if (selectedTileData.name != nameData) database.RenameTile(selectedTileData.name, nameData);
 
     }
@@ -254,12 +284,12 @@ public class TileDatabaseWindow : EditorWindow
         {
             // Search bar
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Search :", GUILayout.Width(60));
+            EditorGUILayout.LabelField("Search :", EditorStyles.boldLabel, GUILayout.Width(60));
             search = GUILayout.TextField(search);
             EditorGUILayout.EndHorizontal();
 
             //Scroll bar
-            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos, GUILayout.Height(500)))
+            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
             {
                 scrollPos = scrollView.scrollPosition;
                 for (int i = 0; i < searchTiles.Count; i++)
@@ -302,7 +332,13 @@ public class TileDatabaseWindow : EditorWindow
         walkableValueData = selectedTileData.walkableValue;
         nameData = selectedTileData.name;
         materialData = selectedTileData.material;
+        codeGraphData = selectedTileData.codeGraphAsset;
 
+        if(codeGraphEditorWindow != null)
+        {
+            codeGraphEditorWindow.Close();
+            codeGraphEditorWindow = null;
+        }
         GUI.FocusControl(null);
 
     }
@@ -311,6 +347,7 @@ public class TileDatabaseWindow : EditorWindow
         bool invalidName = string.IsNullOrEmpty(nameData) || nameData != selectedTileData.tileName && database.GetTileData(nameData) != null;
         return !invalidName && (walkableValueData != selectedTileData.walkableValue ||
             nameData != selectedTileData.name ||
-            materialData != selectedTileData.material);
+            materialData != selectedTileData.material ||
+            codeGraphData != selectedTileData.codeGraphAsset);
     }
 }

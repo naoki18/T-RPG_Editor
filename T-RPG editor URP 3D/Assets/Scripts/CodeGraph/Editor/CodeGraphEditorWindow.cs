@@ -1,3 +1,4 @@
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -25,6 +26,25 @@ public class CodeGraphEditorWindow : EditorWindow
         newWindow.titleContent = new GUIContent($"{target.name}", EditorGUIUtility.ObjectContent(null, typeof(CodeGraphAsset)).image);
         newWindow.Load(target);
     }
+
+    public static CodeGraphEditorWindow CreateSubWindow(CodeGraphAsset target, System.Type mainWindowType)
+    {
+        CodeGraphEditorWindow[] windows = Resources.FindObjectsOfTypeAll<CodeGraphEditorWindow>();
+        foreach (var window in windows)
+        {
+            if (window.currentGraph == target)
+            {
+                window.Focus();
+                return window;
+            }
+        }
+        CodeGraphEditorWindow newWindow = CreateWindow<CodeGraphEditorWindow> ("test");
+        newWindow.titleContent = new GUIContent($"{target.name}", EditorGUIUtility.ObjectContent(null, typeof(CodeGraphAsset)).image);
+        newWindow.Load(target);
+        newWindow.ShowUtility();
+        return newWindow;
+    }
+    
 
     private void OnEnable()
     {

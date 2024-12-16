@@ -22,10 +22,10 @@ public class Tile : MonoBehaviour
         tile.mRenderer.material = data.material;
         tile.baseColor = tile.mRenderer.material.color;
         tile.tileName = data.tileName;
-        if(data.visualScriptingAsset != null)
+        if(data.codeGraphAsset != null)
         {
             tile.gameObject.AddComponent<CodeGraphObject>();
-            tile.GetComponent<CodeGraphObject>().Asset = data.visualScriptingAsset;
+            tile.GetComponent<CodeGraphObject>().Asset = data.codeGraphAsset;
         }
         return tile;
     }
