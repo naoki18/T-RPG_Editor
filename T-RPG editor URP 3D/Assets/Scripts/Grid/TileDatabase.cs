@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TileDatabase", menuName = "Database/TileDatabase")]
+[CreateAssetMenu(fileName = "TileDatabase", menuName = "Database/Tile Database")]
 public class TileDatabase : ScriptableObject
 {
     public List<ScriptableTile> datas;
@@ -74,7 +74,7 @@ public class TileDatabase : ScriptableObject
         string folderPath = "Assets/Resources/Tiles";
         if (AssetDatabase.IsValidFolder(folderPath))
         {
-            string fullPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + $"/{tileData.tileName}.asset");
+            string fullPath = folderPath + $"/{tileData.tileName}.asset";
             AssetDatabase.RenameAsset(fullPath, name);
             tileData.tileName = name;
             tileData.name = name;

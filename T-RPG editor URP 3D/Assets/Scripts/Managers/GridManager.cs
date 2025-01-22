@@ -15,6 +15,9 @@ public class GridManager : MonoBehaviour
 
     List<Vector3Int> reachablePosition = new List<Vector3Int>();
     Tile tileOnMouse = null;
+
+    public delegate void HoveringTile(Tile tile);
+    public event HoveringTile OnTileHovered;
     private void Awake()
     {
         if (Instance == null)
@@ -188,6 +191,16 @@ public class GridManager : MonoBehaviour
             }
             
         }
+        if(Input.GetMouseButtonDown(1))
+        {
+            switch (GameManager.Instance.GetState())
+            {
+                case GameManager.GameState.PLAYER_MOVE_CHARACTER:
+                    SelectUnit();
+                    GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
+                    break;
+            }
+        }
     }
 
     private void SelectUnit()
@@ -226,10 +239,9 @@ public class GridManager : MonoBehaviour
                 }
                 newTile.Highlight(0.5f);
             }
-            if (tileOnMouse != null) tileOnMouse.HideInformation();
             
             tileOnMouse = newTile;
-            newTile.ShowInformation();
+            OnTileHovered?.Invoke(tileOnMouse);
         }
     }
 
@@ -246,7 +258,6 @@ public class GridManager : MonoBehaviour
 
     private void SetHoveredTileNull()
     {
-        tileOnMouse.HideInformation();
         tileOnMouse.RemoveHighlight();
         tileOnMouse = null;
     }

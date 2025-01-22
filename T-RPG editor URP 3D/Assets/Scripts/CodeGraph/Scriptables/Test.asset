@@ -12,44 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a9473b35814e945a8af90e5ba13098, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  _nodes:
-  - rid: 2430103836566224896
-  - rid: 5935964334154579968
-  _connections:
-  - inputPort:
-      nodeId: ae4c8e38-414b-48c3-8b14-1f3f2c9aea32
-      portIndex: 1
-    outputPort:
-      nodeId: bd28fa68-1f59-498d-bba3-c97bff2e2ce4
-      portIndex: 0
+  _nodes: []
+  _connections: []
   gameObject: {fileID: 0}
   scriptable: {fileID: 0}
   references:
     version: 2
-    RefIds:
-    - rid: 2430103836566224896
-      type: {class: StartNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: bd28fa68-1f59-498d-bba3-c97bff2e2ce4
-        _position:
-          serializedVersion: 2
-          x: 388
-          y: 192
-          width: 106
-          height: 77
-        typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        linkedValues: []
-    - rid: 5935964334154579968
-      type: {class: ToStringNode, ns: , asm: Assembly-CSharp}
-      data:
-        _guid: ae4c8e38-414b-48c3-8b14-1f3f2c9aea32
-        _position:
-          serializedVersion: 2
-          x: 577
-          y: 192
-          width: 157
-          height: 101
-        typeName: ToStringNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        linkedValues: []
-        fromCast: 
+    RefIds: []

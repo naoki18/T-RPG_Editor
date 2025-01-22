@@ -5,17 +5,13 @@ public class TileInformationUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI TileName;
     [SerializeField] TextMeshProUGUI TileCost;
-    void Start()
-    {
-        Tile tile = GetComponentInParent<Tile>();
-        TileName.text = tile.GetName();
-        TileCost.text = "Cost : " + tile.GetWalkableValue();
-        this.gameObject.SetActive(false);
-    }
+    //void Start()
+    //{
+    //    this.gameObject.SetActive(false);
+    //}
 
-    public void UpdateUi()
+    public void UpdateUi(Tile tile)
     {
-        Tile tile = GetComponentInParent<Tile>();
         TileName.text = tile.GetName();
         TileCost.text = "Cost : " + tile.GetWalkableValue();
     }

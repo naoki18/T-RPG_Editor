@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
         ENEMIES_SPAWN,
         PLAYER_TURN,
         PLAYER_MOVE_CHARACTER,
+        PLAYER_ATTACK,
         ENEMIES_TURN
     }
     public static GameManager Instance { get; private set; }

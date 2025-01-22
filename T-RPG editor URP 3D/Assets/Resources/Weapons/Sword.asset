@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0166d0c6fea2e4f9526c21edfa5390, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
+  sprite: {fileID: 0}
+  weaponName: Sword
   attack: 10
   range: 1
+  width: 0

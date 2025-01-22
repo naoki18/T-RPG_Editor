@@ -77,14 +77,4 @@ public class Tile : MonoBehaviour
     {
         return tileName;
     }
-    public void ShowInformation()
-    {
-        informationUi.UpdateUi();
-        informationUi.gameObject.SetActive(true);
-    }
-
-    public void HideInformation()
-    {
-        informationUi.gameObject.SetActive(false);
-    }
 }
