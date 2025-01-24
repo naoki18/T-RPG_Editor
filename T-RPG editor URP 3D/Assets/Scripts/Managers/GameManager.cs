@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         switch(gameState)
         {
             case GameState.GENERATE_GRID:
-                GridManager.Instance.GenerateGrid();
+                Grid.Instance.GenerateGrid();
                 break;
             case GameState.PLAYER_SPAWN:
                 UnitManager.instance.SpawnAllies();
@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
                 UnitManager.instance.SpawnEnemies();
                 break;
             case GameState.PLAYER_TURN:
-                GridManager.Instance.ClearReachablePos();
+                Grid.Instance.ClearReachablePos();
                 break;
             default:
                 break;

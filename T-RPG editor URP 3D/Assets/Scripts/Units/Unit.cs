@@ -34,7 +34,7 @@ public class Unit : MonoBehaviour
     public Faction GetFaction() { return faction; }
     public void SetPosition(Vector3Int position)
     {
-        Tile tile = GridManager.Instance.GetTileAtPos(position);
+        Tile tile = Grid.Instance.GetTileAtPos(position);
         if (tile != null)
         {
             this.transform.position = position;
@@ -58,14 +58,14 @@ public class Unit : MonoBehaviour
             int movementPointAvailable = movementPoint;
             // List with next position to try & movement point available when position has been saved
             List<Tuple<Vector3Int, int>> tileToTry = new() { };
-            tileToTry.Add(new Tuple<Vector3Int, int>(this.transform.position.ToInt() + GridManager.directions[i], movementPointAvailable));
+            tileToTry.Add(new Tuple<Vector3Int, int>(this.transform.position.ToInt() + Grid.directions[i], movementPointAvailable));
             do
             {
                 // Get last position to try
                 Tuple<Vector3Int, int> tuple = tileToTry[^1];
                 Vector3Int PositionToTry = tuple.Item1;
                 movementPointAvailable = tuple.Item2;
-                Tile tile = GridManager.Instance.GetTileAtPos(PositionToTry);
+                Tile tile = Grid.Instance.GetTileAtPos(PositionToTry);
                 if (tile != null && tile.GetWalkableValue() > -1)
                 {
                     movementPointAvailable -= tile.GetWalkableValue();
@@ -77,7 +77,7 @@ public class Unit : MonoBehaviour
                     {
                         for (int j = 0; j < 4; j++)
                         {
-                            tileToTry.Add(new Tuple<Vector3Int, int>(PositionToTry + GridManager.directions[j], movementPointAvailable));
+                            tileToTry.Add(new Tuple<Vector3Int, int>(PositionToTry + Grid.directions[j], movementPointAvailable));
                         }
 
                     }
@@ -106,7 +106,7 @@ public class Unit : MonoBehaviour
     }
     public IEnumerator MoveUnit(List<Vector3Int> positions)
     {
-        GridManager.Instance.ClearReachablePos();
+        Grid.Instance.ClearReachablePos();
         
         Vector3 beginPos = positions[0];
         Vector3 currentDirection = positions[1] - positions[0];
@@ -118,7 +118,7 @@ public class Unit : MonoBehaviour
                 range++;
                 continue;
             }
-            GridManager.Instance.GetTileAtPos(this.transform.position.ToInt()).SetCharacter(null);
+            Grid.Instance.GetTileAtPos(this.transform.position.ToInt()).SetCharacter(null);
             if (i < positions.Count - 1) currentDirection = positions[i + 1] - positions[i];
             Vector3 positionToReach = positions[i];
             float timer = 0f;

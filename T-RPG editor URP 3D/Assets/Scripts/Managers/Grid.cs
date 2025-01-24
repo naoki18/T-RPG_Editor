@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class GridManager : MonoBehaviour
+public class Grid : MonoBehaviour
 {
     public static Vector3Int[] directions = new Vector3Int[4] { new Vector3Int(1, 0, 0), new Vector3Int(-1, 0, 0), new Vector3Int(0, 0, 1), new Vector3Int(0, 0, -1) };
-    public static GridManager Instance { get; private set; }
+    public static Grid Instance { get; private set; }
     [SerializeField] int width;
     [SerializeField] int height;
     [SerializeField] Tile tilePf;

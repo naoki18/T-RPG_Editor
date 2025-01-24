@@ -20,12 +20,12 @@ public class UIManager : MonoBehaviour
     }
     private void Start()
     {
-        GridManager.Instance.OnTileHovered += UpdateTileInfo;
+        Grid.Instance.OnTileHovered += UpdateTileInfo;
     }
 
     private void OnDestroy()
     {
-        GridManager.Instance.OnTileHovered -= UpdateTileInfo;
+        Grid.Instance.OnTileHovered -= UpdateTileInfo;
     }
     private void UpdateTileInfo(Tile tile)
     {

@@ -34,10 +34,10 @@ public static class AStar
             if(current == end) return AStar.ReconstructPath(cameFrom, current);
 
             set.Remove(current);
-            foreach (var neighbour in GridManager.GetNeighbours(current))
+            foreach (var neighbour in Grid.GetNeighbours(current))
             {
-                if (GridManager.Instance.GetTileAtPos(neighbour) == null || GridManager.Instance.GetTileAtPos(neighbour).GetWalkableValue() == -1) continue;
-                int neighboursGScore = gScore[current] + GridManager.Instance.GetTileAtPos(neighbour).GetWalkableValue();
+                if (Grid.Instance.GetTileAtPos(neighbour) == null || Grid.Instance.GetTileAtPos(neighbour).GetWalkableValue() == -1) continue;
+                int neighboursGScore = gScore[current] + Grid.Instance.GetTileAtPos(neighbour).GetWalkableValue();
                 if (!gScore.TryGetValue(neighbour, out _) || gScore[neighbour] > neighboursGScore)
                 {
                     cameFrom[neighbour] = current;

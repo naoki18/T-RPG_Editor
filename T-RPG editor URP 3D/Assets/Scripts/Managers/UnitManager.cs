@@ -32,7 +32,7 @@ public class UnitManager : MonoBehaviour
             GameManager.Instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
             return;
         }
-        Vector3Int pos = GridManager.Instance.GetRandomValidPos();
+        Vector3Int pos = Grid.Instance.GetRandomValidPos();
         unit.SetPosition(pos);
         GameManager.Instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
     }
@@ -45,7 +45,7 @@ public class UnitManager : MonoBehaviour
             return;
         }
 
-        Vector3Int pos = GridManager.Instance.GetRandomValidPos();
+        Vector3Int pos = Grid.Instance.GetRandomValidPos();
         unit.SetPosition(pos);
         GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
     }
