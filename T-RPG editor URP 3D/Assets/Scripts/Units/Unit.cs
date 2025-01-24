@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class Unit : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class Unit : MonoBehaviour
         unit.currentHp = unitData.hp;
         unit.speed = unitData.speed;
 
-        if(unitData.codeGraph)
+        if (unitData.codeGraph)
         {
             unit.gameObject.AddComponent<CodeGraphObject>();
             unit.GetComponent<CodeGraphObject>().Asset = unitData.codeGraph;
@@ -32,9 +33,10 @@ public class Unit : MonoBehaviour
     }
 
     public Faction GetFaction() { return faction; }
-    public void SetPosition(Vector3Int position)
+    public void SetPositionOnGrid(Vector3Int position, Grid grid)
     {
-        Tile tile = Grid.Instance.GetTileAtPos(position);
+        
+        Tile tile = grid.GetTileAtPos(position);
         if (tile != null)
         {
             this.transform.position = position;
@@ -44,13 +46,12 @@ public class Unit : MonoBehaviour
         {
             Debug.LogError("Can't find any tile at : " + position);
         }
-        
     }
-    
-    public List<Vector3Int> GetReachablePos()
+
+    public List<Vector3Int> GetReachablePos(Grid gridReference)
     {
         List<Vector3Int> reachablePos = new List<Vector3Int>();
-        
+
         // Let's try every direction from the current position
         for (int i = 0; i < 4; i++)
         {
@@ -65,7 +66,7 @@ public class Unit : MonoBehaviour
                 Tuple<Vector3Int, int> tuple = tileToTry[^1];
                 Vector3Int PositionToTry = tuple.Item1;
                 movementPointAvailable = tuple.Item2;
-                Tile tile = Grid.Instance.GetTileAtPos(PositionToTry);
+                Tile tile = gridReference.GetTileAtPos(PositionToTry);
                 if (tile != null && tile.GetWalkableValue() > -1)
                 {
                     movementPointAvailable -= tile.GetWalkableValue();
@@ -99,15 +100,15 @@ public class Unit : MonoBehaviour
         currentHp = Mathf.Clamp(currentHp, 0, maxHp);
         OnDamage?.Invoke(currentHp, maxHp);
 
-        if(currentHp <= 0)
+        if (currentHp <= 0)
         {
             Destroy(this.gameObject);
         }
     }
-    public IEnumerator MoveUnit(List<Vector3Int> positions)
+    public IEnumerator MoveUnit(List<Vector3Int> positions, Grid gridReference)
     {
-        Grid.Instance.ClearReachablePos();
-        
+        gridReference.ClearReachablePos(gridReference);
+
         Vector3 beginPos = positions[0];
         Vector3 currentDirection = positions[1] - positions[0];
         int range = 0;
@@ -118,7 +119,7 @@ public class Unit : MonoBehaviour
                 range++;
                 continue;
             }
-            Grid.Instance.GetTileAtPos(this.transform.position.ToInt()).SetCharacter(null);
+            gridReference.GetTileAtPos(this.transform.position.ToInt()).SetCharacter(null);
             if (i < positions.Count - 1) currentDirection = positions[i + 1] - positions[i];
             Vector3 positionToReach = positions[i];
             float timer = 0f;
@@ -130,7 +131,7 @@ public class Unit : MonoBehaviour
                 yield return null;
             } while (timer < 1f);
             // Call this to set the unit on the tile. Because before we only move its sprite
-            this.SetPosition(Vector3Int.RoundToInt(positions[i]));
+            this.SetPositionOnGrid(Vector3Int.RoundToInt(positions[i]), gridReference);
             beginPos = positions[i];
             range = 1;
             yield return null;

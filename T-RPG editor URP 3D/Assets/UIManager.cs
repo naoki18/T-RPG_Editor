@@ -3,33 +3,29 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    static public UIManager instance;
+    static public UIManager Instance;
 
     [SerializeField] TileInformationUI tileInformationUI;
     // Start is called before the first frame update
     private void Awake()
     {
-        if(instance == null)
+        if(Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {
             Destroy(this.gameObject);
         }
     }
-    private void Start()
+    public void UpdateTileInfo(Tile tile)
     {
-        Grid.Instance.OnTileHovered += UpdateTileInfo;
-    }
-
-    private void OnDestroy()
-    {
-        Grid.Instance.OnTileHovered -= UpdateTileInfo;
-    }
-    private void UpdateTileInfo(Tile tile)
-    {
-        if (!tile) return;
+        if (!tile)
+        {
+            tileInformationUI.enabled = false;
+            return;
+        }
+        tileInformationUI.enabled = true;
         tileInformationUI.UpdateUi(tile);
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class UnitManager : MonoBehaviour
 {
     public static UnitManager instance { get; private set; }
-
     public Unit unitPf;
 
     List<ScriptableUnit> units = new List<ScriptableUnit>();
@@ -23,8 +22,21 @@ public class UnitManager : MonoBehaviour
         else Destroy(this);
     }
 
+    private void Start()
+    {
+        GameManager.Instance.onPlayerSpawn += SpawnAllies;
+        GameManager.Instance.onEnemiesSpawn += SpawnEnemies;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.onPlayerSpawn -= SpawnAllies;
+        GameManager.Instance.onEnemiesSpawn -= SpawnEnemies;
+    }
     #region SPAWN
-    public void SpawnAllies()
+   
+
+    public void SpawnAllies(Grid grid)
     {
         Unit unit = InstantiateRandomUnit(Faction.ALLY);
         if (unit == null)
@@ -32,11 +44,12 @@ public class UnitManager : MonoBehaviour
             GameManager.Instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
             return;
         }
-        Vector3Int pos = Grid.Instance.GetRandomValidPos();
-        unit.SetPosition(pos);
+        Vector3Int pos = grid.GetRandomValidPos();
+        unit.SetPositionOnGrid(pos, grid);
         GameManager.Instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
     }
-    public void SpawnEnemies()
+
+    public void SpawnEnemies(Grid grid)
     {
         Unit unit = InstantiateRandomUnit(Faction.ENEMY);
         if (unit == null)
@@ -45,8 +58,8 @@ public class UnitManager : MonoBehaviour
             return;
         }
 
-        Vector3Int pos = Grid.Instance.GetRandomValidPos();
-        unit.SetPosition(pos);
+        Vector3Int pos = grid.GetRandomValidPos();
+        unit.SetPositionOnGrid(pos, grid);
         GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
     }
     private Unit InstantiateRandomUnit(Faction faction)
