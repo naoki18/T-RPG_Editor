@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class WeaponDatabaseWindow : EditorWindow
 {
@@ -20,6 +22,7 @@ public class WeaponDatabaseWindow : EditorWindow
     public int attackData;
     public int rangeData;
     public int widthData;
+    public List<Vector2> damagedTileData;
 
     private WeaponDatabase database;
     private ScriptableWeapon selectedWeaponData;
@@ -54,12 +57,11 @@ public class WeaponDatabaseWindow : EditorWindow
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     DataPart();
+                    AttackDesignPart();
                 }
             }
         }
     }
-
-    
     private void DataPart()
     {
         if (selectedWeaponData == null) return;
@@ -122,24 +124,63 @@ public class WeaponDatabaseWindow : EditorWindow
         }
     }
 
-    private void SaveCurrentTile()
+    private void AttackDesignPart()
     {
-        selectedWeaponData.sprite = spriteData;
-        selectedWeaponData.attack = attackData;
-        selectedWeaponData.range = rangeData;
-        selectedWeaponData.width = widthData;
-        if (selectedWeaponData.name != nameData) database.RenameWeapon(selectedWeaponData.name, nameData);
+        if (selectedWeaponData == null) return;
+        using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+        {
+            GUILayout.Label("Attack design", EditorStyles.boldLabel);
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+            {
+                for (int i = 0; i < selectedWeaponData.range; i++)
+                {
+                    using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
+                    {
+                        GUILayout.FlexibleSpace();
+                        for (int j = 0; j < selectedWeaponData.width * 2 - 1; j++)
+                        {
+                            Vector2 pos = new Vector2(i, j);
+                            bool isSelected = damagedTileData.Contains(pos);
+                            if (isSelected) GUI.color = Color.green;
+                            if (GUILayout.Button("", GUILayout.Width(75)))
+                            {
+                                if (isSelected) damagedTileData.Remove(pos);
+                                else damagedTileData.Add(pos);
+                            }
+                            GUI.color = Color.white;
+                        }
+                        GUILayout.FlexibleSpace();
+                    }
+                }
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.FlexibleSpace();
+                    GUIStyle style = new GUIStyle(EditorStyles.helpBox);
+                    style.alignment = TextAnchor.MiddleCenter;
+                    style.fontSize = 15;
+                    GUI.color = Color.yellow;
+                    GUILayout.Label("Player", style, GUILayout.Width(75));
+                    GUI.color = Color.white;
+                    GUILayout.FlexibleSpace();
+                }
 
+
+
+                GUI.backgroundColor = Color.white;
+            }
+        }
     }
 
-    
+
+
+
 
     private void OnEnable()
     {
         database = WeaponDatabase.Get();
     }
 
-    
+
 
     void SearchInDatabase()
     {
@@ -215,6 +256,9 @@ public class WeaponDatabaseWindow : EditorWindow
         widthData = selectedWeaponData.width;
         nameData = selectedWeaponData.name;
         spriteData = selectedWeaponData.sprite;
+        damagedTileData = new List<Vector2>();
+        // Doing for loop to avoid ref value
+        for (int i = 0; i < selectedWeaponData.damagedTile.Count; i++) damagedTileData.Add(selectedWeaponData.damagedTile[i]);
 
         GUI.FocusControl(null);
 
@@ -226,7 +270,22 @@ public class WeaponDatabaseWindow : EditorWindow
             nameData != selectedWeaponData.name ||
             widthData != selectedWeaponData.width ||
             rangeData != selectedWeaponData.range ||
-            spriteData != selectedWeaponData.sprite);
+            spriteData != selectedWeaponData.sprite ||
+            !damagedTileData.Compare(selectedWeaponData.damagedTile));
+
+    }
+
+    private void SaveCurrentTile()
+    {
+        selectedWeaponData.sprite = spriteData;
+        selectedWeaponData.attack = attackData;
+        selectedWeaponData.range = rangeData;
+        selectedWeaponData.width = widthData;
+        selectedWeaponData.damagedTile = new List<Vector2>();
+        // avoid ref value
+        for (int i = 0; i < damagedTileData.Count; i++) selectedWeaponData.damagedTile.Add(damagedTileData[i]);
+
+        if (selectedWeaponData.name != nameData) database.RenameWeapon(selectedWeaponData.name, nameData);
 
     }
 }
