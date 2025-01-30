@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public enum GameState
     {
-        GENERATE_GRID,
+        START_GAME,
         PLAYER_SPAWN,
         ENEMIES_SPAWN,
         PLAYER_TURN,
@@ -19,7 +16,15 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameState baseState;
     private GameState gameState;
+    private Grid gameGrid;
 
+    public delegate void OnGameStart();
+    public event OnGameStart onGameStart;
+
+    public delegate void OnChangeState(Grid grid);
+    public event OnChangeState onPlayerSpawn;
+    public event OnChangeState onEnemiesSpawn;
+    public event OnChangeState onPlayerTurn;
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -34,19 +39,19 @@ public class GameManager : MonoBehaviour
     {
         // TODO : Ajouter des delegates pour laisser chaque manager faire ce qu'il doit faire lors d'un nouveau state
         gameState = newState;
-        switch(gameState)
+        switch (gameState)
         {
-            case GameState.GENERATE_GRID:
-                GridManager.Instance.GenerateGrid();
+            case GameState.START_GAME:
+                onGameStart?.Invoke();
                 break;
             case GameState.PLAYER_SPAWN:
-                UnitManager.instance.SpawnAllies();
+                onPlayerSpawn?.Invoke(gameGrid);
                 break;
             case GameState.ENEMIES_SPAWN:
-                UnitManager.instance.SpawnEnemies();
+                onEnemiesSpawn?.Invoke(gameGrid);
                 break;
             case GameState.PLAYER_TURN:
-                GridManager.Instance.ClearReachablePos();
+                onPlayerTurn?.Invoke(gameGrid);
                 break;
             default:
                 break;
@@ -56,5 +61,10 @@ public class GameManager : MonoBehaviour
     public GameState GetState()
     {
         return gameState;
+    }
+
+    public void SetGrid(Grid grid)
+    { 
+        gameGrid = grid; 
     }
 }

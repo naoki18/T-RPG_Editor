@@ -55,7 +55,7 @@ public class TileDatabaseWindow : EditorWindow
             EndWindows();
             using (var dataPartWindow = new EditorGUILayout.VerticalScope())
             {
-                using(new EditorGUILayout.HorizontalScope())
+                using (new EditorGUILayout.HorizontalScope())
                 {
                     DataPart();
                     PreviewTilePart();
@@ -123,6 +123,7 @@ public class TileDatabaseWindow : EditorWindow
                     if (GUILayout.Button("Save"))
                     {
                         SaveCurrentTile();
+                        selectedTile = selectedTileData.tileName;
                     }
                     GUI.backgroundColor = Color.white;
                 }
@@ -300,11 +301,15 @@ public class TileDatabaseWindow : EditorWindow
                         GUI.backgroundColor = Color.red;
                         if (GUILayout.Button("X", GUILayout.Width(20)))
                         {
-                            if (searchTiles[i].tileName == selectedTile)
+                            string currentTileName = searchTiles[i].tileName;
+                            database.RemoveTile(searchTiles[i].tileName);
+                            SearchInDatabase();
+                            if (currentTileName == selectedTile)
                             {
                                 selectedTile = searchTiles.Count > 0 ? searchTiles[0].tileName : string.Empty;
+                                SelectTile(selectedTile);
                             }
-                            database.RemoveTile(searchTiles[i].tileName);
+
                         }
                     }
                 }
@@ -321,6 +326,7 @@ public class TileDatabaseWindow : EditorWindow
 
     private void SelectTile(string tile)
     {
+        Debug.Log($"<color=red>{tile}</color>");
         selectedTile = tile;
         selectedTileData = database.GetTileData(selectedTile);
 
@@ -329,7 +335,7 @@ public class TileDatabaseWindow : EditorWindow
         materialData = selectedTileData.material;
         codeGraphData = selectedTileData.codeGraphAsset;
 
-        if(codeGraphEditorWindow != null)
+        if (codeGraphEditorWindow != null)
         {
             codeGraphEditorWindow.Close();
             codeGraphEditorWindow = null;

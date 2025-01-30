@@ -227,11 +227,15 @@ public class WeaponDatabaseWindow : EditorWindow
                         GUI.backgroundColor = Color.red;
                         if (GUILayout.Button("X", GUILayout.Width(20)))
                         {
-                            if (searchWeapons[i].weaponName == selectedWeapon)
+                            string currentWeaponName = searchWeapons[i].weaponName;
+                            database.RemoveWeapon(searchWeapons[i].weaponName);
+                            SearchInDatabase();
+                            if (currentWeaponName == selectedWeapon)
                             {
                                 selectedWeapon = searchWeapons.Count > 0 ? searchWeapons[0].weaponName : string.Empty;
+                                SelectWeapon(selectedWeapon);
                             }
-                            database.RemoveWeapon(searchWeapons[i].weaponName);
+                            
                         }
                     }
                 }

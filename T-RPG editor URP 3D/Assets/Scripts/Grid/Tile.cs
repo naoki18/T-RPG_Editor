@@ -11,11 +11,9 @@ public class Tile : MonoBehaviour
 
     Color baseColor;
 
-    [SerializeField] TileInformationUI informationUi;
-
-    public static Tile CreateTile(ScriptableTile data)
+    public static Tile CreateTile(ScriptableTile data, Tile prefab)
     {
-        Tile tile = Instantiate(GridManager.Instance.GetTilePf(), Vector3.zero, Quaternion.identity);
+        Tile tile = Instantiate(prefab, Vector3.zero, Quaternion.identity);
         tile.mRenderer = tile.GetComponent<MeshRenderer>();
         tile.unitOnTile = null;
         tile.walkableValue = data.walkableValue;

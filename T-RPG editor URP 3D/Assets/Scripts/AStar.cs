@@ -17,7 +17,7 @@ public static class AStar
         //path.RemoveAt(0);
         return path;
     }
-    public static List<Vector3Int> GetPath(Tile tileA, Tile tileB)
+    public static List<Vector3Int> GetPath(Tile tileA, Tile tileB, Grid gridReference)
     {
         Vector3Int start = tileA.transform.position.ToInt();
         Vector3Int end = tileB.transform.position.ToInt();
@@ -34,10 +34,10 @@ public static class AStar
             if(current == end) return AStar.ReconstructPath(cameFrom, current);
 
             set.Remove(current);
-            foreach (var neighbour in GridManager.GetNeighbours(current))
+            foreach (var neighbour in Grid.GetNeighbours(current))
             {
-                if (GridManager.Instance.GetTileAtPos(neighbour) == null || GridManager.Instance.GetTileAtPos(neighbour).GetWalkableValue() == -1) continue;
-                int neighboursGScore = gScore[current] + GridManager.Instance.GetTileAtPos(neighbour).GetWalkableValue();
+                if (gridReference.GetTileAtPos(neighbour) == null || gridReference.GetTileAtPos(neighbour).GetWalkableValue() == -1) continue;
+                int neighboursGScore = gScore[current] + gridReference.GetTileAtPos(neighbour).GetWalkableValue();
                 if (!gScore.TryGetValue(neighbour, out _) || gScore[neighbour] > neighboursGScore)
                 {
                     cameFrom[neighbour] = current;
