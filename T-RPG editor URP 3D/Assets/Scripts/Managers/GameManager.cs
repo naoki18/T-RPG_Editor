@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
         PLAYER_SPAWN,
         ENEMIES_SPAWN,
         PLAYER_TURN,
+        PLAYER_CHOICE,
         PLAYER_MOVE_CHARACTER,
         PLAYER_ATTACK,
         ENEMIES_TURN
@@ -34,23 +35,14 @@ public class GameManager : MonoBehaviour
     {
         // TODO : Ajouter des delegates pour laisser chaque manager faire ce qu'il doit faire lors d'un nouveau state
         gameState = newState;
-        switch (gameState)
-        {
-            case GameState.START_GAME:
-                break;
-            case GameState.PLAYER_SPAWN:
-                break;
-            case GameState.ENEMIES_SPAWN:
-                break;
-            case GameState.PLAYER_TURN:
-                break;
-            default:
-                break;
-        }
 
         OnGameStateChanged?.Invoke(newState);
     }
 
+    public void ChangeState(string newState)
+    {
+        ChangeState((GameState)Enum.Parse(typeof(GameState), newState));
+    }
     public GameState GetState()
     {
         return gameState;
@@ -59,5 +51,10 @@ public class GameManager : MonoBehaviour
     public void SetGrid(Grid grid)
     { 
         gameGrid = grid; 
+    }
+
+    public void Test()
+    {
+        Debug.Log("test");
     }
 }

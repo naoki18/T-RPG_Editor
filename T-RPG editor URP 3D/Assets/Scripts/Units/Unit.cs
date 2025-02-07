@@ -11,6 +11,7 @@ public class Unit : MonoBehaviour
     int maxHp;
     int currentHp;
     int speed;
+    ScriptableWeapon weapon;
 
     public delegate void OnDamageDelegate(int currentHp, int maxHp);
     public event OnDamageDelegate OnDamage;
@@ -23,7 +24,7 @@ public class Unit : MonoBehaviour
         unit.maxHp = unitData.hp;
         unit.currentHp = unitData.hp;
         unit.speed = unitData.speed;
-
+        unit.weapon = unitData.baseWeapon;
         if (unitData.codeGraph)
         {
             unit.gameObject.AddComponent<CodeGraphObject>();
@@ -48,10 +49,25 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public List<Vector3Int> GetReachablePos(Grid gridReference)
+    public List<Vector3Int> GetDamageablePosition()
+    {
+        Grid grid = Grid.Instance;
+        List<Vector3Int> toReturn = new List<Vector3Int>();
+        foreach(Vector2 tile in weapon.damagedTile)
+        {
+            Vector3 test = this.transform.position.ToInt() + new Vector3(tile.x, this.transform.position.y, tile.y);
+            if(grid.GetTileAtPos(test.ToInt()) != null)
+            {
+                toReturn.Add(test.ToInt());
+            }
+                
+        }
+        return toReturn;
+    }
+    public List<Vector3Int> GetReachablePos()
     {
         List<Vector3Int> reachablePos = new List<Vector3Int>();
-
+        Grid gridReference = Grid.Instance;
         // Let's try every direction from the current position
         for (int i = 0; i < 4; i++)
         {
@@ -105,9 +121,10 @@ public class Unit : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-    public IEnumerator MoveUnit(List<Vector3Int> positions, Grid gridReference)
+    public IEnumerator MoveUnit(List<Vector3Int> positions)
     {
-        gridReference.ClearReachablePos(gridReference);
+        Grid gridReference = Grid.Instance;
+        gridReference.ClearReachablePos();
 
         Vector3 beginPos = positions[0];
         Vector3 currentDirection = positions[1] - positions[0];

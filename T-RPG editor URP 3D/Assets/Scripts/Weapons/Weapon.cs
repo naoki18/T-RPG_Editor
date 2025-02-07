@@ -8,8 +8,7 @@ public class Weapon
         Weapon newWeapon = new()
         {
             attack = data.attack,
-            range = data.range,
-            width = data.width
+            range = data.range
         };
         return newWeapon;
     }

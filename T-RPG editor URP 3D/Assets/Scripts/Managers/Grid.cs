@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
+    
     public static Vector3Int[] directions = new Vector3Int[4] { new Vector3Int(1, 0, 0), new Vector3Int(-1, 0, 0), new Vector3Int(0, 0, 1), new Vector3Int(0, 0, -1) };
     [SerializeField] int width;
     [SerializeField] int height;
@@ -14,30 +15,40 @@ public class Grid : MonoBehaviour
 
     List<Vector3Int> reachablePosition = new List<Vector3Int>();
     Tile tileOnMouse = null;
-
+    public static Grid Instance { get; private set; }
     public delegate void HoveringTile(Tile tile);
     public event HoveringTile OnTileHovered;
     private void Awake()
     {
         tiles = Resources.LoadAll<ScriptableTile>("Tiles").ToList();
-        GameManager.OnGameStateChanged += InitializeGrid;
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else Destroy(this.gameObject);
+        GameManager.OnGameStateChanged += GenerateGrid;
+        GameManager.OnGameStateChanged += MoveSelectedUnit;
+        GameManager.OnGameStateChanged += AttackWithSelectedUnit;
     }
 
-    
+    private void AttackWithSelectedUnit(GameManager.GameState state)
+    {
+        if (state != GameManager.GameState.PLAYER_ATTACK) return;
+        FindDamageablePosition(UnitManager.instance.GetSelectedUnit());
+    }
+
+    private void MoveSelectedUnit(GameManager.GameState state)
+    {
+        if(state == GameManager.GameState.PLAYER_MOVE_CHARACTER) FindReachablePosition(UnitManager.instance.GetSelectedUnit());
+    }
 
     public void Start()
     {
-        UnitManager.instance.OnSelectUnit += FindReachablePosition;
-        //GameManager.Instance.onGameStart += GenerateGrid;
-        //GameManager.Instance.onPlayerTurn += ClearReachablePos;
         OnTileHovered += UIManager.Instance.UpdateTileInfo;
     }
 
     private void OnDestroy()
     {
-        UnitManager.instance.OnSelectUnit -= FindReachablePosition;
-        //GameManager.Instance.onGameStart -= GenerateGrid;
-        //GameManager.Instance.onPlayerTurn -= ClearReachablePos;
         OnTileHovered -= UIManager.Instance.UpdateTileInfo;
     }
     public void Update()
@@ -142,8 +153,14 @@ public class Grid : MonoBehaviour
     #region REACHABLE_POSITION
     private void FindReachablePosition(Unit unit)
     {
-        ClearReachablePos(this);
-        reachablePosition = unit.GetReachablePos(this);
+        ClearReachablePos();
+        reachablePosition = unit.GetReachablePos();
+        HighlightReachablePosition();
+    }
+    private void FindDamageablePosition(Unit unit)
+    {
+        ClearReachablePos();
+        reachablePosition = unit.GetDamageablePosition();
         HighlightReachablePosition();
     }
     private void HighlightReachablePosition()
@@ -154,7 +171,7 @@ public class Grid : MonoBehaviour
         }
     }
 
-    public void ClearReachablePos(Grid grid)
+    public void ClearReachablePos()
     {
         foreach (var pos in reachablePosition)
         {
@@ -218,8 +235,7 @@ public class Grid : MonoBehaviour
         if (characterOnTile != null && characterOnTile.GetFaction() == Faction.ALLY)
         {
             UnitManager.instance.SelectUnit(characterOnTile);
-            GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_MOVE_CHARACTER);
-            tileOnMouse.RemoveHighlight();
+            GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_CHOICE);
         }
     }
 
@@ -229,7 +245,7 @@ public class Grid : MonoBehaviour
         Tile tileOccupied = GetTileAtPos(selectedUnit.transform.position.ToInt());
         if (selectedUnit != null && tileOnMouse != null && tileOnMouse.GetCharacter() == null && IsReachable(tileOnMouse))
         {
-            StartCoroutine(selectedUnit.MoveUnit(AStar.GetPath(tileOccupied, tileOnMouse, this), this));
+            StartCoroutine(selectedUnit.MoveUnit(AStar.GetPath(tileOccupied, tileOnMouse)));
         }
     }
 

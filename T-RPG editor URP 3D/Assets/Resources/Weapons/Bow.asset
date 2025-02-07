@@ -10,18 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b0166d0c6fea2e4f9526c21edfa5390, type: 3}
-  m_Name: Sword
+  m_Name: Bow
   m_EditorClassIdentifier: 
   sprite: {fileID: 0}
-  weaponName: Sword
-  attack: 10
-  range: 2
-  damagedTile:
-  - {x: -1, y: -1}
-  - {x: 0, y: -1}
-  - {x: 1, y: -1}
-  - {x: 1, y: 0}
-  - {x: 1, y: 1}
-  - {x: 0, y: 1}
-  - {x: -1, y: 0}
-  - {x: -1, y: 1}
+  weaponName: r
+  attack: 0
+  range: 0
+  damagedTile: []

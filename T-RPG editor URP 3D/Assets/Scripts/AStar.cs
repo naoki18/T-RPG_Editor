@@ -17,8 +17,9 @@ public static class AStar
         //path.RemoveAt(0);
         return path;
     }
-    public static List<Vector3Int> GetPath(Tile tileA, Tile tileB, Grid gridReference)
+    public static List<Vector3Int> GetPath(Tile tileA, Tile tileB)
     {
+        Grid gridReference = Grid.Instance;
         Vector3Int start = tileA.transform.position.ToInt();
         Vector3Int end = tileB.transform.position.ToInt();
 

@@ -24,11 +24,6 @@ public class UnitManager : MonoBehaviour
     }
 
 
-    private void OnDestroy()
-    {
-        GameManager.Instance.onPlayerSpawn -= SpawnAllies;
-        GameManager.Instance.onEnemiesSpawn -= SpawnEnemies;
-    }
     #region SPAWN
    
     public void SpawnUnit(GameManager.GameState state)
@@ -36,13 +31,16 @@ public class UnitManager : MonoBehaviour
         switch (state)
         {
             case GameManager.GameState.PLAYER_SPAWN:
+                SpawnAllies();
                 break;
             case GameManager.GameState.ENEMIES_SPAWN:
+                SpawnEnemies();
                 break;
         }
     }
-    public void SpawnAllies(Grid grid)
+    public void SpawnAllies()
     {
+        Grid grid = Grid.Instance;
         Unit unit = InstantiateRandomUnit(Faction.ALLY);
         if (unit == null)
         {
@@ -54,8 +52,9 @@ public class UnitManager : MonoBehaviour
         GameManager.Instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
     }
 
-    public void SpawnEnemies(Grid grid)
+    public void SpawnEnemies()
     {
+        Grid grid = Grid.Instance;
         Unit unit = InstantiateRandomUnit(Faction.ENEMY);
         if (unit == null)
         {
@@ -81,7 +80,7 @@ public class UnitManager : MonoBehaviour
     {
         if (unit == null) return;
         selectedUnit = unit;
-        OnSelectUnit.Invoke(unit);
+        OnSelectUnit?.Invoke(unit);
     }
 
     public void UnselectUnit()

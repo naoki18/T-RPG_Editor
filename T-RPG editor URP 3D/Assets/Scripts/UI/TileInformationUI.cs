@@ -13,6 +13,11 @@ public class TileInformationUI : MonoBehaviour
     public void UpdateUi(Tile tile)
     {
         TileName.text = tile.GetName();
+        if (tile.GetWalkableValue() == -1)
+        {
+            TileCost.text = "Occupied"; 
+            return;
+        }
         TileCost.text = "Cost : " + tile.GetWalkableValue();
     }
 }

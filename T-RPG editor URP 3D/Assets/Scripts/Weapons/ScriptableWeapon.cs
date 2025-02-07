@@ -9,7 +9,6 @@ public class ScriptableWeapon : ScriptableObject, IComparable<ScriptableWeapon>
     public string weaponName;
     public int attack;
     public int range;
-    public int width;
     public List<Vector2> damagedTile;
 
     public int CompareTo(ScriptableWeapon other)
