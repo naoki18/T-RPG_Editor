@@ -136,7 +136,6 @@ public class WeaponDatabaseWindow : EditorWindow
                 {
                     using (new EditorGUILayout.HorizontalScope())
                     {
-                        GUILayout.FlexibleSpace();
                         for (int j = 0; j < sideSize; j++)
                         {
                             int currentIndex1D = i * sideSize + j;
@@ -162,7 +161,6 @@ public class WeaponDatabaseWindow : EditorWindow
                             }
                             
                         }
-                        GUILayout.FlexibleSpace();
                     }
                 }
 

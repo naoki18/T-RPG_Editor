@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bow
   m_EditorClassIdentifier: 
   sprite: {fileID: 0}
-  weaponName: r
-  attack: 0
-  range: 0
+  weaponName: Bow
+  attack: 2
+  range: 3
   damagedTile: []

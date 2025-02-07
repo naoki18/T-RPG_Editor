@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faction: 0
   sprite: {fileID: 1488531949, guid: a1f868d870f5b9f4f8438cabbe8bcf22, type: 3}
-  baseWeapon: {fileID: 11400000, guid: 3638071f89728e44c8d7b1f16d689167, type: 2}
+  baseWeapon: {fileID: 11400000, guid: 542ebdc7e3fc9ca498dac991cbcac13a, type: 2}
   movementPoint: 5
   hp: 100
   speed: 0
