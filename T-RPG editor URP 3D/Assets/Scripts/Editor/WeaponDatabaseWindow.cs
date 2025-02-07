@@ -114,7 +114,7 @@ public class WeaponDatabaseWindow : EditorWindow
                     GUI.backgroundColor = Color.green;
                     if (GUILayout.Button("Save"))
                     {
-                        SaveCurrentTile();
+                        SaveCurrentWeapon();
                     }
                     GUI.backgroundColor = Color.white;
                 }
@@ -279,7 +279,7 @@ public class WeaponDatabaseWindow : EditorWindow
 
     }
 
-    private void SaveCurrentTile()
+    private void SaveCurrentWeapon()
     {
         selectedWeaponData.sprite = spriteData;
         selectedWeaponData.attack = attackData;
@@ -290,6 +290,7 @@ public class WeaponDatabaseWindow : EditorWindow
         for (int i = 0; i < damagedTileData.Count; i++) selectedWeaponData.damagedTile.Add(damagedTileData[i]);
 
         if (selectedWeaponData.name != nameData) database.RenameWeapon(selectedWeaponData.name, nameData);
-
+        EditorUtility.SetDirty(selectedWeaponData);
+        EditorUtility.SetDirty(database);
     }
 }

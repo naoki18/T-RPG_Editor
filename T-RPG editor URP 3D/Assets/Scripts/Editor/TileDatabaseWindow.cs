@@ -139,7 +139,8 @@ public class TileDatabaseWindow : EditorWindow
         selectedTileData.material = materialData;
         selectedTileData.codeGraphAsset = codeGraphData;
         if (selectedTileData.name != nameData) database.RenameTile(selectedTileData.name, nameData);
-
+        EditorUtility.SetDirty(selectedTileData);
+        EditorUtility.SetDirty(database);
     }
 
     private void PreviewTilePart()

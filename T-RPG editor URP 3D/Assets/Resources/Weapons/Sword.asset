@@ -15,5 +15,6 @@ MonoBehaviour:
   sprite: {fileID: 0}
   weaponName: Sword
   attack: 10
-  range: 1
-  width: 0
+  range: 3
+  width: 3
+  damagedTile: []

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -18,13 +19,7 @@ public class GameManager : MonoBehaviour
     private GameState gameState;
     private Grid gameGrid;
 
-    public delegate void OnGameStart();
-    public event OnGameStart onGameStart;
-
-    public delegate void OnChangeState(Grid grid);
-    public event OnChangeState onPlayerSpawn;
-    public event OnChangeState onEnemiesSpawn;
-    public event OnChangeState onPlayerTurn;
+    public static event Action<GameState> OnGameStateChanged;
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -42,20 +37,18 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.START_GAME:
-                onGameStart?.Invoke();
                 break;
             case GameState.PLAYER_SPAWN:
-                onPlayerSpawn?.Invoke(gameGrid);
                 break;
             case GameState.ENEMIES_SPAWN:
-                onEnemiesSpawn?.Invoke(gameGrid);
                 break;
             case GameState.PLAYER_TURN:
-                onPlayerTurn?.Invoke(gameGrid);
                 break;
             default:
                 break;
         }
+
+        OnGameStateChanged?.Invoke(newState);
     }
 
     public GameState GetState()

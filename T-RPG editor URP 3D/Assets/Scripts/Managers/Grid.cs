@@ -20,21 +20,24 @@ public class Grid : MonoBehaviour
     private void Awake()
     {
         tiles = Resources.LoadAll<ScriptableTile>("Tiles").ToList();
+        GameManager.OnGameStateChanged += InitializeGrid;
     }
+
+    
 
     public void Start()
     {
         UnitManager.instance.OnSelectUnit += FindReachablePosition;
-        GameManager.Instance.onGameStart += GenerateGrid;
-        GameManager.Instance.onPlayerTurn += ClearReachablePos;
+        //GameManager.Instance.onGameStart += GenerateGrid;
+        //GameManager.Instance.onPlayerTurn += ClearReachablePos;
         OnTileHovered += UIManager.Instance.UpdateTileInfo;
     }
 
     private void OnDestroy()
     {
         UnitManager.instance.OnSelectUnit -= FindReachablePosition;
-        GameManager.Instance.onGameStart -= GenerateGrid;
-        GameManager.Instance.onPlayerTurn -= ClearReachablePos;
+        //GameManager.Instance.onGameStart -= GenerateGrid;
+        //GameManager.Instance.onPlayerTurn -= ClearReachablePos;
         OnTileHovered -= UIManager.Instance.UpdateTileInfo;
     }
     public void Update()
@@ -50,8 +53,9 @@ public class Grid : MonoBehaviour
             }
         }
     }
-    public void GenerateGrid()
+    public void GenerateGrid(GameManager.GameState state)
     {
+        if (state != GameManager.GameState.START_GAME) return;
         tileMap = new Dictionary<Vector3Int, Tile>();
         for (int x = 0; x < width; x++)
         {

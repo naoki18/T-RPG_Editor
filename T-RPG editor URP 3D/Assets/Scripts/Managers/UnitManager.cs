@@ -18,15 +18,11 @@ public class UnitManager : MonoBehaviour
         {
             instance = this;
             units = Resources.LoadAll<ScriptableUnit>("Units").ToList();
+            GameManager.OnGameStateChanged += SpawnUnit;
         }
         else Destroy(this);
     }
 
-    private void Start()
-    {
-        GameManager.Instance.onPlayerSpawn += SpawnAllies;
-        GameManager.Instance.onEnemiesSpawn += SpawnEnemies;
-    }
 
     private void OnDestroy()
     {
@@ -35,7 +31,16 @@ public class UnitManager : MonoBehaviour
     }
     #region SPAWN
    
-
+    public void SpawnUnit(GameManager.GameState state)
+    {
+        switch (state)
+        {
+            case GameManager.GameState.PLAYER_SPAWN:
+                break;
+            case GameManager.GameState.ENEMIES_SPAWN:
+                break;
+        }
+    }
     public void SpawnAllies(Grid grid)
     {
         Unit unit = InstantiateRandomUnit(Faction.ALLY);
