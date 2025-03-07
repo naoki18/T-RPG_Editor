@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4a7a79aca8a0fe4198a6692fbb49e36, type: 3}
-  m_Name: Heros
+  m_Name: Hero
   m_EditorClassIdentifier: 
   faction: 0
   sprite: {fileID: 1488531949, guid: a1f868d870f5b9f4f8438cabbe8bcf22, type: 3}
@@ -18,4 +18,5 @@ MonoBehaviour:
   movementPoint: 5
   hp: 100
   speed: 0
+  unitName: Hero
   codeGraph: {fileID: 11400000, guid: 1423bae99e0b2fd4ba222d2ae499d8f9, type: 2}

@@ -1,17 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class WeaponDatabaseWindow : EditorWindow
 {
-    private const float MAX_ZOOM = 20;
-    private const float MIN_ZOOM = 8;
-
-    private bool mouseDown = false;
-    private float zoom = -3f;
     private string selectedWeapon = "";
     private string search = "";
 
@@ -64,7 +57,7 @@ public class WeaponDatabaseWindow : EditorWindow
     private void DataPart()
     {
         if (selectedWeaponData == null) return;
-        using (var test = new EditorGUILayout.VerticalScope(GUILayout.Width(150)))
+        using (new EditorGUILayout.VerticalScope(GUILayout.Width(150)))
         {
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {

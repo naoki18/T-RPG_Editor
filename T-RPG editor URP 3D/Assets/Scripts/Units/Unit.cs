@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 
@@ -156,5 +157,9 @@ public class Unit : MonoBehaviour
         GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
         UnitManager.instance.UnselectUnit();
         yield return null;
+    }
+    public int GetDamage()
+    {
+        return weapon.attack;
     }
 }

@@ -29,6 +29,7 @@ public class Grid : MonoBehaviour
         GameManager.OnGameStateChanged += GenerateGrid;
         GameManager.OnGameStateChanged += MoveSelectedUnit;
         GameManager.OnGameStateChanged += AttackWithSelectedUnit;
+        GameManager.OnGameStateChanged += ClearReachablePos;
     }
 
     private void AttackWithSelectedUnit(GameManager.GameState state)
@@ -39,7 +40,8 @@ public class Grid : MonoBehaviour
 
     private void MoveSelectedUnit(GameManager.GameState state)
     {
-        if(state == GameManager.GameState.PLAYER_MOVE_CHARACTER) FindReachablePosition(UnitManager.instance.GetSelectedUnit());
+        if (state != GameManager.GameState.PLAYER_MOVE_CHARACTER) return;
+        FindReachablePosition(UnitManager.instance.GetSelectedUnit());
     }
 
     public void Start()
@@ -179,6 +181,14 @@ public class Grid : MonoBehaviour
         }
         reachablePosition.Clear();
     }
+    public void ClearReachablePos(GameManager.GameState gameState)
+    {
+        if(gameState == GameManager.GameState.PLAYER_CHOICE)
+        {
+            ClearReachablePos();
+        }
+        
+    }
     #endregion
 
     public void UpdateTileOnMouse()
@@ -192,6 +202,9 @@ public class Grid : MonoBehaviour
                     UpdateHoveredTile(info, true);
                     break;
                 case GameManager.GameState.PLAYER_MOVE_CHARACTER:
+                    UpdateHoveredTile(info, false);
+                    break;
+                case GameManager.GameState.PLAYER_ATTACK:
                     UpdateHoveredTile(info, false);
                     break;
             }
@@ -213,6 +226,9 @@ public class Grid : MonoBehaviour
                 case GameManager.GameState.PLAYER_MOVE_CHARACTER:
                     SelectNewPosition();
                     break;
+                case GameManager.GameState.PLAYER_ATTACK:
+                    SelectAttackPos();
+                    break;
             }
 
         }
@@ -226,6 +242,21 @@ public class Grid : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private void SelectAttackPos()
+    {
+        if (tileOnMouse == null) return;
+        Unit characterOnTile = tileOnMouse.GetCharacter();
+        if (IsReachable(tileOnMouse) && characterOnTile != null && characterOnTile.GetFaction() == Faction.ENEMY)
+        {
+            Unit selectedUnit = UnitManager.instance.GetSelectedUnit();
+            characterOnTile.Damage(selectedUnit.GetDamage());
+            ClearReachablePos();
+            GameManager.Instance.ClearPreviousStates();
+            GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
+        }
+
     }
 
     private void SelectUnit()

@@ -23,6 +23,9 @@ public class CodeGraphView : GraphView
     public Dictionary<string, CodeGraphEditorNode> _nodeDict;
     public Dictionary<Edge, CodeGraphConnection> _connectionDict;
 
+    private Blackboard blackboard;
+    private BlackboardSection blackboardSection;
+
     public CodeGraphView(SerializedObject serializedObject, CodeGraphEditorWindow window)
     {
         _serializedObject = serializedObject;
@@ -64,9 +67,18 @@ public class CodeGraphView : GraphView
         DrawNodes();
         DrawConnections();
 
+        // Création du Blackboard
+        blackboard = new Blackboard(this);
+        blackboard.title = "Blackboard";
+        blackboardSection = new BlackboardSection { title = "Properties" };
+        blackboard.Add(blackboardSection);
+
+        // Ajout du Blackboard à la vue
+        Add(blackboard);
+        AddProperty("test", "testType");
     }
 
-   
+
 
     private void ListenEdge(CodeGraphEditorNode editorNode)
     {
@@ -280,7 +292,7 @@ public class CodeGraphView : GraphView
         _nodeDict.Remove(node.Node.id);
         _graphNodes.Remove(node);
 
-        for(int i = 0; i < _graphNodes.Count; i++)
+        for (int i = 0; i < _graphNodes.Count; i++)
         {
             _graphNodes[i].RebindProperties(i);
         }
@@ -372,8 +384,14 @@ public class CodeGraphView : GraphView
         this.Bind(_serializedObject);
     }
 
-    //private void Repaint(in UndoRedoInfo undo)
-    //{
-    //    ReDrawNodes();
-    //}
+    public void AddProperty(string name, string type)
+    {
+        var field = new BlackboardField(null, name, type);
+        var objectField = new ObjectField("test")
+        {
+            objectType = typeof(ScriptableObject)
+        };
+        var row = new BlackboardRow(field, objectField);
+        blackboardSection.Add(row);
+    }
 }
