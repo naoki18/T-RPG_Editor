@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Grass
   m_EditorClassIdentifier: 
   tileName: Grass
-  walkableValue: 1
+  walkableValue: 15
   material: {fileID: 2100000, guid: eef66aecd99cf9a408e750344eaf7ba5, type: 2}
   codeGraphAsset: {fileID: 11400000, guid: 1423bae99e0b2fd4ba222d2ae499d8f9, type: 2}

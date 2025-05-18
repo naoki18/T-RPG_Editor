@@ -278,6 +278,7 @@ public class Grid : MonoBehaviour
         {
             StartCoroutine(selectedUnit.MoveUnit(AStar.GetPath(tileOccupied, tileOnMouse)));
         }
+        GameManager.Instance.ClearPreviousStates();
     }
 
     private void UpdateHoveredTile(RaycastHit hit, bool highlight = true)

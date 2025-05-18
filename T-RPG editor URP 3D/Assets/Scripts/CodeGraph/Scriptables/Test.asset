@@ -12,10 +12,114 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a9473b35814e945a8af90e5ba13098, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  _nodes: []
-  _connections: []
+  _nodes:
+  - rid: 6303670943471894530
+  - rid: 6303670943471894531
+  - rid: 6303670943471894532
+  - rid: 6303670943471894540
+  - rid: 6303670943471894541
+  _connections:
+  - inputPort:
+      nodeId: 326c4356-be44-47a3-9bb0-d307e3462aeb
+      portIndex: 1
+    outputPort:
+      nodeId: 2975e23b-9978-4b3b-b6d8-29b46aa9e73b
+      portIndex: 0
+  - inputPort:
+      nodeId: bcdfd19d-4609-4afb-af11-b1dcb32656bb
+      portIndex: 1
+    outputPort:
+      nodeId: 326c4356-be44-47a3-9bb0-d307e3462aeb
+      portIndex: 0
   gameObject: {fileID: 0}
   scriptable: {fileID: 0}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6303670943471894530
+      type: {class: StartNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 2975e23b-9978-4b3b-b6d8-29b46aa9e73b
+        _position:
+          serializedVersion: 2
+          x: 558
+          y: 451
+          width: 0
+          height: 0
+        typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        linkedValues: []
+    - rid: 6303670943471894531
+      type: {class: ThisNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 326c4356-be44-47a3-9bb0-d307e3462aeb
+        _position:
+          serializedVersion: 2
+          x: 705
+          y: 451
+          width: 119
+          height: 101
+        typeName: ThisNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        linkedValues:
+        - inputValue: target
+          outputValue: self
+          inputNodeId: bcdfd19d-4609-4afb-af11-b1dcb32656bb
+        self: {fileID: 0}
+    - rid: 6303670943471894532
+      type: {class: GetComponentNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: bcdfd19d-4609-4afb-af11-b1dcb32656bb
+        _position:
+          serializedVersion: 2
+          x: 847
+          y: 451
+          width: 282
+          height: 141
+        typeName: GetComponentNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        linkedValues: []
+        target: {fileID: 0}
+        type:
+          typeNames:
+          - Billboard
+          - CodeGraphObject
+          - Tile
+          - GameManager
+          - Grid
+          - UnitManager
+          - HealthUI
+          - TileInformationUI
+          - Unit
+          - UIManager
+          selectedType: Tile
+    - rid: 6303670943471894540
+      type: {class: ToStringNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 2934b010-8060-4d07-9afb-7d35097c676e
+        _position:
+          serializedVersion: 2
+          x: 1477
+          y: 460
+          width: 157
+          height: 101
+        typeName: ToStringNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        linkedValues:
+        - inputValue: message
+          outputValue: fromCast
+          inputNodeId: 08ed1c8f-0537-4aa4-bbe2-cc8ae70b95fc
+        fromCast: 
+    - rid: 6303670943471894541
+      type: {class: DebugLogNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 08ed1c8f-0537-4aa4-bbe2-cc8ae70b95fc
+        _position:
+          serializedVersion: 2
+          x: 1686
+          y: 460
+          width: 139
+          height: 125
+        typeName: DebugLogNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        linkedValues: []
+        message: 
+        color: {r: 0, g: 0, b: 0, a: 0}

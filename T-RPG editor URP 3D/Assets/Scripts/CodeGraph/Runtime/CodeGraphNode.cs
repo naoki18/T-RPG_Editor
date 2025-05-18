@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class CodeGraphNode
+public class CodeGraphNode : INode
 {
     public const int OUTPUT = 0;
     public const int INPUT = 1;
@@ -27,11 +27,15 @@ public class CodeGraphNode
     public string typeName;
     public string id => _guid;
     public Rect position => _position;
+
+    public string NodeName { get ; set; }
+
     public List<LinkedValue> linkedValues;
-    public CodeGraphNode()
+    public CodeGraphNode(string nodeName)
     {
         linkedValues = new List<LinkedValue>();
         NewGUID();
+        NodeName = nodeName;
     }
 
     private void NewGUID()

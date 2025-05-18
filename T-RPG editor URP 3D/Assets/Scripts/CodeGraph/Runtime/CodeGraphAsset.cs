@@ -13,7 +13,7 @@ public class CodeGraphAsset : ScriptableObject
 
     private Dictionary<string, CodeGraphNode> _nodeDict;
 
-    public List<CodeGraphNode> Nodes => _nodes;
+    public List<CodeGraphNode> Nodes { get => _nodes; set => _nodes = value; }
     public List<CodeGraphConnection> Connections => _connections;
     public GameObject gameObject;
     
@@ -24,6 +24,12 @@ public class CodeGraphAsset : ScriptableObject
     {
         _nodes = new List<CodeGraphNode>();
         _connections = new List<CodeGraphConnection>();
+    }
+
+    public CodeGraphAsset(CodeGraphAsset other)
+    {
+        _nodes = other.Nodes.ToList();
+        _connections = other.Connections.ToList();
     }
 
     public void Init(GameObject gameObject)

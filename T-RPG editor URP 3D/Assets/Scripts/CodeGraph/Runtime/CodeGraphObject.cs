@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 public class CodeGraphObject : MonoBehaviour
 {
@@ -24,6 +25,14 @@ public class CodeGraphObject : MonoBehaviour
     private void Start()
     {
         assetInstance = Instantiate(_asset);
+        for (int i = 0; i < _asset.Nodes.Count; i++)
+        {
+            if(_asset.Nodes[i] is GenericNode genNode)
+            {
+                (assetInstance.Nodes[i] as GenericNode).MethodName = genNode.MethodName;
+                (assetInstance.Nodes[i] as GenericNode).ClassName = genNode.ClassName;
+            }
+        }
         InitGraph();
         if(startNode != null) ProcessAndMoveToNextNode(startNode);
     }

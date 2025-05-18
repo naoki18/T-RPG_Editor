@@ -8,7 +8,7 @@ using UnityEngine;
 public class TypeSearchWindow : ScriptableObject, ISearchWindowProvider
 {
     List<string> typeNames = new List<string>();
-    public Action<string> test;
+    public Action<string> onChange;
     public TypeSearchWindow()
     {
         var targetAssemblies = AppDomain.CurrentDomain.GetAssemblies()
@@ -20,6 +20,7 @@ public class TypeSearchWindow : ScriptableObject, ISearchWindowProvider
             {
                 bool isMonoBehaviour = t.IsSubclassOf(typeof(MonoBehaviour));
                 if (!isMonoBehaviour && !t.IsSubclassOf(typeof(Component))) continue;
+
                 string test = t.FullName;
                 if (isMonoBehaviour)
                 {
@@ -60,7 +61,7 @@ public class TypeSearchWindow : ScriptableObject, ISearchWindowProvider
 
     public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
     {
-        test?.Invoke(SearchTreeEntry.userData.ToString());
+        onChange?.Invoke(SearchTreeEntry.userData.ToString());
         return true;
     }
 

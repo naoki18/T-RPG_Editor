@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -9,13 +8,19 @@ using UnityEngine;
 [Serializable]
 public class SystemTypeSerialisation
 {
+    static public Action AnyTypeChanged;
     public List<string> typeNames = new List<string>();
     // Used to save editor choice
     public string selectedType = string.Empty;
-    private System.Type _type = typeof(object);
+    
     public System.Type Type
     {
-        get => _type; set => _type = value;
+        get
+        {
+            if (selectedType == string.Empty) return null;
+            return System.Reflection.Assembly.GetExecutingAssembly().GetType(selectedType);
+        }
+        private set { }
     }
 
     public SystemTypeSerialisation()
@@ -25,7 +30,6 @@ public class SystemTypeSerialisation
             if (!t.IsSubclassOf(typeof(MonoBehaviour))) continue;
             typeNames.Add(t.Name);
         }
-
     }
 
 }
@@ -39,20 +43,19 @@ public class SystemTypeEditor : PropertyDrawer
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         serializedType = property.FindPropertyRelative("selectedType");
-
         if (GUILayout.Button(serializedType.stringValue, EditorStyles.popup))
         {
-            Debug.Log(serializedType.stringValue);
             TypeSearchWindow win = ScriptableObject.CreateInstance<TypeSearchWindow>();
-            win.test += (x) =>
+            win.onChange += (x) =>
             {
                 serializedType.stringValue = x;
+                Debug.Log(serializedType.serializedObject.GetType());
                 serializedType.serializedObject.ApplyModifiedProperties();
+                SystemTypeSerialisation.AnyTypeChanged?.Invoke();
             };
 
             SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), win);
         }
-        
     }
 
     //private void DrawMember(Rect position, SerializedProperty propertyToDraw)

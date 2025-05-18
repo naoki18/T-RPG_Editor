@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -20,7 +21,7 @@ public class CodeGraphEditorNode : Node
     public CodeGraphNode Node => _node;
     public List<Port> Ports => _ports;
 
-    
+
     public CodeGraphEditorNode(CodeGraphNode _node, SerializedObject codeGraphObject)
     {
         this.AddToClassList("code-graph-node");
@@ -29,6 +30,7 @@ public class CodeGraphEditorNode : Node
 
         Type type = _node.GetType();
         NodeInfoAttribute info = type.GetCustomAttribute<NodeInfoAttribute>();
+
         title = info.title;
         _serializedObject = codeGraphObject;
 
@@ -50,6 +52,92 @@ public class CodeGraphEditorNode : Node
             CreateFlowInput();
         }
 
+        // That's horrible but I don't have time to find a clean way to do this. It would need to rework the entire architecture
+        if (type == typeof(GetComponentNode))
+        {
+            DrawGetComponentNode(_node, type);
+
+            return;
+        }
+
+        else if (type == typeof(GenericNode))
+        {
+            DrawGenericNode(_node as GenericNode, type);
+
+            return;
+        }
+
+        for (int i = 0; i < type.GetFields().Length; i++)
+        {
+            DrawNode(type, i);
+        }
+
+        //this.topContainer.style.backgroundColor = Color.red;
+        //this.titleButtonContainer.style.backgroundColor = Color.green;
+        //this.titleContainer.style.backgroundColor = Color.blue;
+        RefreshExpandedState();
+    }
+
+    private void DrawGenericNode(GenericNode _node, Type type)
+    {
+        bool hasArgs = (bool)type.GetField("hasArgs").GetValue(_node);
+        bool hasReturn = (bool)type.GetField("hasReturn").GetValue(_node);
+        for (int i = 0; i < type.GetFields().Length; i++)
+        {
+            FieldInfo variable = type.GetFields()[i];
+            Type varType = variable.FieldType;
+            if (variable.Name == "args" && !hasArgs)
+            {
+                continue;
+            }
+
+            if (variable.Name == "returned")
+            {
+                if (!hasReturn) continue;
+                varType = _node.ReturnType;
+                UnityEngine.Debug.Log($"<color=red>{_node.ReturnType}</color>");
+            }
+
+                bool hasExposedProperty = variable.GetCustomAttribute<ExposedPropertyAttribute>() != null;
+            bool hasInputProperty = variable.GetCustomAttribute<InputAttribute>() != null;
+            bool hasOutputAttribute = variable.GetCustomAttribute<OutputAttribute>() != null;
+            if (hasExposedProperty || hasInputProperty || hasOutputAttribute)
+            {
+                VisualElement newRow = new VisualElement();
+                newRow.style.flexDirection = FlexDirection.Row;
+                rows.Add(newRow);
+                if (hasInputProperty) CreatePropertyInput(variable.Name, varType, i);
+                else if (hasOutputAttribute)
+                {
+                    CreatePropertyOutput(variable.Name, varType);
+                }
+                if (hasExposedProperty) DrawProperty(variable.Name, i);
+
+            }
+        }
+    }
+
+    private void DrawNode(Type type, int i)
+    {
+        FieldInfo variable = type.GetFields()[i];
+        bool hasExposedProperty = variable.GetCustomAttribute<ExposedPropertyAttribute>() != null;
+        bool hasInputProperty = variable.GetCustomAttribute<InputAttribute>() != null;
+        bool hasOutputAttribute = variable.GetCustomAttribute<OutputAttribute>() != null;
+        if (hasExposedProperty || hasInputProperty || hasOutputAttribute)
+        {
+            VisualElement newRow = new VisualElement();
+            newRow.style.flexDirection = FlexDirection.Row;
+            rows.Add(newRow);
+            if (hasInputProperty) CreatePropertyInput(variable.Name, variable.FieldType, i);
+            else if (hasOutputAttribute) CreatePropertyOutput(variable.Name, variable.FieldType);
+            if (hasExposedProperty) DrawProperty(variable.Name, i);
+
+        }
+    }
+
+    private void DrawGetComponentNode(CodeGraphNode _node, Type type)
+    {
+        SystemTypeSerialisation.AnyTypeChanged += RefreshComponentNode;
         for (int i = 0; i < type.GetFields().Length; i++)
         {
             FieldInfo variable = type.GetFields()[i];
@@ -62,16 +150,14 @@ public class CodeGraphEditorNode : Node
                 newRow.style.flexDirection = FlexDirection.Row;
                 rows.Add(newRow);
                 if (hasInputProperty) CreatePropertyInput(variable.Name, variable.FieldType, i);
-                else if (hasOutputAttribute) CreatePropertyOutput(variable.Name, variable.FieldType);
+                else if (hasOutputAttribute)
+                {
+                    CreatePropertyOutput(variable.Name, (_node as GetComponentNode).type.Type);
+                }
                 if (hasExposedProperty) DrawProperty(variable.Name, i);
 
             }
         }
-
-        //this.topContainer.style.backgroundColor = Color.red;
-        //this.titleButtonContainer.style.backgroundColor = Color.green;
-        //this.titleContainer.style.backgroundColor = Color.blue;
-        RefreshExpandedState();
     }
 
     private void FetchSerializedProperty()
@@ -99,7 +185,7 @@ public class CodeGraphEditorNode : Node
             FetchSerializedProperty();
         }
 
-        SerializedProperty prop = _serializedProperty.FindPropertyRelative(name);   
+        SerializedProperty prop = _serializedProperty.FindPropertyRelative(name);
         PropertyField field = new PropertyField(prop);
 
         // If there is an inputPort connected
@@ -146,7 +232,7 @@ public class CodeGraphEditorNode : Node
     {
         Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, type);
         outputPort.portName = name;
-
+        outputPort.portType = type;
         _ports.Add(outputPort);
         outputContainer.Add(outputPort);
     }
@@ -186,6 +272,7 @@ public class CodeGraphEditorNode : Node
             }
         }
     }
+
     public void AddLitteralProperty(Edge edge)
     {
         if (edge == null) return;
@@ -207,6 +294,12 @@ public class CodeGraphEditorNode : Node
                 break;
             }
         }
+    }
 
+    // Horrible because really not flexible. I would rework that if I had time
+    private void RefreshComponentNode()
+    {
+        if (_node is not GetComponentNode) return;
+        _ports.First(x => x.portName == "component").portType = (_node as GetComponentNode).type.Type;
     }
 }

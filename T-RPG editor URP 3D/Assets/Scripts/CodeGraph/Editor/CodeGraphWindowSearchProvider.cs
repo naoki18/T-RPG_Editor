@@ -42,11 +42,23 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
                         NodeInfoAttribute att = (NodeInfoAttribute)attribute;
                         var node = Activator.CreateInstance(type);
                         if (string.IsNullOrEmpty(att.menuItem)) continue;
+
                         elements.Add(new SearchContextElement(node, att.menuItem));
                     }
                 }
             }
         }
+
+        if(from != null)
+        {
+            MethodInfo[] methods = from.portType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+            foreach (MethodInfo method in methods)
+            {
+                var node = new GenericNode(method);
+                elements.Add(new SearchContextElement(node, $"Component Methods/{method.Name}"));
+            }
+        }
+        
 
         elements.Sort((entry1, entry2) =>
         {
@@ -101,8 +113,19 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
         var graphMousePos = view.contentViewContainer.WorldToLocal(windowMousePos);
 
         SearchContextElement element = (SearchContextElement)SearchTreeEntry.userData;
-        CodeGraphNode node = (CodeGraphNode)element.target;
-        node.SetPosition(new Rect(graphMousePos, new Vector2()));
+        CodeGraphNode node;
+
+        if(element.target.GetType() == typeof(GenericNode))
+        {
+            string methodName = element.title.Split('/').Last();
+            MethodInfo method = from.portType.GetMethod(methodName);
+            node = new GenericNode(method);
+        }
+        else
+        {
+            node = (CodeGraphNode)element.target;
+        }
+            node.SetPosition(new Rect(graphMousePos, new Vector2()));
         view.Add(node);
         if (from != null)
         {

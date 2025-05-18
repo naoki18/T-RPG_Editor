@@ -2,15 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[NodeInfo("Process/Update", false, false, true)]
-public class UpdateNode : CodeGraphNode
+[NodeInfo("Get self", "Self/Get self")]
+public class ThisNode : CodeGraphNode
 {
-    public UpdateNode() : base("Update")
-    {
-    }
-
+    [Output] public GameObject self;
     public override string OnProcess(CodeGraphAsset graph)
     {
+        self = graph.gameObject;
         return base.OnProcess(graph);
     }
 }

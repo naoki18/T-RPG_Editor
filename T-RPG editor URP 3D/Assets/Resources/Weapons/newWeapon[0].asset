@@ -9,10 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5243c638cc4ef8c4aa24abc583d5a584, type: 3}
-  m_Name: Mud
+  m_Script: {fileID: 11500000, guid: 6b0166d0c6fea2e4f9526c21edfa5390, type: 3}
+  m_Name: newWeapon[0]
   m_EditorClassIdentifier: 
-  tileName: Mud
-  walkableValue: 2
-  material: {fileID: 2100000, guid: 0c8fee75afeb04b4191d915bb995929c, type: 2}
-  codeGraphAsset: {fileID: 0}
+  sprite: {fileID: 0}
+  weaponName: newWeapon[0]
+  attack: 3
+  range: 2
+  damagedTile:
+  - {x: 0, y: -1}
+  - {x: 1, y: -1}
+  - {x: 1, y: 0}

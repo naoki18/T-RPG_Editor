@@ -115,7 +115,29 @@ public class TileDatabaseWindow : EditorWindow
                 using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
                 {
                     GUILayout.Label("Visual scripting :");
-                    codeGraphData = (CodeGraphAsset)EditorGUILayout.ObjectField(codeGraphData, typeof(CodeGraphAsset), true);
+                    if (codeGraphData == null)
+                    {
+                        GUI.backgroundColor = Color.green;
+                        if (GUILayout.Button("Create visual scripting"))
+                        {
+
+                        }
+                        GUI.backgroundColor = Color.white;
+                    }
+                    else
+                    {
+                        GUI.enabled = false;
+                        EditorGUILayout.ObjectField(codeGraphData, typeof(CodeGraphAsset), true);
+                        GUI.enabled = true;
+                        GUI.backgroundColor = Color.red;
+                        if(GUILayout.Button("x"))
+                        {
+                            codeGraphData = null;
+                        }
+                        GUI.backgroundColor = Color.white;
+                        
+                    }
+                   
                 }
                 if (CanSave())
                 {

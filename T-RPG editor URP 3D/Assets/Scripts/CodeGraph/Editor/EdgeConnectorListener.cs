@@ -18,6 +18,7 @@ public class EdgeConnectorListener : IEdgeConnectorListener
     public void OnDropOutsidePort(Edge edge, Vector2 position)
     {
         position = GUIUtility.GUIToScreenPoint(Event.current.mousePosition);
+        Debug.Log(edge.output.portType);
         _currentGraphView.ShowSearchWindow(position, edge.output);
     }
 }
