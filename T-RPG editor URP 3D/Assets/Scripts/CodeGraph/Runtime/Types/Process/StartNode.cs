@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[NodeInfo("Start node", "Process/Start", false, false, true)]
+[NodeInfo("Process/Start", false, false, true)]
 public class StartNode : CodeGraphNode
 {
     public StartNode() : base("Start node")

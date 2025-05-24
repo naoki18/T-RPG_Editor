@@ -13,70 +13,119 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   _nodes:
-  - rid: 6303670943471894530
-  - rid: 6303670943471894531
-  - rid: 6303670943471894532
-  - rid: 6303670943471894540
-  - rid: 6303670943471894541
+  - rid: 6303671124636729344
+  - rid: 6303671139242606592
+  - rid: 6303671139242606593
+  - rid: 6303671139242606608
+  - rid: 6303671139242606610
+  - rid: 6303671139242606611
   _connections:
   - inputPort:
-      nodeId: 326c4356-be44-47a3-9bb0-d307e3462aeb
+      nodeId: 67f19951-214f-4d19-816c-fc2126d2d423
       portIndex: 1
     outputPort:
-      nodeId: 2975e23b-9978-4b3b-b6d8-29b46aa9e73b
+      nodeId: b2cc2328-0db8-46a1-aed0-9db8faefa69c
       portIndex: 0
   - inputPort:
-      nodeId: bcdfd19d-4609-4afb-af11-b1dcb32656bb
+      nodeId: 6d672ef6-4ce0-4cd9-85ba-76aace40f8dc
       portIndex: 1
     outputPort:
-      nodeId: 326c4356-be44-47a3-9bb0-d307e3462aeb
+      nodeId: 67f19951-214f-4d19-816c-fc2126d2d423
       portIndex: 0
+  - inputPort:
+      nodeId: 6d672ef6-4ce0-4cd9-85ba-76aace40f8dc
+      portIndex: 2
+    outputPort:
+      nodeId: 67f19951-214f-4d19-816c-fc2126d2d423
+      portIndex: 2
+  - inputPort:
+      nodeId: 7c0d8c3a-47e1-413d-9d75-6d3cac3ce81b
+      portIndex: 1
+    outputPort:
+      nodeId: 6d672ef6-4ce0-4cd9-85ba-76aace40f8dc
+      portIndex: 0
+  - inputPort:
+      nodeId: 7c0d8c3a-47e1-413d-9d75-6d3cac3ce81b
+      portIndex: 2
+    outputPort:
+      nodeId: 6d672ef6-4ce0-4cd9-85ba-76aace40f8dc
+      portIndex: 3
+  - inputPort:
+      nodeId: 2e16e943-560e-41ad-b039-68534e6698fa
+      portIndex: 1
+    outputPort:
+      nodeId: 7c0d8c3a-47e1-413d-9d75-6d3cac3ce81b
+      portIndex: 0
+  - inputPort:
+      nodeId: 2e16e943-560e-41ad-b039-68534e6698fa
+      portIndex: 2
+    outputPort:
+      nodeId: 7c0d8c3a-47e1-413d-9d75-6d3cac3ce81b
+      portIndex: 3
+  - inputPort:
+      nodeId: 253ccdc4-be5d-43a3-a659-dcab51efe6e4
+      portIndex: 1
+    outputPort:
+      nodeId: 2e16e943-560e-41ad-b039-68534e6698fa
+      portIndex: 0
+  - inputPort:
+      nodeId: 253ccdc4-be5d-43a3-a659-dcab51efe6e4
+      portIndex: 2
+    outputPort:
+      nodeId: 2e16e943-560e-41ad-b039-68534e6698fa
+      portIndex: 3
   gameObject: {fileID: 0}
   scriptable: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 6303670943471894530
+    - rid: 6303671124636729344
       type: {class: StartNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: 2975e23b-9978-4b3b-b6d8-29b46aa9e73b
+        _guid: b2cc2328-0db8-46a1-aed0-9db8faefa69c
         _position:
           serializedVersion: 2
-          x: 558
-          y: 451
+          x: 243
+          y: 464
           width: 0
           height: 0
         typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        NodeName: Start node
         linkedValues: []
-    - rid: 6303670943471894531
+    - rid: 6303671139242606592
       type: {class: ThisNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: 326c4356-be44-47a3-9bb0-d307e3462aeb
+        _guid: 67f19951-214f-4d19-816c-fc2126d2d423
         _position:
           serializedVersion: 2
-          x: 705
-          y: 451
+          x: 400
+          y: 464
           width: 119
           height: 101
         typeName: ThisNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        NodeName: Get self
         linkedValues:
         - inputValue: target
           outputValue: self
-          inputNodeId: bcdfd19d-4609-4afb-af11-b1dcb32656bb
+          inputNodeId: 6d672ef6-4ce0-4cd9-85ba-76aace40f8dc
         self: {fileID: 0}
-    - rid: 6303670943471894532
+    - rid: 6303671139242606593
       type: {class: GetComponentNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: bcdfd19d-4609-4afb-af11-b1dcb32656bb
+        _guid: 6d672ef6-4ce0-4cd9-85ba-76aace40f8dc
         _position:
           serializedVersion: 2
-          x: 847
-          y: 451
+          x: 589
+          y: 464
           width: 282
           height: 141
         typeName: GetComponentNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
-        linkedValues: []
+        NodeName: Get Component
+        linkedValues:
+        - inputValue: component
+          outputValue: component
+          inputNodeId: 7c0d8c3a-47e1-413d-9d75-6d3cac3ce81b
         target: {fileID: 0}
         type:
           typeNames:
@@ -91,35 +140,59 @@ MonoBehaviour:
           - Unit
           - UIManager
           selectedType: Tile
-    - rid: 6303670943471894540
-      type: {class: ToStringNode, ns: , asm: Assembly-CSharp}
+    - rid: 6303671139242606608
+      type: {class: GenericNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: 2934b010-8060-4d07-9afb-7d35097c676e
+        _guid: 7c0d8c3a-47e1-413d-9d75-6d3cac3ce81b
         _position:
           serializedVersion: 2
-          x: 1477
-          y: 460
+          x: 919
+          y: 464
+          width: 177
+          height: 101
+        typeName: GenericNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        NodeName: GetWalkableValue
+        linkedValues:
+        - inputValue: toCast
+          outputValue: returned
+          inputNodeId: 2e16e943-560e-41ad-b039-68534e6698fa
+        hasArgs: 0
+        hasReturn: 1
+        MethodName: GetWalkableValue
+        ClassName: Tile
+        ReturnTypeName: Int32
+    - rid: 6303671139242606610
+      type: {class: ToStringNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 2e16e943-560e-41ad-b039-68534e6698fa
+        _position:
+          serializedVersion: 2
+          x: 1136
+          y: 464
           width: 157
           height: 101
         typeName: ToStringNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
+        NodeName: To String
         linkedValues:
         - inputValue: message
           outputValue: fromCast
-          inputNodeId: 08ed1c8f-0537-4aa4-bbe2-cc8ae70b95fc
+          inputNodeId: 253ccdc4-be5d-43a3-a659-dcab51efe6e4
         fromCast: 
-    - rid: 6303670943471894541
+    - rid: 6303671139242606611
       type: {class: DebugLogNode, ns: , asm: Assembly-CSharp}
       data:
-        _guid: 08ed1c8f-0537-4aa4-bbe2-cc8ae70b95fc
+        _guid: 253ccdc4-be5d-43a3-a659-dcab51efe6e4
         _position:
           serializedVersion: 2
-          x: 1686
-          y: 460
-          width: 139
+          x: 1358
+          y: 451
+          width: 154
           height: 125
         typeName: DebugLogNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
+        NodeName: DebugLog
         linkedValues: []
         message: 
         color: {r: 0, g: 0, b: 0, a: 0}

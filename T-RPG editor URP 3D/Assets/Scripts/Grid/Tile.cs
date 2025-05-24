@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField] short walkableValue = 0;
+    [SerializeField] int walkableValue = 0;
 
     MeshRenderer mRenderer;
     Unit unitOnTile;
@@ -11,6 +12,7 @@ public class Tile : MonoBehaviour
 
     Color baseColor;
 
+    public event Action<Unit> OnCharacterWalkedOn;
     public static Tile CreateTile(ScriptableTile data, Tile prefab)
     {
         Tile tile = Instantiate(prefab, Vector3.zero, Quaternion.identity);
@@ -31,9 +33,10 @@ public class Tile : MonoBehaviour
     public void SetCharacter(Unit character)
     {
         unitOnTile = character;
+        OnCharacterWalkedOn?.Invoke(character);
     }
 
-    public short GetWalkableValue()
+    public int GetWalkableValue()
     {
         if (unitOnTile != null) return -1;
         return walkableValue;

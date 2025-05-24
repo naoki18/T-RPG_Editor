@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ public class CodeGraphEditorNode : Node
         Type type = _node.GetType();
         NodeInfoAttribute info = type.GetCustomAttribute<NodeInfoAttribute>();
 
-        title = info.title;
+        title = _node.NodeName;
         _serializedObject = codeGraphObject;
 
         string[] depth = info.menuItem.Split("/");
@@ -80,25 +81,23 @@ public class CodeGraphEditorNode : Node
 
     private void DrawGenericNode(GenericNode _node, Type type)
     {
-        bool hasArgs = (bool)type.GetField("hasArgs").GetValue(_node);
-        bool hasReturn = (bool)type.GetField("hasReturn").GetValue(_node);
+        bool hasArgs = _node.hasArgs;
+        bool hasReturn = _node.hasReturn;
+        int rowNb = 0;
+
         for (int i = 0; i < type.GetFields().Length; i++)
         {
             FieldInfo variable = type.GetFields()[i];
             Type varType = variable.FieldType;
-            if (variable.Name == "args" && !hasArgs)
-            {
-                continue;
-            }
+
 
             if (variable.Name == "returned")
             {
                 if (!hasReturn) continue;
                 varType = _node.ReturnType;
-                UnityEngine.Debug.Log($"<color=red>{_node.ReturnType}</color>");
             }
 
-                bool hasExposedProperty = variable.GetCustomAttribute<ExposedPropertyAttribute>() != null;
+            bool hasExposedProperty = variable.GetCustomAttribute<ExposedPropertyAttribute>() != null;
             bool hasInputProperty = variable.GetCustomAttribute<InputAttribute>() != null;
             bool hasOutputAttribute = variable.GetCustomAttribute<OutputAttribute>() != null;
             if (hasExposedProperty || hasInputProperty || hasOutputAttribute)
@@ -106,15 +105,30 @@ public class CodeGraphEditorNode : Node
                 VisualElement newRow = new VisualElement();
                 newRow.style.flexDirection = FlexDirection.Row;
                 rows.Add(newRow);
-                if (hasInputProperty) CreatePropertyInput(variable.Name, varType, i);
+                if (hasInputProperty) CreatePropertyInput(variable.Name, varType, rowNb++);
                 else if (hasOutputAttribute)
                 {
                     CreatePropertyOutput(variable.Name, varType);
                 }
-                if (hasExposedProperty) DrawProperty(variable.Name, i);
+                if (hasExposedProperty) DrawProperty(variable.Name, rowNb++);
+            }
+            
+        }
 
+        if (hasArgs)
+        {
+            var variable = _node.GetType().GetProperty("Args");
+            List<ParamInformation> args = (List<ParamInformation>)variable.GetValue(_node);
+            foreach (ParamInformation arg in args)
+            {
+                VisualElement newRow = new VisualElement();
+                newRow.style.flexDirection = FlexDirection.Row;
+                rows.Add(newRow);
+                CreatePropertyInput(arg.Name, arg.Type, rowNb++);
             }
         }
+
+        _serializedObject.ApplyModifiedProperties();
     }
 
     private void DrawNode(Type type, int i)
@@ -224,8 +238,17 @@ public class CodeGraphEditorNode : Node
         Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, type);
         inputPort.portName = name;
         _ports.Add(inputPort);
-        rows[rowIndex].Add(inputPort);
-        inputContainer.Add(rows[rowIndex]);
+        try
+        {
+            rows[rowIndex].Add(inputPort);
+            inputContainer.Add(rows[rowIndex]);
+        }
+        catch (Exception)
+        {
+            UnityEngine.Debug.Log("test");
+        }
+
+
     }
 
     private void CreatePropertyOutput(string name, Type type)

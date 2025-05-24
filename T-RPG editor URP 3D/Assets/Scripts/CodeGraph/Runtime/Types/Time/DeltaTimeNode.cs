@@ -1,9 +1,14 @@
 using UnityEngine;
 
-[NodeInfo("Delta time", "Time/Delta Time", false, true, true)]
+[NodeInfo("Time/Delta Time", false, true, true)]
 public class DeltaTimeNode : CodeGraphNode
 {
     public float DeltaTime;
+
+    public DeltaTimeNode() : base("Delta Time")
+    {
+    }
+
     public override string OnProcess(CodeGraphAsset graph)
     {
         DeltaTime = Time.deltaTime;

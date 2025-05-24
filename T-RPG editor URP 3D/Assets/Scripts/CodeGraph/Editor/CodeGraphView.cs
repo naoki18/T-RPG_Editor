@@ -6,6 +6,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Windows;
 
 public class CodeGraphView : GraphView
 {
@@ -211,7 +212,20 @@ public class CodeGraphView : GraphView
         System.Type outputType = outputNode.Node.GetType();
 
         FieldInfo outputField = outputType.GetField(edge.output.portName);
-        FieldInfo inputField = inputType.GetField(edge.input.portName);
+        FieldInfo inputField = null;
+        
+        inputField = inputType.GetField(edge.input.portName);
+        if (inputField == null && inputType == typeof(GenericNode))
+        {
+            // Récupérer la liste des paramètres
+            List<ParamInformation> parameters = (List<ParamInformation>)inputType.GetProperty("Args").GetValue(inputNode.Node);
+
+            // Trouver le paramètre correspondant au nom du port
+            ParamInformation param = parameters.FirstOrDefault(x => x.Name == edge.input.portName);
+
+            // Assigner la valeur dans le champ (inputField est un FieldInfo)
+            inputField = param?.GetType().GetField("Value");
+        }
 
 
         if (outputField == null || inputField == null) return;

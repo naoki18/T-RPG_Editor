@@ -52,10 +52,17 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
         if(from != null)
         {
             MethodInfo[] methods = from.portType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-            foreach (MethodInfo method in methods)
+            foreach (MethodInfo method in methods.Where(m => !m.IsSpecialName).ToArray())
             {
                 var node = new GenericNode(method);
                 elements.Add(new SearchContextElement(node, $"Component Methods/{method.Name}"));
+            }
+
+            // Event
+            foreach(MethodInfo method in methods.Where(m => m.IsSpecialName && m.Name.Contains("add_")).ToArray())
+            {
+                var node = new EventNode(method);
+                elements.Add(new SearchContextElement(node, $"Events/{method.Name.Replace("add_", "")}"));
             }
         }
         

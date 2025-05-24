@@ -2,12 +2,16 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-[NodeInfo("Add", "Maths/Add", true)]
+[NodeInfo("Maths/Add", true)]
 public class AddNode : CodeGraphNode
 {
     [Input] public object _a;
     [Input] public object _b;
     [Output] public object result;
+
+    public AddNode() : base("Add")
+    {
+    }
 
     public override string OnProcess(CodeGraphAsset graph)
     {
