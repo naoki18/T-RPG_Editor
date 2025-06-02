@@ -15,4 +15,4 @@ MonoBehaviour:
   tileName: Mud
   walkableValue: 2
   material: {fileID: 2100000, guid: 0c8fee75afeb04b4191d915bb995929c, type: 2}
-  codeGraphAsset: {fileID: 0}
+  codeGraphAsset: {fileID: 11400000, guid: fd95879343d0b7c4ca1834c83ebbbdeb, type: 2}

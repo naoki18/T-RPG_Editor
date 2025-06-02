@@ -18,18 +18,22 @@ public class Grid : MonoBehaviour
     public static Grid Instance { get; private set; }
     public delegate void HoveringTile(Tile tile);
     public event HoveringTile OnTileHovered;
+
     private void Awake()
     {
         tiles = Resources.LoadAll<ScriptableTile>("Tiles").ToList();
+
         if(Instance == null)
         {
             Instance = this;
+
+            GameManager.OnGameStateChanged += GenerateGrid;
+            GameManager.OnGameStateChanged += MoveSelectedUnit;
+            GameManager.OnGameStateChanged += AttackWithSelectedUnit;
+            GameManager.OnGameStateChanged += ClearReachablePos;
         }
+
         else Destroy(this.gameObject);
-        GameManager.OnGameStateChanged += GenerateGrid;
-        GameManager.OnGameStateChanged += MoveSelectedUnit;
-        GameManager.OnGameStateChanged += AttackWithSelectedUnit;
-        GameManager.OnGameStateChanged += ClearReachablePos;
     }
 
     private void AttackWithSelectedUnit(GameManager.GameState state)
@@ -278,6 +282,7 @@ public class Grid : MonoBehaviour
         {
             StartCoroutine(selectedUnit.MoveUnit(AStar.GetPath(tileOccupied, tileOnMouse)));
         }
+
         GameManager.Instance.ClearPreviousStates();
     }
 

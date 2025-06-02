@@ -58,11 +58,12 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
                 elements.Add(new SearchContextElement(node, $"Component Methods/{method.Name}"));
             }
 
+            EventInfo[] events = from.portType.GetEvents(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
             // Event
-            foreach(MethodInfo method in methods.Where(m => m.IsSpecialName && m.Name.Contains("add_")).ToArray())
+            foreach (EventInfo @event in events)
             {
-                var node = new EventNode(method);
-                elements.Add(new SearchContextElement(node, $"Events/{method.Name.Replace("add_", "")}"));
+                var node = new EventNode(@event);
+                elements.Add(new SearchContextElement(node, $"Events/{@event.Name}"));
             }
         }
         
@@ -136,8 +137,14 @@ public class CodeGraphWindowSearchProvider : ScriptableObject, ISearchWindowProv
         view.Add(node);
         if (from != null)
         {
-            if(view.GetNode(node.id).Ports.Count > CodeGraphNode.INPUT)
-                view.CreateEdgeFromScratch(from.ConnectTo(view.GetNode(node.id).Ports[CodeGraphNode.INPUT]));
+            foreach(var input in view.GetNode(node.id).Ports.Where(x => x.direction == Direction.Input))
+            {
+                if(input.portType == from.portType)
+                {
+                    view.CreateEdgeFromScratch(from.ConnectTo(input));
+                    break;
+                }
+            }
         }
         from = null;
         return true;

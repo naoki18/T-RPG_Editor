@@ -33,6 +33,5 @@ public class ForNode : CodeGraphNode
 
         count = 0;
         return base.OnProcess(graph);
-
     }
 }

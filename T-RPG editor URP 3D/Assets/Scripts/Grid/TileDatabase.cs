@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -26,11 +27,11 @@ public class TileDatabase : ScriptableObject
     public void RemoveTile(string name)
     {
         string folderPath = "Assets/Resources/Tiles";
-        if(AssetDatabase.IsValidFolder(folderPath))
+        if (AssetDatabase.IsValidFolder(folderPath))
         {
             string fullpath = folderPath + $"/{name}.asset";
             datas.Remove(GetTileData(name));
-            if(AssetDatabase.DeleteAsset(fullpath))
+            if (AssetDatabase.DeleteAsset(fullpath))
             {
                 Debug.Log("<color=green>Success</color>");
             }
@@ -39,13 +40,14 @@ public class TileDatabase : ScriptableObject
         {
             Debug.LogError($"Can't remove, path {folderPath} is invalid");
         }
-        
-        
+
+
     }
     public static TileDatabase Get()
     {
         return Resources.Load<TileDatabase>("TileDatabase");
     }
+
     public void AddTile(ScriptableTile tile)
     {
         TileDatabase database = TileDatabase.Get();
@@ -53,7 +55,8 @@ public class TileDatabase : ScriptableObject
         if (tile.tileName == null)
         {
             int index = 0;
-            foreach (var tileData in datas) {
+            foreach (var tileData in datas)
+            {
                 if (tileData.tileName.Contains("newTile")) index++;
             }
             tile.tileName = $"newTile[{index}]";
@@ -62,10 +65,9 @@ public class TileDatabase : ScriptableObject
         string folderPath = "Assets/Resources/Tiles";
         if (AssetDatabase.IsValidFolder(folderPath))
         {
-                string fullPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + $"/{tile.tileName}.asset");
-                AssetDatabase.CreateAsset(tile, fullPath);
-                database.datas.Add(tile);
-
+            string fullPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + $"/{tile.tileName}.asset");
+            AssetDatabase.CreateAsset(tile, fullPath);
+            database.datas.Add(tile);
         }
     }
     public void RenameTile(string tile, string name)
@@ -81,3 +83,4 @@ public class TileDatabase : ScriptableObject
         }
     }
 }
+#endif

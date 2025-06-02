@@ -6,36 +6,63 @@ using UnityEngine;
 [NodeInfo]
 public class EventNode : CodeGraphNode
 {
+    [Input] public object Component;
+    [Output] public PortType.FlowPort Event;
+
     public static int eventPortIndex = 3;
 
     public bool hasArgs = false;
     public bool hasReturn = false;
-    public string MethodName;
-    public string ClassName;
-    public string ReturnTypeName;
 
-    [Input] public object component;
-    [Output] public PortType.FlowPort Event;
+    private List<ParamInformation> parameters = null;
+    public List<ParamInformation> Args
+    {
+        get
+        {
+            if (parameters != null) return parameters;
+            List<ParamInformation> @params = new();
+
+            foreach (var param in Assembly.GetExecutingAssembly().GetType(ClassName).GetEvent(EventName).EventHandlerType.GetMethod("Invoke").GetParameters())
+            {
+                ParamInformation paramInfo = new ParamInformation(null, param.Name, param.ParameterType.FullName);
+                @params.Add(paramInfo);
+            }
+            parameters = @params;
+            return @params;
+        }
+    }
+
+    public string EventName;
+    public string ClassName;
+
+    public System.Type ClassType
+    {
+        get
+        {
+            return Assembly.GetExecutingAssembly().GetType(ClassName)
+                ?? Assembly.GetAssembly(typeof(int)).GetType(ClassName);
+        }
+    }
 
     public EventNode() : base("")
     {
 
     }
 
-    public EventNode(MethodInfo method) : base(method.Name.Replace("add_", ""))
+    public EventNode(EventInfo eventInfo) : base(eventInfo.Name)
     {
-        var @params = method.GetParameters();
+        MethodInfo invokeMethod = eventInfo.EventHandlerType.GetMethod("Invoke");
+        ParameterInfo[] @params = invokeMethod.GetParameters();
 
-        MethodName = method.Name;
-        ClassName = method.ReflectedType.Name;
+        EventName = eventInfo.Name;
+        ClassName = eventInfo.ReflectedType.FullName;
 
         hasArgs = @params.Length > 0;
-        ReturnTypeName = method.ReturnType.Name;
-        hasReturn = method.ReturnType != typeof(void);
+        hasReturn = invokeMethod.ReturnType != typeof(void);
     }
 
     public override string OnProcess(CodeGraphAsset graph)
     {
-        return base.OnProcess(graph);
+        return base.OnProcess(graph, OUTPUT, ProcessType.Event);
     }
 }

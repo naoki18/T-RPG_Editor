@@ -75,6 +75,7 @@ public class TileDatabaseWindow : EditorWindow
                 this.Dock(codeGraphEditorWindow, Docker.DockPosition.Bottom);
         }
     }
+
     private void DataPart()
     {
         if (selectedTileData == null) return;
@@ -120,7 +121,21 @@ public class TileDatabaseWindow : EditorWindow
                         GUI.backgroundColor = Color.green;
                         if (GUILayout.Button("Create visual scripting"))
                         {
+                            string name = $"Assets/VScripting/Tiles/{selectedTileData.tileName}.asset";
+                            CodeGraphAsset assetAtPath = AssetDatabase.LoadAssetAtPath<CodeGraphAsset>(name);
 
+                            CodeGraphAsset codeGraphAsset = new();
+                            if (assetAtPath == null)
+                            {
+                                AssetDatabase.CreateAsset(codeGraphAsset, name);
+                                AssetDatabase.SaveAssets();
+                            }
+                            else
+                            {
+                                codeGraphAsset = assetAtPath;
+                            }
+
+                                codeGraphData = codeGraphAsset;
                         }
                         GUI.backgroundColor = Color.white;
                     }
@@ -130,14 +145,14 @@ public class TileDatabaseWindow : EditorWindow
                         EditorGUILayout.ObjectField(codeGraphData, typeof(CodeGraphAsset), true);
                         GUI.enabled = true;
                         GUI.backgroundColor = Color.red;
-                        if(GUILayout.Button("x"))
+                        if (GUILayout.Button("x"))
                         {
                             codeGraphData = null;
                         }
                         GUI.backgroundColor = Color.white;
-                        
+
                     }
-                   
+
                 }
                 if (CanSave())
                 {

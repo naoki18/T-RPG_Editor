@@ -19,4 +19,4 @@ MonoBehaviour:
   hp: 100
   speed: 0
   unitName: Hero
-  codeGraph: {fileID: 0}
+  codeGraph: {fileID: 11400000, guid: 4af5fcaa3df43214f86c9b5d0d8fff36, type: 2}

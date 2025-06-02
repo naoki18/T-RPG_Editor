@@ -11,6 +11,9 @@ public class UnitDatabaseWindow : EditorWindow
     private List<ScriptableUnit> searchUnits;
     private UnitDatabase database;
     private Vector2 scrollPos = Vector2.zero;
+
+    private CodeGraphEditorWindow codeGraphEditorWindow = null;
+
     // DATAS 
     private Faction factionData;
     private Sprite spriteData;
@@ -52,6 +55,7 @@ public class UnitDatabaseWindow : EditorWindow
                 {
                     DataPart();
                     CharacterPreview();
+                    CodeGraphViewPart();
                 }
             }
         }
@@ -152,8 +156,45 @@ public class UnitDatabaseWindow : EditorWindow
                 using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
                 {
                     GUILayout.Label("Visual scripting :");
-                    codeGraphData = (CodeGraphAsset)EditorGUILayout.ObjectField(codeGraphData, typeof(CodeGraphAsset), true);
+                    if (codeGraphData == null)
+                    {
+                        GUI.backgroundColor = Color.green;
+                        if (GUILayout.Button("Create visual scripting"))
+                        {
+                            string name = $"Assets/VScripting/Units/{selectedUnitData.unitName}.asset";
+                            CodeGraphAsset assetAtPath = AssetDatabase.LoadAssetAtPath<CodeGraphAsset>(name);
+
+                            CodeGraphAsset codeGraphAsset = new();
+                            if (assetAtPath == null)
+                            {
+                                AssetDatabase.CreateAsset(codeGraphAsset, name);
+                                AssetDatabase.SaveAssets();
+                            }
+                            else
+                            {
+                                codeGraphAsset = assetAtPath;
+                            }
+
+                            codeGraphData = codeGraphAsset;
+                        }
+                        GUI.backgroundColor = Color.white;
+                    }
+                    else
+                    {
+                        GUI.enabled = false;
+                        EditorGUILayout.ObjectField(codeGraphData, typeof(CodeGraphAsset), true);
+                        GUI.enabled = true;
+                        GUI.backgroundColor = Color.red;
+                        if (GUILayout.Button("x"))
+                        {
+                            codeGraphData = null;
+                        }
+                        GUI.backgroundColor = Color.white;
+
+                    }
+
                 }
+            
                 if (CanSave())
                 {
                     GUI.backgroundColor = Color.green;
@@ -169,6 +210,15 @@ public class UnitDatabaseWindow : EditorWindow
         }
     }
 
+    private void CodeGraphViewPart()
+    {
+        if (selectedUnitData.codeGraph != null && codeGraphEditorWindow == null)
+        {
+            codeGraphEditorWindow = CodeGraphEditorWindow.CreateSubWindow(selectedUnitData.codeGraph, this.GetType());
+            if (!codeGraphEditorWindow.docked)
+                this.Dock(codeGraphEditorWindow, Docker.DockPosition.Bottom);
+        }
+    }
 
     private void ManageUnitPart()
     {
@@ -250,6 +300,12 @@ public class UnitDatabaseWindow : EditorWindow
         speedData = selectedUnitData.speed;
         unitNameData = selectedUnitData.unitName;
         codeGraphData = selectedUnitData.codeGraph;
+
+        if (codeGraphEditorWindow != null)
+        {
+            codeGraphEditorWindow.Close();
+            codeGraphEditorWindow = null;
+        }
 
         GUI.FocusControl(null);
 

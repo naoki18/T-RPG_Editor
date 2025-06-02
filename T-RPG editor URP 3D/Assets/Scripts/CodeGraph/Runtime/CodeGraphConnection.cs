@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public struct CodeGraphConnection
+public struct CodeGraphConnection : IEquatable<CodeGraphConnection>
 {
     public CodeGraphConnectionPort inputPort;
     public CodeGraphConnectionPort outputPort;
@@ -17,9 +17,14 @@ public struct CodeGraphConnection
         inputPort = new CodeGraphConnectionPort(inputPortId, inputIndex);
         outputPort = new CodeGraphConnectionPort(outputPortId, outputId);
     }
+
+    public bool Equals(CodeGraphConnection other)
+    {
+        return inputPort.Equals(other.inputPort) && outputPort.Equals(other.outputPort);
+    }
 }
 [Serializable]
-public struct CodeGraphConnectionPort
+public struct CodeGraphConnectionPort : IEquatable<CodeGraphConnectionPort>
 {
     public string nodeId;
     public int portIndex;
@@ -28,6 +33,11 @@ public struct CodeGraphConnectionPort
     {
         nodeId = id;
         portIndex = index;
+    }
+
+    public bool Equals(CodeGraphConnectionPort other)
+    {
+        return nodeId == other.nodeId && portIndex == other.portIndex;
     }
 }
 

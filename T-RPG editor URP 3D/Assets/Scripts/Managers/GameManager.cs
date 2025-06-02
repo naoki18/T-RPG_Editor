@@ -34,10 +34,12 @@ public class GameManager : MonoBehaviour
         }
         else Destroy(this);
     }
+
     void Start()
     {
         ChangeState(baseState);
     }
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
             BackToPreviousState();
         }
     }
+
     public void ChangeState(GameState newState, bool savePreviousState = false)
     {
         if(savePreviousState) previousStates.Push(gameState);
@@ -52,6 +55,7 @@ public class GameManager : MonoBehaviour
         gameState = newState;
         OnGameStateChanged?.Invoke(newState);
     }
+
     public void ChangeState(string newState)
     {
         string[] strings = newState.Split('&');
@@ -64,6 +68,7 @@ public class GameManager : MonoBehaviour
         Debug.Log($"new State => {strings[0]}");
         ChangeState((GameState)Enum.Parse(typeof(GameState), strings[0]), savePreviousState);
     }
+
     public void BackToPreviousState()
     {
         if (previousStates.Count == 0) return;
@@ -81,6 +86,4 @@ public class GameManager : MonoBehaviour
     { 
         gameGrid = grid; 
     }
-
-    
 }

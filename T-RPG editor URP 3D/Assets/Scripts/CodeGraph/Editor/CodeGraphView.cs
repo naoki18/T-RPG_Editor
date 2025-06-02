@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.MemoryProfiler;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -188,6 +189,7 @@ public class CodeGraphView : GraphView
         ConnectVariable(edge, inputNode, outputNode);
         AddElement(edge);
     }
+
     private void DrawConnection(CodeGraphConnection connection)
     {
         CodeGraphEditorNode inputNode = GetNode(connection.inputPort.nodeId);
@@ -213,7 +215,7 @@ public class CodeGraphView : GraphView
 
         FieldInfo outputField = outputType.GetField(edge.output.portName);
         FieldInfo inputField = null;
-        
+
         inputField = inputType.GetField(edge.input.portName);
         if (inputField == null && inputType == typeof(GenericNode))
         {
@@ -227,6 +229,18 @@ public class CodeGraphView : GraphView
             inputField = param?.GetType().GetField("Value");
         }
 
+        if (outputField == null && outputType == typeof(EventNode))
+        {
+            // Récupérer la liste des paramètres
+            List<ParamInformation> parameters = (List<ParamInformation>)outputType.GetProperty("Args").GetValue(outputNode.Node);
+
+            // Trouver le paramètre correspondant au nom du port
+            ParamInformation param = parameters.FirstOrDefault(x => x.Name == edge.output.portName);
+
+            // Assigner la valeur dans le champ (inputField est un FieldInfo)
+            outputField = param?.GetType().GetField("Value");
+        }
+
 
         if (outputField == null || inputField == null) return;
         // If a node takes generic type, makes all port the same type ( expect Input & Output flow )
@@ -238,12 +252,30 @@ public class CodeGraphView : GraphView
                     port.portType = outputField.FieldType;
             }
         }
+
+        if(inputType == typeof(ForEachNode) && edge.input.portName == "List")
+        {
+            Port listCurrentObjPort = inputNode.Ports.Where(p => p.portName == "Current").First();
+            if (edge.output.portType.IsArray)
+            {
+                listCurrentObjPort.portType = edge.output.portType.GetElementType();
+            }
+            else if(edge.output.portType.IsGenericType)
+            {
+                listCurrentObjPort.portType = edge.output.portType.GetGenericArguments()[0];
+            }
+            else
+            {
+                RemoveConnection(edge);
+            }
+
+        }
+
         CodeGraphNode.LinkedValue linkedValue = new CodeGraphNode.LinkedValue(edge.input.portName, edge.output.portName, inputNode.Node.id);
         if (!outputNode.Node.linkedValues.Contains(linkedValue))
         {
             outputNode.Node.linkedValues.Add(linkedValue);
         }
-
     }
 
     private void DisconnectVariable(Edge edge, CodeGraphEditorNode inputNode, CodeGraphEditorNode outputNode)
@@ -288,6 +320,7 @@ public class CodeGraphView : GraphView
     private void RemoveNode(CodeGraphEditorNode node)
     {
         Undo.RecordObject(_serializedObject.targetObject, "Object removed");
+
         _codeGraph.Nodes.Remove(node.Node);
         _nodeDict.Remove(node.Node.id);
         _graphNodes.Remove(node);

@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -57,9 +58,9 @@ public class WeaponDatabase : ScriptableObject
         if (weapon.weaponName == null)
         {
             int index = 0;
-            foreach (var tileData in datas)
+            foreach (var weaponData in datas)
             {
-                if (tileData.weaponName.Contains("newWeapon")) index++;
+                if (weaponData.weaponName.Contains("newWeapon")) index++;
             }
             weapon.weaponName = $"newWeapon[{index}]";
         }
@@ -86,3 +87,4 @@ public class WeaponDatabase : ScriptableObject
         }
     }
 }
+#endif

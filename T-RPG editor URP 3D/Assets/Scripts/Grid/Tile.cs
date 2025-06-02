@@ -12,7 +12,9 @@ public class Tile : MonoBehaviour
 
     Color baseColor;
 
-    public event Action<Unit> OnCharacterWalkedOn;
+    public delegate void CharacterWalkedOnHandler(Unit unit);
+    public event CharacterWalkedOnHandler OnCharacterWalkedOn;
+
     public static Tile CreateTile(ScriptableTile data, Tile prefab)
     {
         Tile tile = Instantiate(prefab, Vector3.zero, Quaternion.identity);
@@ -33,7 +35,7 @@ public class Tile : MonoBehaviour
     public void SetCharacter(Unit character)
     {
         unitOnTile = character;
-        OnCharacterWalkedOn?.Invoke(character);
+        if(unitOnTile != null) OnCharacterWalkedOn?.Invoke(character);
     }
 
     public int GetWalkableValue()

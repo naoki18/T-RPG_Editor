@@ -12,7 +12,7 @@ public class ToStringNode : CodeGraphNode
 
     public override string OnProcess(CodeGraphAsset graph)
     {
-        fromCast = toCast.ToString();
+        fromCast = toCast == null ? "" : toCast.ToString();
         return base.OnProcess(graph);
     }
 }

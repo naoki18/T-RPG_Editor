@@ -68,10 +68,17 @@ public class CodeGraphEditorNode : Node
             return;
         }
 
-        for (int i = 0; i < type.GetFields().Length; i++)
+        else if(type == typeof(EventNode))
         {
-            DrawNode(type, i);
+            DrawEventNode(_node as EventNode, type);
+
+            return;
         }
+
+            for (int i = 0; i < type.GetFields().Length; i++)
+            {
+                DrawNode(type, i);
+            }
 
         //this.topContainer.style.backgroundColor = Color.red;
         //this.titleButtonContainer.style.backgroundColor = Color.green;
@@ -91,10 +98,15 @@ public class CodeGraphEditorNode : Node
             Type varType = variable.FieldType;
 
 
-            if (variable.Name == "returned")
+            if (variable.Name == "Returned")
             {
                 if (!hasReturn) continue;
                 varType = _node.ReturnType;
+            }
+
+            if(variable.Name == "Component")
+            {
+                varType = _node.ClassType;
             }
 
             bool hasExposedProperty = variable.GetCustomAttribute<ExposedPropertyAttribute>() != null;
@@ -125,6 +137,56 @@ public class CodeGraphEditorNode : Node
                 newRow.style.flexDirection = FlexDirection.Row;
                 rows.Add(newRow);
                 CreatePropertyInput(arg.Name, arg.Type, rowNb++);
+            }
+        }
+
+        _serializedObject.ApplyModifiedProperties();
+    }
+
+    private void DrawEventNode(EventNode _node, Type type)
+    {
+        bool hasArgs = _node.hasArgs;
+        bool hasReturn = _node.hasReturn;
+        int rowNb = 0;
+
+        for (int i = 0; i < type.GetFields().Length; i++)
+        {
+            FieldInfo variable = type.GetFields()[i];
+            Type varType = variable.FieldType;
+
+            if (variable.Name == "Component")
+            {
+                varType = _node.ClassType;
+            }
+
+            bool hasExposedProperty = variable.GetCustomAttribute<ExposedPropertyAttribute>() != null;
+            bool hasInputProperty = variable.GetCustomAttribute<InputAttribute>() != null;
+            bool hasOutputAttribute = variable.GetCustomAttribute<OutputAttribute>() != null;
+            if (hasExposedProperty || hasInputProperty || hasOutputAttribute)
+            {
+                VisualElement newRow = new VisualElement();
+                newRow.style.flexDirection = FlexDirection.Row;
+                rows.Add(newRow);
+                if (hasInputProperty) CreatePropertyInput(variable.Name, varType, rowNb++);
+                else if (hasOutputAttribute)
+                {
+                    CreatePropertyOutput(variable.Name, varType);
+                }
+                if (hasExposedProperty) DrawProperty(variable.Name, rowNb++);
+            }
+
+        }
+
+        if (hasArgs)
+        {
+            var variable = _node.GetType().GetProperty("Args");
+            List<ParamInformation> args = (List<ParamInformation>)variable.GetValue(_node);
+            foreach (ParamInformation arg in args)
+            {
+                VisualElement newRow = new VisualElement();
+                newRow.style.flexDirection = FlexDirection.Row;
+                rows.Add(newRow);
+                CreatePropertyOutput(arg.Name, arg.Type);
             }
         }
 
@@ -253,7 +315,8 @@ public class CodeGraphEditorNode : Node
 
     private void CreatePropertyOutput(string name, Type type)
     {
-        Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, type);
+        Port.Capacity capacity = type != typeof(PortType.FlowPort) ? Port.Capacity.Multi : Port.Capacity.Single;
+        Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, capacity, type);
         outputPort.portName = name;
         outputPort.portType = type;
         _ports.Add(outputPort);

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faction: 1
   sprite: {fileID: -577577312, guid: c239e76c73e93e44f861f6a8987a4ff5, type: 3}
-  baseWeapon: {fileID: 0}
+  baseWeapon: {fileID: 11400000, guid: 3cba62ec038b7aa4d95329b5c730b891, type: 2}
   movementPoint: 2
   hp: 5
   speed: 0
   unitName: Enemy
-  codeGraph: {fileID: 0}
+  codeGraph: {fileID: 11400000, guid: bb31e250f63e8c14c9d86143b57feecc, type: 2}

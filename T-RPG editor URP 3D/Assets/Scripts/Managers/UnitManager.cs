@@ -8,10 +8,16 @@ public class UnitManager : MonoBehaviour
     public Unit unitPf;
 
     List<ScriptableUnit> units = new List<ScriptableUnit>();
+    List<Unit> allUnits = new List<Unit>();
+
+    public List<Unit> Enemies => allUnits.Where(x => x.GetFaction() == Faction.ENEMY).OrderBy(s => s.GetSpeed()).ToList();
+    public List<Unit> Allies => allUnits.Where(x => x.GetFaction() == Faction.ALLY).ToList();
+
     Unit selectedUnit;
 
     public delegate void OnSelectUnitDelegate(Unit unit);
     public event OnSelectUnitDelegate OnSelectUnit;
+
     private void Awake()
     {
         if (instance == null)
@@ -19,13 +25,24 @@ public class UnitManager : MonoBehaviour
             instance = this;
             units = Resources.LoadAll<ScriptableUnit>("Units").ToList();
             GameManager.OnGameStateChanged += SpawnUnit;
+            GameManager.OnGameStateChanged += DoEnnemiesTurn;
         }
         else Destroy(this);
     }
 
+    private void DoEnnemiesTurn(GameManager.GameState state)
+    {
+        if (state != GameManager.GameState.ENEMIES_TURN) return;
+        foreach(Unit enemy in Enemies)
+        {
+            enemy.OnTurn();
+        }
+
+        //GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
+    }
 
     #region SPAWN
-   
+
     public void SpawnUnit(GameManager.GameState state)
     {
         switch (state)
@@ -38,17 +55,18 @@ public class UnitManager : MonoBehaviour
                 break;
         }
     }
+
     public void SpawnAllies()
     {
         Grid grid = Grid.Instance;
         Unit unit = InstantiateRandomUnit(Faction.ALLY);
-        if (unit == null)
+        if (unit != null)
         {
-            GameManager.Instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
-            return;
+            Vector3Int pos = grid.GetRandomValidPos();
+            unit.SetPositionOnGrid(pos, grid);
         }
-        Vector3Int pos = grid.GetRandomValidPos();
-        unit.SetPositionOnGrid(pos, grid);
+
+        allUnits.Add(unit);
         GameManager.Instance.ChangeState(GameManager.GameState.ENEMIES_SPAWN);
     }
 
@@ -56,16 +74,16 @@ public class UnitManager : MonoBehaviour
     {
         Grid grid = Grid.Instance;
         Unit unit = InstantiateRandomUnit(Faction.ENEMY);
-        if (unit == null)
+        if (unit != null)
         {
-            GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
-            return;
+            allUnits.Add(unit);
+            Vector3Int pos = grid.GetRandomValidPos();
+            unit.SetPositionOnGrid(pos, grid);
         }
 
-        Vector3Int pos = grid.GetRandomValidPos();
-        unit.SetPositionOnGrid(pos, grid);
         GameManager.Instance.ChangeState(GameManager.GameState.PLAYER_TURN);
     }
+
     private Unit InstantiateRandomUnit(Faction faction)
     {
         if (units.Count == 0) return null;

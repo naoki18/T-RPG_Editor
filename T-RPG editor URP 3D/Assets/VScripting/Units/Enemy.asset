@@ -1,0 +1,336 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a9473b35814e945a8af90e5ba13098, type: 3}
+  m_Name: Enemy
+  m_EditorClassIdentifier: 
+  _nodes:
+  - rid: 6664221399925653507
+  - rid: 6664221399925653508
+  - rid: 6664221399925653509
+  - rid: 6664221399925653520
+  - rid: 6664221399925653522
+  - rid: 6664221399925653525
+  - rid: 6664221399925653530
+  - rid: 6664221399925653531
+  - rid: 6664221399925653540
+  - rid: 6664221404159803394
+  _connections:
+  - inputPort:
+      nodeId: ddc28c15-71ac-4e49-aafd-1cd9ba7c1b6b
+      portIndex: 1
+    outputPort:
+      nodeId: 83965042-a008-455e-84e7-668fc4cf4acb
+      portIndex: 0
+  - inputPort:
+      nodeId: b3a5e766-db85-4e52-975e-af5fc209b22f
+      portIndex: 1
+    outputPort:
+      nodeId: ddc28c15-71ac-4e49-aafd-1cd9ba7c1b6b
+      portIndex: 0
+  - inputPort:
+      nodeId: b3a5e766-db85-4e52-975e-af5fc209b22f
+      portIndex: 2
+    outputPort:
+      nodeId: ddc28c15-71ac-4e49-aafd-1cd9ba7c1b6b
+      portIndex: 2
+  - inputPort:
+      nodeId: 90395456-2ecc-422e-aa5a-278961b9070d
+      portIndex: 1
+    outputPort:
+      nodeId: e8de87b1-4243-4408-b30e-a36d22f79aad
+      portIndex: 0
+  - inputPort:
+      nodeId: 90395456-2ecc-422e-aa5a-278961b9070d
+      portIndex: 3
+    outputPort:
+      nodeId: e8de87b1-4243-4408-b30e-a36d22f79aad
+      portIndex: 3
+  - inputPort:
+      nodeId: 1b60898a-d6c1-4814-8cbe-aa0618574289
+      portIndex: 2
+    outputPort:
+      nodeId: 90395456-2ecc-422e-aa5a-278961b9070d
+      portIndex: 4
+  - inputPort:
+      nodeId: 1b60898a-d6c1-4814-8cbe-aa0618574289
+      portIndex: 1
+    outputPort:
+      nodeId: 90395456-2ecc-422e-aa5a-278961b9070d
+      portIndex: 2
+  - inputPort:
+      nodeId: 1270d760-4583-478d-9bc1-50a757daeb70
+      portIndex: 1
+    outputPort:
+      nodeId: 1b60898a-d6c1-4814-8cbe-aa0618574289
+      portIndex: 0
+  - inputPort:
+      nodeId: 3e48f849-8e03-488d-a397-42e9feccd8e2
+      portIndex: 2
+    outputPort:
+      nodeId: 1b60898a-d6c1-4814-8cbe-aa0618574289
+      portIndex: 3
+  - inputPort:
+      nodeId: 3e48f849-8e03-488d-a397-42e9feccd8e2
+      portIndex: 1
+    outputPort:
+      nodeId: 1270d760-4583-478d-9bc1-50a757daeb70
+      portIndex: 0
+  - inputPort:
+      nodeId: 3e48f849-8e03-488d-a397-42e9feccd8e2
+      portIndex: 3
+    outputPort:
+      nodeId: 1270d760-4583-478d-9bc1-50a757daeb70
+      portIndex: 2
+  - inputPort:
+      nodeId: 905cfaf0-c678-4723-b051-407984e0a10a
+      portIndex: 1
+    outputPort:
+      nodeId: b3a5e766-db85-4e52-975e-af5fc209b22f
+      portIndex: 0
+  - inputPort:
+      nodeId: 905cfaf0-c678-4723-b051-407984e0a10a
+      portIndex: 2
+    outputPort:
+      nodeId: b3a5e766-db85-4e52-975e-af5fc209b22f
+      portIndex: 3
+  - inputPort:
+      nodeId: 6fb58652-1865-4149-bb5a-2fe027f30c68
+      portIndex: 2
+    outputPort:
+      nodeId: 905cfaf0-c678-4723-b051-407984e0a10a
+      portIndex: 4
+  - inputPort:
+      nodeId: 6fb58652-1865-4149-bb5a-2fe027f30c68
+      portIndex: 1
+    outputPort:
+      nodeId: 905cfaf0-c678-4723-b051-407984e0a10a
+      portIndex: 3
+  - inputPort:
+      nodeId: e8de87b1-4243-4408-b30e-a36d22f79aad
+      portIndex: 1
+    outputPort:
+      nodeId: 6fb58652-1865-4149-bb5a-2fe027f30c68
+      portIndex: 0
+  - inputPort:
+      nodeId: e8de87b1-4243-4408-b30e-a36d22f79aad
+      portIndex: 2
+    outputPort:
+      nodeId: 905cfaf0-c678-4723-b051-407984e0a10a
+      portIndex: 4
+  gameObject: {fileID: 0}
+  scriptable: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 6664221399925653507
+      type: {class: StartNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 83965042-a008-455e-84e7-668fc4cf4acb
+        _position:
+          serializedVersion: 2
+          x: 627
+          y: 174
+          width: 0
+          height: 0
+        typeName: StartNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        NodeName: Start node
+        linkedValues: []
+    - rid: 6664221399925653508
+      type: {class: ThisNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: ddc28c15-71ac-4e49-aafd-1cd9ba7c1b6b
+        _position:
+          serializedVersion: 2
+          x: 788
+          y: 174
+          width: 119
+          height: 101
+        typeName: ThisNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        NodeName: Get self
+        linkedValues:
+        - inputValue: target
+          outputValue: self
+          inputNodeId: b3a5e766-db85-4e52-975e-af5fc209b22f
+        self: {fileID: 0}
+    - rid: 6664221399925653509
+      type: {class: GetComponentNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: b3a5e766-db85-4e52-975e-af5fc209b22f
+        _position:
+          serializedVersion: 2
+          x: 935
+          y: 174
+          width: 282
+          height: 141
+        typeName: GetComponentNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        NodeName: Get Component
+        linkedValues:
+        - inputValue: Component
+          outputValue: component
+          inputNodeId: 905cfaf0-c678-4723-b051-407984e0a10a
+        target: {fileID: 0}
+        type:
+          typeNames:
+          - Billboard
+          - CodeGraphObject
+          - Tile
+          - GameManager
+          - Grid
+          - UnitManager
+          - HealthUI
+          - TileInformationUI
+          - Unit
+          - UIManager
+          selectedType: Unit
+    - rid: 6664221399925653520
+      type: {class: GenericNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: e8de87b1-4243-4408-b30e-a36d22f79aad
+        _position:
+          serializedVersion: 2
+          x: 1871
+          y: 278
+          width: 182
+          height: 101
+        typeName: GenericNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        NodeName: GetDamageableTile
+        linkedValues:
+        - inputValue: List
+          outputValue: Returned
+          inputNodeId: 90395456-2ecc-422e-aa5a-278961b9070d
+        hasArgs: 0
+        hasReturn: 1
+        MethodName: GetDamageableTile
+        ClassName: Unit
+        ReturnTypeName: System.Collections.Generic.List`1[[Tile, Assembly-CSharp,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]
+    - rid: 6664221399925653522
+      type: {class: ForEachNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 90395456-2ecc-422e-aa5a-278961b9070d
+        _position:
+          serializedVersion: 2
+          x: 2095
+          y: 278
+          width: 140
+          height: 125
+        typeName: ForEachNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        NodeName: Foreach
+        linkedValues:
+        - inputValue: Component
+          outputValue: Current
+          inputNodeId: 1b60898a-d6c1-4814-8cbe-aa0618574289
+    - rid: 6664221399925653525
+      type: {class: GenericNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 1b60898a-d6c1-4814-8cbe-aa0618574289
+        _position:
+          serializedVersion: 2
+          x: 2258
+          y: 353
+          width: 182
+          height: 101
+        typeName: GenericNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        NodeName: GetCharacter
+        linkedValues:
+        - inputValue: Component
+          outputValue: Returned
+          inputNodeId: 3e48f849-8e03-488d-a397-42e9feccd8e2
+        hasArgs: 0
+        hasReturn: 1
+        MethodName: GetCharacter
+        ClassName: Tile
+        ReturnTypeName: Unit
+    - rid: 6664221399925653530
+      type: {class: GenericNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 3e48f849-8e03-488d-a397-42e9feccd8e2
+        _position:
+          serializedVersion: 2
+          x: 2732
+          y: 353
+          width: 153
+          height: 125
+        typeName: GenericNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        NodeName: Damage
+        linkedValues: []
+        hasArgs: 1
+        hasReturn: 0
+        MethodName: Damage
+        ClassName: Unit
+        ReturnTypeName: System.Void
+    - rid: 6664221399925653531
+      type: {class: LitteralIntNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 1270d760-4583-478d-9bc1-50a757daeb70
+        _position:
+          serializedVersion: 2
+          x: 2457
+          y: 353
+          width: 253
+          height: 101
+        typeName: LitteralIntNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        NodeName: Int 32
+        linkedValues:
+        - inputValue: amount
+          outputValue: outputValue
+          inputNodeId: 3e48f849-8e03-488d-a397-42e9feccd8e2
+        value: 10
+        outputValue: 0
+    - rid: 6664221399925653540
+      type: {class: EventNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 905cfaf0-c678-4723-b051-407984e0a10a
+        _position:
+          serializedVersion: 2
+          x: 1242
+          y: 254
+          width: 184
+          height: 125
+        typeName: EventNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        NodeName: OnTurnEvent
+        linkedValues:
+        - inputValue: Component
+          outputValue: character
+          inputNodeId: 6fb58652-1865-4149-bb5a-2fe027f30c68
+        - inputValue: Component
+          outputValue: character
+          inputNodeId: e8de87b1-4243-4408-b30e-a36d22f79aad
+        hasArgs: 1
+        hasReturn: 0
+        EventName: OnTurnEvent
+        ClassName: Unit
+    - rid: 6664221404159803394
+      type: {class: GenericNode, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 6fb58652-1865-4149-bb5a-2fe027f30c68
+        _position:
+          serializedVersion: 2
+          x: 1612
+          y: 278
+          width: 153
+          height: 101
+        typeName: GenericNode, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        NodeName: MoveToPlayer
+        linkedValues: []
+        hasArgs: 0
+        hasReturn: 0
+        MethodName: MoveToPlayer
+        ClassName: Unit
+        ReturnTypeName: System.Void

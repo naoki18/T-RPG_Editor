@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using UnityEngine;
 
@@ -59,17 +60,18 @@ public class CodeGraphNode
         _position = position;
     }
 
+    private void OnEventTriggered(object[] args)
+    {
+        Debug.Log($"Événement déclenché pour {NodeName} avec {args.Length} arguments.");
+        //OnProcess(CodeGraphManager.CurrentGraph, 0, ProcessType.None); // ou autre logique
+    }
+
     public string OnProcess(CodeGraphAsset graph, int outputPort, ProcessType process = ProcessType.None)
     {
         switch(process)
         {
             case ProcessType.Loop:
                 savePoints.Push(id);
-                break;
-            case ProcessType.Event:
-                EventNode eventNode = (this as EventNode);
-                EventInfo eventInfo = Assembly.GetAssembly(typeof(EventNode)).GetType(eventNode.ClassName).GetEvent(NodeName);
-                //Assembly.GetAssembly(typeof(EventNode)).GetType(eventNode.ClassName).GetMethod(eventNode.MethodName).
                 break;
             case ProcessType.None:
             default:
@@ -83,12 +85,11 @@ public class CodeGraphNode
             foreach (LinkedValue linkedValue in linkedValues)
             {
                 CodeGraphNode inputNode = graph.GetNode(linkedValue.inputNodeId);
-                object _outputValue = this.GetType().GetField(linkedValue.outputValue).GetValue(this);
+                object _outputValue = this.GetType().GetField(linkedValue.outputValue)?.GetValue(this);
                 FieldInfo inputField = inputNode.GetType().GetField(linkedValue.inputValue);
 
                 if (inputField == null && _outputValue != null && inputNode is GenericNode genNode)
                 {
-                    Type inputType = genNode.GetType();
                     // Récupérer la liste des paramètres
                     List<ParamInformation> parameters = genNode.Args;
 
@@ -100,19 +101,41 @@ public class CodeGraphNode
                     inputField.SetValue(param, _outputValue);
                 }
 
-                else if (inputField != null && _outputValue != null)
+                else if (inputField != null && _outputValue == null && this is EventNode eventNode)
                 {
-                    inputField.SetValue(inputNode, _outputValue);
+                    // Récupérer la liste des paramètres
+                    List<ParamInformation> parameters = eventNode.Args;
+
+                    // Trouver le paramètre correspondant au nom du port
+                    ParamInformation param = parameters.FirstOrDefault(x => x.Name == linkedValue.outputValue);
+
+                    // Assigner la valeur dans le champ (inputField est un FieldInfo)
+                    FieldInfo outputField = param.GetType().GetField("Value");
+                    _outputValue = param.GetType().GetField("Value").GetValue(param);
+                    if(_outputValue != null) inputField.SetValue(inputNode, _outputValue);
                 }
 
+                else if (inputField != null)
+                {
+                    try
+                    {
+                        inputField.SetValue(inputNode, _outputValue);
+                    }
+                    catch (Exception)
+                    {
+                        Debug.Log("test");
+                    }
+                    
+                }
             }
         }
+
         if (node != null)
         {
             return node.id;
         }
 
-        if(savePoints.Count > 0) return savePoints.Pop();
+        if (savePoints.Count > 0) return savePoints.Pop();
 
         return string.Empty;
     }

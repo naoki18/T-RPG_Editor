@@ -249,6 +249,11 @@ public class WeaponDatabaseWindow : EditorWindow
         spriteData = selectedWeaponData.sprite;
         damagedTileData = new List<Vector2>();
         // Doing for loop to avoid ref value
+        if(selectedWeaponData.damagedTile == null)
+        {
+            selectedWeaponData.damagedTile = new();
+        }
+
         for (int i = 0; i < selectedWeaponData.damagedTile.Count; i++) damagedTileData.Add(selectedWeaponData.damagedTile[i]);
 
         GUI.FocusControl(null);

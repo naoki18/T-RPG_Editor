@@ -34,8 +34,8 @@ public class ParamInformation
 [NodeInfo]
 public class GenericNode : CodeGraphNode
 {
-    [Input] public object component;
-    [Output] public object returned;
+    [Input] public object Component;
+    [Output] public object Returned;
 
 
     public bool hasArgs = false;
@@ -63,8 +63,22 @@ public class GenericNode : CodeGraphNode
     public string ClassName;
     public string ReturnTypeName;
 
-    public System.Type ReturnType { get => Assembly.GetExecutingAssembly().GetType(ReturnTypeName); }
-    
+    public System.Type ReturnType { get
+        {
+            return Assembly.GetExecutingAssembly().GetType(ReturnTypeName)
+                ?? Assembly.GetAssembly(typeof(int)).GetType(ReturnTypeName);
+        }
+    }
+
+    public System.Type ClassType
+    {
+        get
+        {
+            return Assembly.GetExecutingAssembly().GetType(ClassName)
+                ?? Assembly.GetAssembly(typeof(int)).GetType(ClassName);
+        }
+    }
+
     public List<string> argsTypeName { get; } = new();
     public GenericNode() : base("")
     {
@@ -76,10 +90,10 @@ public class GenericNode : CodeGraphNode
         var @params = method.GetParameters();
 
         MethodName = method.Name;
-        ClassName = method.ReflectedType.Name;
+        ClassName = method.ReflectedType.FullName;
 
         hasArgs = @params.Length > 0;
-        ReturnTypeName = method.ReturnType.Name;
+        ReturnTypeName = method.ReturnType.FullName;
         hasReturn = method.ReturnType != typeof(void);
     }
 
@@ -88,13 +102,15 @@ public class GenericNode : CodeGraphNode
         try
         {
             object[] args = Args.Select(x => x.Value).ToArray();
-            returned = Assembly.GetExecutingAssembly().GetType(ClassName).GetMethod(MethodName).Invoke(component, args);
-            return base.OnProcess(graph);
+            Returned = Assembly.GetExecutingAssembly().GetType(ClassName).GetMethod(MethodName).Invoke(Component, args);
+            
         }
-        catch (Exception)
+        catch (Exception) 
         {
-            return string.Empty;
+            // Do nothing
         }
+
+        return base.OnProcess(graph);
 
     }
 }
